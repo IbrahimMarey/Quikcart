@@ -134,4 +134,5 @@
     <string name="check_login">Please Login First</string>
     <string name="skip">Guest</string>
     <string name="cart">Cart</string>
+    <string name="explore_by_category">Explore by Category</string>
 </resources>
