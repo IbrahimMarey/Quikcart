@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id ("kotlin-kapt")
-
+    id ("androidx.navigation.safeargs")
 }
 
 android {
@@ -35,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -52,4 +56,13 @@ dependencies {
     implementation ("androidx.room:room-ktx:2.5.0")
     implementation ("androidx.room:room-runtime:2.5.0")
     kapt ("androidx.room:room-compiler:2.5.0")
+
+
+    //nav
+    implementation ("androidx.navigation:navigation-fragment:2.5.3")
+    implementation ("androidx.navigation:navigation-ui:2.5.3")
+
+    //curved bottom nav
+    implementation ("com.github.qamarelsafadi:CurvedBottomNavigation:0.1.3")
+
 }

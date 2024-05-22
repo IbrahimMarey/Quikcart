@@ -18,5 +18,7 @@
     <color name="xd_dark_burgundy">#992935</color>
     <color name="xd_green_asset">#a2ce45</color>
     <color name="xd_yellow">#fbd96d</color>
+    <color name="xd_btn_nav">#f5f9fa</color>
+    <color name="xd_btn_nav_item">#8e8e8e</color>
 
 </resources>
