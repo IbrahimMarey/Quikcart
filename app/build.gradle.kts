@@ -55,7 +55,7 @@ dependencies {
     //Room
     implementation ("androidx.room:room-ktx:2.5.0")
     implementation ("androidx.room:room-runtime:2.5.0")
-    kapt ("androidx.room:room-compiler:2.5.0")
+    kapt ("androidx.room:room-compiler:2.6.1")
 
 
     //nav
@@ -64,5 +64,8 @@ dependencies {
 
     //curved bottom nav
     implementation ("com.github.qamarelsafadi:CurvedBottomNavigation:0.1.3")
+
+    //slider view
+    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.2")
 
 }
