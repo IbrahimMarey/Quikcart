@@ -2,4 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="xd_orange">#fd8700</color>
+    <color name="xd_blue">#0274bc</color>
+    <color name="xd_blue_asset">#b1eafd</color>
+    <color name="xd_blue_asset1">#dff8ea</color>
+    <color name="xd_red">#e04428</color>
+    <color name="xd_asset_pink">#ffc8bd</color>
+    <color name="xd_pink">#f9bead</color>
+    <color name="xd_dark_pink">#cb6d80</color>
+    <color name="xd_purple_asset">#d6e7ff</color>
+    <color name="xd_purple">#cdb9ff</color>
+    <color name="xd_asset_burgundy">#b23f56</color>
+    <color name="xd_burgundy">#a22e3b</color>
+    <color name="xd_dark_burgundy">#992935</color>
+    <color name="xd_green_asset">#a2ce45</color>
+    <color name="xd_yellow">#fbd96d</color>
+
 </resources>
