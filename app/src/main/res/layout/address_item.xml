@@ -17,8 +17,8 @@
         >
         <ImageView
             android:id="@+id/map_img"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:src="@drawable/location_img"
             android:background="@drawable/rounded_bg"
             app:layout_constraintTop_toTopOf="parent"
