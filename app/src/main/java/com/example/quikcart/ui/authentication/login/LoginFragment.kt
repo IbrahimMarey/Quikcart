@@ -22,7 +22,6 @@ class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: AuthViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -30,43 +29,53 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider (this)[AuthViewModel::class.java]
-
+        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         binding.SignInButton.setOnClickListener {
             val email = binding.UserNameTextField.editText?.text.toString()
             val password = binding.PasswordTextField.editText?.text.toString()
-            if (email.isNotBlank() && password.isNotBlank()) {
+            if (isValidEmail(email) && isValidPassword(password)) {
                 val user = User(email, password)
                 lifecycleScope.launch {
                     viewModel.login(user)
                     viewModel.authState.collect { state ->
                         when (state) {
                             ViewState.Loading -> {
-                                 binding.progressBar.visibility = View.VISIBLE
+                                binding.progressBar.visibility = View.VISIBLE
                             }
                             is ViewState.Success -> {
                                 binding.progressBar.visibility = View.GONE
                                 val success = state.data
                                 if (success) {
                                     Toast.makeText(requireContext(), "Sign in successful", Toast.LENGTH_SHORT).show()
+
                                 } else {
                                     Toast.makeText(requireContext(), "Sign in failed. Please try again.", Toast.LENGTH_SHORT).show()
                                 }
+                            }
+                            is ViewState.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                Toast.makeText(requireContext(), "Error: ${state.message}", Toast.LENGTH_SHORT).show()
                             }
                             else -> {}
                         }
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Invalid email or password. Please check your input.", Toast.LENGTH_SHORT).show()
             }
         }
+
         binding.signinText.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signupFragment)
-
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+    private fun isValidPassword(password: String): Boolean {
+        return password.length >= 8
     }
 }

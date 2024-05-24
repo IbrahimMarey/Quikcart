@@ -37,7 +37,8 @@ class SignupFragment : Fragment() {
         binding.SignInButton.setOnClickListener {
             val email = binding.EmailTextField.editText?.text.toString()
             val password = binding.PasswordTextField.editText?.text.toString()
-            if (email.isNotBlank() && password.isNotBlank()) {
+            val username = binding.UserNameTextField.editText?.text.toString()
+            if ((isValidEmail(email) && isValidPassword(password)) && username.isNotBlank()) {
                 val user = User(email, password)
                 lifecycleScope.launch {
                     viewModel.signUp(user)
@@ -61,11 +62,17 @@ class SignupFragment : Fragment() {
                     }
                 }
             } else {
-                Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Invalid email or password. Please check your input.", Toast.LENGTH_SHORT).show()
             }
         }
         binding.signinText.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
         }
+    }
+    private fun isValidEmail(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+    private fun isValidPassword(password: String): Boolean {
+        return password.length >= 8
     }
 }
