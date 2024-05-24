@@ -8,7 +8,9 @@
     <ImageView
         android:id="@+id/category_img"
         android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintHeight_percent=".78"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/ic_cart"
@@ -18,7 +20,8 @@
     <TextView
         android:id="@+id/category_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".2"
         app:layout_constraintTop_toBottomOf="@id/category_img"
         app:layout_constraintStart_toStartOf="@id/category_img"
         app:layout_constraintEnd_toEndOf="@id/category_img"
