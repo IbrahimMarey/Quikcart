@@ -145,5 +145,8 @@
     <string name="email">Email</string>
     <string name="your_name">Your Name</string>
     <string name="already_have_account">Already have account</string>
+    <string name="total_price">اجمالي السعر</string>
+    <string name="payment_methods">طرق الدفع</string>
+
 
 </resources>
