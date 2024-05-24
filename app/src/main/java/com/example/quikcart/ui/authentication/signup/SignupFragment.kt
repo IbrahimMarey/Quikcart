@@ -7,15 +7,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.quikcart.databinding.FragmentSignupBinding 
+import androidx.navigation.Navigation
+import com.example.quikcart.R
+import com.example.quikcart.databinding.FragmentSignupBinding
 import com.example.quikcart.models.entities.User
 import com.example.quikcart.ui.authentication.AuthViewModel
+import com.example.quikcart.models.ViewState
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
-    private val viewModel: AuthViewModel by viewModels()
+    private lateinit var viewModel: AuthViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,14 +34,7 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.signUpResult.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                Toast.makeText(requireContext(), "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
-            }
-        }
+          viewModel = ViewModelProvider (this)[AuthViewModel::class.java]
 
         binding.SignInButton.setOnClickListener {
             val email = binding.EmailTextField.editText?.text.toString()
@@ -43,10 +43,31 @@ class SignupFragment : Fragment() {
                 val user = User(email, password)
                 lifecycleScope.launch {
                     viewModel.signUp(user)
+                    viewModel.signUpState.collect { state ->
+                        when (state) {
+                            ViewState.Loading -> {
+                                 binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is ViewState.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                val success = state.data
+                                if (success) {
+                                    Toast.makeText(requireContext(), "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
+                                    Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
+                                } else {
+                                    Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                            else -> {}
+                        }
+                    }
                 }
             } else {
                 Toast.makeText(requireContext(), "Please enter email and password", Toast.LENGTH_SHORT).show()
             }
+        }
+        binding.signinText.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
         }
     }
 }

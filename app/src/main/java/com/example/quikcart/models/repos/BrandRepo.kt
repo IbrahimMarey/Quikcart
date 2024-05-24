@@ -4,7 +4,6 @@ import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.repos.remote.brands.RemoteBrands
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 
 interface BrandRepo {

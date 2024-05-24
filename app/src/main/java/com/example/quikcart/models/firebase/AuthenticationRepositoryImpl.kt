@@ -5,14 +5,26 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class AuthRepository {
+
+
+class AuthRepositoryImp @Inject constructor() :AuthenticationRepository {
+
     private val auth: FirebaseAuth = Firebase.auth
 
-    suspend fun signUpWithEmailAndPassword(user: User): Boolean {
+    override suspend fun signUpWithEmailAndPassword(user: User): Boolean {
         return try {
             auth.createUserWithEmailAndPassword(user.email, user.password).await()
             auth.currentUser?.sendEmailVerification()?.await()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+    override suspend fun signInWithEmailAndPassword(user: User): Boolean {
+        return try {
+            auth.signInWithEmailAndPassword(user.email, user.password).await()
             true
         } catch (e: Exception) {
             false

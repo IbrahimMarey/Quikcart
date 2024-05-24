@@ -4,12 +4,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
     id ("kotlin-kapt")
     id ("androidx.navigation.safeargs")
     id ("com.google.dagger.hilt.android")
-
-
-
 
 }
 
@@ -94,4 +92,14 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.48.1")
     //picasso
     implementation ("com.squareup.picasso:picasso:2.8")
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
 }
