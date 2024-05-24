@@ -101,7 +101,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
-                android:id="@+id/SignInText"
+                android:id="@+id/SignInButton"
                 android:layout_width="match_parent"
                 android:layout_height="59dp"
                 android:layout_marginStart="30dp"
@@ -126,10 +126,10 @@
                 android:text="@string/dont_have_an_account"
                 android:textSize="@dimen/text_large"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/SignInText"
+                app:layout_constraintEnd_toEndOf="@+id/SignInButton"
                 app:layout_constraintHorizontal_bias="0.401"
-                app:layout_constraintStart_toStartOf="@+id/SignInText"
-                app:layout_constraintTop_toBottomOf="@+id/SignInText" />
+                app:layout_constraintStart_toStartOf="@+id/SignInButton"
+                app:layout_constraintTop_toBottomOf="@+id/SignInButton" />
 
             <TextView
                 android:id="@+id/forgetTextView"
@@ -141,7 +141,7 @@
                 android:text="@string/forget"
                 android:textColor="@color/xd_blue"
                 android:textSize="@dimen/text_medium"
-                app:layout_constraintBottom_toTopOf="@+id/SignInText"
+                app:layout_constraintBottom_toTopOf="@+id/SignInButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/PasswordTextField" />
 

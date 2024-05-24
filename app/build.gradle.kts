@@ -4,6 +4,7 @@ plugins {
     id ("kotlin-kapt")
     id ("androidx.navigation.safeargs")
     alias(libs.plugins.google.gms.google.services)
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -80,4 +81,16 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+
+
+
+}
+kapt {
+    correctErrorTypes = true
 }
