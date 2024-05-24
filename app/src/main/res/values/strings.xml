@@ -144,4 +144,6 @@
     <string name="email">Email</string>
     <string name="your_name">Your Name</string>
     <string name="already_have_account">Already have account</string>
+    <string name="total_price">Total Price</string>
+    <string name="payment_methods">Payment Methods</string>
 </resources>

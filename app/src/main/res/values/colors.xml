@@ -5,8 +5,9 @@
 
     <color name="xd_orange">#fd8700</color>
     <color name="xd_blue">#0274bc</color>
-    <color name="xd_blue_asset">#b1eafd</color>
-    <color name="xd_blue_asset1">#dff8ea</color>
+    <color name="xd_blue_asset">#48b6db</color>
+    <color name="xd_blue_asset1">#b1eafd</color>
+    <color name="xd_blue_white">#dff8ea</color>
     <color name="xd_red">#e04428</color>
     <color name="xd_asset_pink">#ffc8bd</color>
     <color name="xd_pink">#f9bead</color>
