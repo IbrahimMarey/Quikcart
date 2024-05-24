@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -16,7 +15,6 @@ import com.example.quikcart.models.entities.User
 import com.example.quikcart.ui.authentication.AuthViewModel
 import com.example.quikcart.models.ViewState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -43,7 +41,7 @@ class SignupFragment : Fragment() {
                 val user = User(email, password)
                 lifecycleScope.launch {
                     viewModel.signUp(user)
-                    viewModel.signUpState.collect { state ->
+                    viewModel.authState.collect { state ->
                         when (state) {
                             ViewState.Loading -> {
                                  binding.progressBar.visibility = View.VISIBLE
