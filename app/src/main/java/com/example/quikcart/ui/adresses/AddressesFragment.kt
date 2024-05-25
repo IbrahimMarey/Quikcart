@@ -1,4 +1,4 @@
-package com.example.quikcart.ui.cart
+package com.example.quikcart.ui.adresses
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,28 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
-import com.example.quikcart.R
-import com.example.quikcart.databinding.FragmentCartBinding
+import com.example.quikcart.databinding.FragmentAddressesBinding
 
-class CartFragment : Fragment() {
 
-    lateinit var binding: FragmentCartBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+class AddressesFragment : Fragment() {
+    lateinit var binding:FragmentAddressesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCartBinding.inflate(inflater,container,false)
+        binding = FragmentAddressesBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.proceedToPayBtn.setOnClickListener{
-            val action = CartFragmentDirections.actionCartFragmentToPaymentFragment()
+        binding.addAddressBtn.setOnClickListener {
+            val action = AddressesFragmentDirections.actionAddressesFragmentToMapFragment()
             Navigation.findNavController(it).navigate(action)
         }
     }
