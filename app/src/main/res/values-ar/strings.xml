@@ -147,6 +147,8 @@
     <string name="already_have_account">Already have account</string>
     <string name="total_price">اجمالي السعر</string>
     <string name="payment_methods">طرق الدفع</string>
-
+    <string name="bank_card">بطاقة البنك</string>
+    <string name="credit_card">بطاقة الإتمان</string>
+    <string name="pay_pal">PayPal</string>
 
 </resources>

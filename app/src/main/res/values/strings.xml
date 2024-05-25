@@ -146,4 +146,7 @@
     <string name="already_have_account">Already have account</string>
     <string name="total_price">Total Price</string>
     <string name="payment_methods">Payment Methods</string>
+    <string name="bank_card">Bank Card</string>
+    <string name="credit_card">Credit Card</string>
+    <string name="pay_pal">PayPal</string>
 </resources>
