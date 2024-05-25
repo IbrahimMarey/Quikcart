@@ -1,6 +1,7 @@
 package com.example.quikcart.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -50,5 +51,25 @@ class MainActivity : AppCompatActivity() {
     private fun initNavHost() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+
+        navController.addOnDestinationChangedListener{ controller , destination , argument ->
+            if (destination.id  == R.id.paymentFragment || destination.id  == R.id.addressesFragment || destination.id  == R.id.mapFragment)
+            {
+                binding.bottomNavigation.visibility = View.GONE
+                if (destination.id  == R.id.mapFragment)
+                {
+                    binding.appToolBar.visibility = View.GONE
+                }else
+                {
+                    binding.appToolBar.visibility = View.VISIBLE
+
+                }
+
+            }else{
+                binding.bottomNavigation.visibility = View.VISIBLE
+
+            }
+        }
+
     }
 }

@@ -16,7 +16,7 @@
     <string name="search_product">البحث عن المنتج</string>
     <string name="search_brand">ابحث عن العلامة التجارية</string>
     <string name="available_size">الحجم متوفر</string>
-    <string name="logout">تسجيل خروج</string>
+    <string name="logout"><u>تسجيل خروج</u></string>
     <string name="user_name">اسم المستخدم</string>
     <string name="userNameEmpty">اسم المستخدم فارغ</string>
     <string name="add_favourite">أضف هذا المنتج إلى المفضلة</string>
@@ -150,5 +150,11 @@
     <string name="bank_card">بطاقة البنك</string>
     <string name="credit_card">بطاقة الإتمان</string>
     <string name="pay_pal">PayPal</string>
+    <string name="contact_us">تواصل معنا</string>
+    <string name="about_us">معلومات التطبيق</string>
+
+    <string name="about_us_data">مشروع التخرج لدي الITI\nاعضاء الفريق:\n\tابراهيم مرعي\n\tمايكل مجدي\n\tناريمان شركان\n\tميار حسن</string>
+    <string name="service_support">الدعم الفني</string>
+
 
 </resources>
