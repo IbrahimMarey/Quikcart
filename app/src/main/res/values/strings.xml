@@ -153,6 +153,7 @@
     <string name="about_us">about Us</string>
     <string name="about_us_data">This is ITI Graduation Project\nTeam Member:\n\tIbrahim Marey\n\tMichael Magdy\n\tNareman Sharkan\n\tMayar Hassan</string>
     <string name="service_support">Service Support</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="confirm">Confirm</string>
+    <string name="give_title_to_location">Give Title To This Location</string>
+    <string name="delete">Delete</string>
 </resources>
