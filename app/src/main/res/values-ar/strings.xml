@@ -152,9 +152,12 @@
     <string name="pay_pal">PayPal</string>
     <string name="contact_us">تواصل معنا</string>
     <string name="about_us">معلومات التطبيق</string>
-
     <string name="about_us_data">مشروع التخرج لدي الITI\nاعضاء الفريق:\n\tابراهيم مرعي\n\tمايكل مجدي\n\tناريمان شركان\n\tميار حسن</string>
     <string name="service_support">الدعم الفني</string>
+    <string name="confirm">تأكيد</string>
+    <string name="give_title_to_location">تعريف المكان</string>
+    <string name="delete">حذف</string>
+
 
 
 </resources>
