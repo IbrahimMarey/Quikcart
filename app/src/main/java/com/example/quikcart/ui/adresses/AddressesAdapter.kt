@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.databinding.AddressesItemBinding
-import com.example.quikcart.helpers.getMarkerAddress
+import com.example.quikcart.utils.getMarkerAddress
 import com.example.quikcart.models.entities.AddressModel
 
 class AddressesAdapter(private val delAddress:(AddressModel)->Unit) : ListAdapter<AddressModel,AddressesAdapter.ViewHolder>(DiffUtils) {

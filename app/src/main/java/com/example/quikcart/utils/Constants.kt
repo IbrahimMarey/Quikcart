@@ -1,4 +1,4 @@
-package com.example.quikcart.helpers
+package com.example.quikcart.utils
 
 import com.example.quikcart.BuildConfig
 

@@ -1,8 +1,8 @@
-package com.example.quikcart.bindingadapters
+package com.example.quikcart.utils
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.example.quikcart.ui.utils.ImageUtils
+import com.example.quikcart.utils.ImageUtils
 
 @BindingAdapter("imageUrl")
 fun loadImage(view:ImageView,url:String){

@@ -16,10 +16,4 @@ class RepoModuleProvider {
     fun provideAppDao(@ApplicationContext ctx: Context): AppDao {
         return AppDatabase.getInstance(ctx).appDao()
     }
-
-    /*@Binds
-    abstract fun provideLocalDataSource(localDataSource: LocalDataSource):LocalDataSourceInterface
-    @Binds
-    abstract fun provideAppRepo(appRepo: AppRepo):AppRepoInterface
-    */
 }

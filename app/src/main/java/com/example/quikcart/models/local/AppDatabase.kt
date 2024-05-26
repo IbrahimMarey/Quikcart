@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.quikcart.helpers.Constants
+import com.example.quikcart.utils.Constants
 import com.example.quikcart.models.entities.AddressModel
 
 @Database(entities = [AddressModel::class], version = 1, exportSchema = false)

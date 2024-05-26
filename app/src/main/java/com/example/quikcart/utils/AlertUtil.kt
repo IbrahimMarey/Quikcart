@@ -1,4 +1,4 @@
-package com.example.quikcart.ui.utils
+package com.example.quikcart.utils
 
 import android.content.Context
 import android.widget.Toast

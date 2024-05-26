@@ -1,6 +1,6 @@
 package com.example.quikcart.models.network
 
-import com.example.quikcart.helpers.Constants
+import com.example.quikcart.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
