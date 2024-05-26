@@ -107,17 +107,16 @@ class SignupFragment : Fragment() {
             send_email_welcome = false
         )
         val customerRequest = CustomerRequest(customer)
-            viewModel.createCustomer(customerRequest)
+        viewModel.createCustomer(customerRequest)
         lifecycleScope.launch {
             viewModel.customerCreationState.collect { state ->
                 when (state) {
-                    // ... (Loading and Success cases)
                     is ViewState.Error -> {
-                        val errorMessage = try { // Try to parse a more specific error message
+                        val errorMessage = try {
                             val errorJson = JSONObject(state.message)
                             val customerErrors = errorJson.optJSONObject("errors")?.optJSONObject("customer")
-                            customerErrors?.toString(2) ?: state.message // Pretty-print the error JSON
-                        } catch (e: Exception) { // Fallback if parsing fails
+                            customerErrors?.toString(2) ?: state.message
+                        } catch (e: Exception) {
                             state.message
                         }
                         Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_LONG).show()

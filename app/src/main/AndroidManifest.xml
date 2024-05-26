@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quikcart"
         tools:targetApi="31"
-        android:name=".App">
+        android:name=".App"
+        >
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCmFmdEX0d_-_ecEhZX_GJARLyl9INYFIs" />
