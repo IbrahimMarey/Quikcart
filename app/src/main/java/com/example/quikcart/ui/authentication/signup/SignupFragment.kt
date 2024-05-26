@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.authentication.signup
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,8 +15,12 @@ import com.example.quikcart.databinding.FragmentSignupBinding
 import com.example.quikcart.models.entities.User
 import com.example.quikcart.ui.authentication.AuthViewModel
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.Address
+import com.example.quikcart.models.entities.Customer
+import com.example.quikcart.models.entities.CustomerRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 @AndroidEntryPoint
 class SignupFragment : Fragment() {
@@ -52,6 +57,7 @@ class SignupFragment : Fragment() {
                                 val success = state.data
                                 if (success) {
                                     Toast.makeText(requireContext(), "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
+                                    createCustomerOnShopify(email, username)
                                     Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
                                 } else {
                                     Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
@@ -74,5 +80,53 @@ class SignupFragment : Fragment() {
     }
     private fun isValidPassword(password: String): Boolean {
         return password.length >= 8
+    }
+
+    private fun createCustomerOnShopify(email: String, username: String) {
+
+        val address = Address(
+        address1 = "123 Oak St",
+        city = "Ottawa",
+        province = "ON",
+        phone = "555-1212",
+        zip = "123 ABC",
+        last_name = "Lastnameson",
+        first_name = "Mother",
+        country = "CA"
+        )
+
+        val customer = Customer(
+            first_name = "Steve",
+            last_name = "Lastnameson",
+            email = "mayarhassan@gmail.com",
+            phone = "32355512",
+            verified_email = true,
+            addresses = listOf(address),
+            password = "newpass",
+            password_confirmation = "newpass",
+            send_email_welcome = false
+        )
+        val customerRequest = CustomerRequest(customer)
+            viewModel.createCustomer(customerRequest)
+        lifecycleScope.launch {
+            viewModel.customerCreationState.collect { state ->
+                when (state) {
+                    // ... (Loading and Success cases)
+                    is ViewState.Error -> {
+                        val errorMessage = try { // Try to parse a more specific error message
+                            val errorJson = JSONObject(state.message)
+                            val customerErrors = errorJson.optJSONObject("errors")?.optJSONObject("customer")
+                            customerErrors?.toString(2) ?: state.message // Pretty-print the error JSON
+                        } catch (e: Exception) { // Fallback if parsing fails
+                            state.message
+                        }
+                        Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_LONG).show()
+                        Log.e("CustomerCreationError", errorMessage)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
     }
 }

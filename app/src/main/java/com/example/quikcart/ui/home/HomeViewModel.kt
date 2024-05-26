@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.models.repos.BrandRepo
+import com.example.quikcart.models.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val brandRepo: BrandRepo) : ViewModel() {
+class HomeViewModel @Inject constructor(private val brandRepo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewState<List<SmartCollectionsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<SmartCollectionsItem>>> = _uiState
 
