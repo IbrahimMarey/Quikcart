@@ -15,7 +15,7 @@
     <string name="search_product">search for product</string>
     <string name="search_brand">search for brand</string>
     <string name="available_size">Available Size</string>
-    <string name="logout">logout</string>
+    <string name="logout"><u>logout</u></string>
     <string name="user_name">User Name</string>
     <string name="userNameEmpty">User name field is empty</string>
     <string name="add_favourite"> Add this product to favorites</string>
@@ -149,4 +149,11 @@
     <string name="bank_card">Bank Card</string>
     <string name="credit_card">Credit Card</string>
     <string name="pay_pal">PayPal</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="about_us">about Us</string>
+    <string name="about_us_data">This is ITI Graduation Project\nTeam Member:\n\tIbrahim Marey\n\tMichael Magdy\n\tNareman Sharkan\n\tMayar Hassan</string>
+    <string name="service_support">Service Support</string>
+    <string name="confirm">Confirm</string>
+    <string name="give_title_to_location">Give Title To This Location</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -8,6 +8,7 @@ plugins {
     id ("kotlin-kapt")
     id ("androidx.navigation.safeargs")
     id ("com.google.dagger.hilt.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 }
 
@@ -101,6 +102,11 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    // circle image
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 
+    //Location
+    implementation("com.google.android.gms:play-services-location:21.1.0")
+    implementation ("com.google.android.gms:play-services-maps:18.0.1")
 
 }
