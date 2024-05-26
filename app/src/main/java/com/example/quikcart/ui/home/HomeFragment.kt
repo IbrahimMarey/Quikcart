@@ -14,7 +14,7 @@ import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentHomeBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.ui.utils.AlertUtil
+import com.example.quikcart.utils.AlertUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

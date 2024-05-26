@@ -1,12 +1,10 @@
 package com.example.quikcart.ui.adresses
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressModel
-import com.example.quikcart.models.repos.appRepo.AppRepo
-import com.example.quikcart.models.repos.appRepo.AppRepoInterface
+import com.example.quikcart.models.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddressesViewModel @Inject constructor(val _appRepo:AppRepoInterface):ViewModel() {
+class AddressesViewModel @Inject constructor(private val _appRepo:Repository):ViewModel() {
     private val _addresses :MutableStateFlow<ViewState<List<AddressModel>>> = MutableStateFlow(ViewState.Loading)
     val addresses : StateFlow<ViewState<List<AddressModel>>> = _addresses
 

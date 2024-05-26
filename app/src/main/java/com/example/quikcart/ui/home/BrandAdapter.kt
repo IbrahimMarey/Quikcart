@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.quikcart.databinding.BrandItemBinding
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.ui.utils.ImageUtils
+import com.example.quikcart.utils.ImageUtils
 
 class BrandAdapter: ListAdapter<SmartCollectionsItem, BrandAdapter.BrandViewHolder>(DiffCallback()) {
 
