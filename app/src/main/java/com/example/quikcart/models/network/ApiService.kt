@@ -4,6 +4,7 @@ import com.example.quikcart.utils.Constants
 import com.example.quikcart.models.entities.BrandsResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+import com.example.quikcart.models.entities.ProductsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -18,6 +19,10 @@ interface ApiService {
     suspend fun postCustomer(
         @Body customerRequest: CustomerRequest
     ): Response<CustomerResponse>
+
+    @Headers("Content-Type:application/json", "X-Shopify-Access-Token:"+ Constants.ACCESS_TOKEN)
+    @GET("products.json")
+    suspend fun getProducts(): ProductsResponse
 }
 
 

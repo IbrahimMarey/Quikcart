@@ -22,6 +22,7 @@
                 app:iconifiedByDefault="false"
                 app:searchHintIcon="@null"
                 android:focusable="false"
+                android:clickable="true"
                 app:searchIcon="@drawable/ic_search"
                 app:closeIcon="@drawable/ic_close"
                 android:background="@drawable/rounded_bg" />
