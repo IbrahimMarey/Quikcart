@@ -3,6 +3,7 @@ package com.example.quikcart.models.repos
 import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.local.LocalDataSourceInterface
 import com.example.quikcart.models.remote.RemoteDataSource
@@ -14,14 +15,17 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class RepositoryImp @Inject constructor(private val brandRemoteRepo: RemoteDataSource, private val localDataSourceInterface: LocalDataSourceInterface):Repository{
+class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteDataSource, private val localDataSourceInterface: LocalDataSourceInterface):Repository{
     override fun getBrands(): Flow<List<SmartCollectionsItem>> {
-        return brandRemoteRepo.getBrands()
+        return remoteDataSource.getBrands()
     }
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
-        return brandRemoteRepo.postCustomer(customerRequest)
+        return remoteDataSource.postCustomer(customerRequest)
     }
 
+    override fun getProducts(): Flow<List<ProductsItem>> {
+        return  remoteDataSource.getProducts()
+    }
 
     override suspend fun getAllAddresses(): Flow<List<AddressModel>> = flow<List<AddressModel>>{
         emit(localDataSourceInterface.getAllAddresses())
