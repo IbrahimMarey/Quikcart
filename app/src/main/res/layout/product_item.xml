@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="productItem"
+            type="com.example.quikcart.models.entities.ProductsItem"/>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card_product"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="@color/cardview_light_background"
+        android:elevation="16dp"
+        android:padding="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hello_text"
+        app:cardCornerRadius="16dp"
+        android:background="@drawable/rounded_bg">
+        <ImageView
+            android:id="@+id/empty_heart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_empty_heart"
+            android:elevation="2dp"
+            />
+        <ImageView
+            android:id="@+id/heart"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_heart"
+            android:elevation="2dp"
+            />
+
+        <ImageView
+            android:id="@+id/image_of_product"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            tools:src="@drawable/logo"
+            app:layout_constraintCircleRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            imageUrl="@{productItem.image.src}"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/type_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Brand : SHOES"
+            android:text="@{productItem.productType}"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_of_product" />
+
+        <TextView
+            android:id="@+id/vendor_of_product"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="ADIDAS"
+            android:text="@{productItem.vendor}"
+            android:textStyle="bold"
+            android:textColor="@color/xd_orange"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/type_name" />
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Brand : SHOES"
+            android:text="@{productItem.price}"
+            android:layout_marginTop="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/vendor_of_product" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

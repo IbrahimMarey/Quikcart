@@ -2,6 +2,7 @@ package com.example.quikcart.models.remote
 
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.network.ApiService
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,11 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
         val response = apiService.getBrands().smartCollections
         response?.filterNotNull()?.let { emit(it) }
     }
+
+    override fun getProductsByBrandId(id: Long): Flow<List<ProductsItem>> = flow{
+        apiService.getProductsByBrandId(id).products?.filterNotNull()?.let { emit(it) }
+    }
+
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return apiService.postCustomer(customerRequest)
     }
