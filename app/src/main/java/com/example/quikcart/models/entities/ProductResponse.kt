@@ -2,7 +2,7 @@ package com.example.quikcart.models.entities
 
 import com.google.gson.annotations.SerializedName
 
-data class ProductResponse(
+/*data class ProductResponse(
 
 	@field:SerializedName("products")
 	val products: List<ProductsItem?>? = null
@@ -238,3 +238,4 @@ data class ProductsItem(
 
 	var price:String? = null
 )
+*/

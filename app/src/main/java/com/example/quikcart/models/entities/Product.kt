@@ -64,7 +64,8 @@ data class ProductsItem(
     val publishedAt: String?,
 
     @field:SerializedName("status")
-    val status: String?
+    val status: String?,
+    var price:String? = null
 ) : Serializable
 
 data class OptionsItem(
@@ -198,4 +199,5 @@ data class VariantsItem(
 
     @field:SerializedName("image_id")
     val imageId: Any?
+
 )

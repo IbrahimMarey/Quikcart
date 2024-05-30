@@ -82,9 +82,10 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Brand : SHOES"
-            android:text="@{productItem.price}"
+            tools:text="220"
+            android:text='@{String.valueOf(productItem.price) + " USD"}'
             android:layout_marginTop="2dp"
+            android:textColor="@color/xd_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/vendor_of_product" />

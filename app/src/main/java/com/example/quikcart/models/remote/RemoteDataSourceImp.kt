@@ -18,7 +18,7 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
     }
 
     override fun getProductsByBrandId(id: Long): Flow<List<ProductsItem>> = flow{
-        apiService.getProductsByBrandId(id).products?.filterNotNull()?.let { emit(it) }
+        apiService.getProductsByBrandId(id).products.let { emit(it) }
     }
 
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {

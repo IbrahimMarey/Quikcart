@@ -21,7 +21,7 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     }
 
     override fun getProductsByBrandId(id: Long): Flow<List<ProductsItem>> {
-        return brandRemoteRepo.getProductsByBrandId(id)
+        return remoteDataSource.getProductsByBrandId(id)
     }
 
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
