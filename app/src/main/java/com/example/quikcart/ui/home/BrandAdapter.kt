@@ -1,5 +1,6 @@
 package com.example.quikcart.ui.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.quikcart.databinding.BrandItemBinding
 import com.example.quikcart.models.entities.SmartCollectionsItem
 
-class BrandAdapter: ListAdapter<SmartCollectionsItem, BrandAdapter.BrandViewHolder>(DiffCallback()) {
+class BrandAdapter(private val onItemClick:(SmartCollectionsItem) ->Unit): ListAdapter<SmartCollectionsItem, BrandAdapter.BrandViewHolder>(DiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BrandViewHolder {
@@ -19,6 +20,10 @@ class BrandAdapter: ListAdapter<SmartCollectionsItem, BrandAdapter.BrandViewHold
 
     override fun onBindViewHolder(holder: BrandViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            Log.e("TAG", "onBindViewHolder: ", )
+            onItemClick.invoke(getItem((position)))
+        }
     }
 
     class BrandViewHolder(private val binding: BrandItemBinding) : ViewHolder(binding.root) {
@@ -30,19 +35,19 @@ class BrandAdapter: ListAdapter<SmartCollectionsItem, BrandAdapter.BrandViewHold
     }
 
      class DiffCallback: DiffUtil.ItemCallback<SmartCollectionsItem>() {
-        override fun areItemsTheSame(
-            oldItem: SmartCollectionsItem,
-            newItem: SmartCollectionsItem
-        ): Boolean {
-            return oldItem === newItem
-        }
+         override fun areItemsTheSame(
+             oldItem: SmartCollectionsItem,
+             newItem: SmartCollectionsItem
+         ): Boolean {
+             return oldItem === newItem
+         }
 
-        override fun areContentsTheSame(
-            oldItem: SmartCollectionsItem,
-            newItem: SmartCollectionsItem
-        ): Boolean {
-            return oldItem == newItem
-        }
+         override fun areContentsTheSame(
+             oldItem: SmartCollectionsItem,
+             newItem: SmartCollectionsItem
+         ): Boolean {
+             return oldItem == newItem
+         }
 
-    }
+     }
 }

@@ -19,6 +19,11 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override fun getBrands(): Flow<List<SmartCollectionsItem>> {
         return remoteDataSource.getBrands()
     }
+
+    override fun getProductsByBrandId(id: Long): Flow<List<ProductsItem>> {
+        return remoteDataSource.getProductsByBrandId(id)
+    }
+
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
