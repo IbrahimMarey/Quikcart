@@ -12,15 +12,16 @@ class AuthRepositoryImp @Inject constructor() :AuthenticationRepository {
 
     private val auth: FirebaseAuth = Firebase.auth
 
-    override suspend fun signUpWithEmailAndPassword(user: User): Boolean {
+    override suspend fun signUpWithEmailAndPassword(user: User): Result<String> {
         return try {
             auth.createUserWithEmailAndPassword(user.email, user.password).await()
             auth.currentUser?.sendEmailVerification()?.await()
-            true
+            Result.success(auth.currentUser?.uid ?: "")
         } catch (e: Exception) {
-            false
+            Result.failure(e)
         }
     }
+
     override suspend fun signInWithEmailAndPassword(user: User): Boolean {
         return try {
             auth.signInWithEmailAndPassword(user.email, user.password).await()

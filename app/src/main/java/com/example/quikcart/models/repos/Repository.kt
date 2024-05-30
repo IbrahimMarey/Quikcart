@@ -13,7 +13,7 @@ interface Repository {
     fun getBrands(): Flow<List<SmartCollectionsItem>>
     fun getProductsByBrandId(id:Long):Flow<List<ProductsItem>>
     suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse>
-
+    fun getProducts(): Flow<List<ProductsItem>>
 
     // local
     suspend fun getAllAddresses(): Flow<List<AddressModel>>

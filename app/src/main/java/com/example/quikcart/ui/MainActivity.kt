@@ -65,7 +65,14 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
-            }else{
+            }
+            else if (destination.id == R.id.searchFragment)
+            {
+                binding.bottomNavigation.visibility = View.GONE
+                binding.appToolBar.visibility = View.GONE
+
+            }
+            else{
                 binding.bottomNavigation.visibility = View.VISIBLE
 
             }

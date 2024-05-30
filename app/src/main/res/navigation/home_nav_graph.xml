@@ -11,8 +11,8 @@
         android:label="@string/homePage"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_productFragment"
-            app:destination="@id/productFragment" />
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
@@ -57,12 +57,8 @@
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
     <fragment
-        android:id="@+id/productFragment"
-        android:name="com.example.quikcart.ui.products.ProductFragment"
-        android:label="fragment_product"
-        tools:layout="@layout/fragment_product" >
-        <argument
-            android:name="brand_id"
-            app:argType="long" />
-    </fragment>
+        android:id="@+id/searchFragment"
+        android:name="com.example.quikcart.ui.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

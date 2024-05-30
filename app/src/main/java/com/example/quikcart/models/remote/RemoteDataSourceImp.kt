@@ -25,4 +25,10 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
         return apiService.postCustomer(customerRequest)
     }
 
+    override fun getProducts(): Flow<List<ProductsItem>> = flow{
+        val response = apiService.getProducts().products
+        response?.filterNotNull()?.let { emit(it) }
+
+    }
+
 }
