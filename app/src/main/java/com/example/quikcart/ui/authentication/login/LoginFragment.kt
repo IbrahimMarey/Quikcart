@@ -55,7 +55,7 @@ class LoginFragment : Fragment() {
                 val user = User(email, password)
                 lifecycleScope.launch {
                     viewModel.login(user)
-                    viewModel.authState.collect { state ->
+                    viewModel.loginState.collect { state ->
                         when (state) {
                             ViewState.Loading -> {
                                 binding.progressBar.visibility = View.VISIBLE

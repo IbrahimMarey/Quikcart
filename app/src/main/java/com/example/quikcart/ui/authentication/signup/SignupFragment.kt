@@ -40,9 +40,6 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider (this)[AuthViewModel::class.java]
-        email = binding.EmailTextField.editText?.text.toString()
-        password = binding.PasswordTextField.editText?.text.toString()
-        username = binding.UserNameTextField.editText?.text.toString()
         signUp()
         binding.signinText.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_signupFragment_to_loginFragment)
@@ -55,22 +52,15 @@ class SignupFragment : Fragment() {
         return password.length >= 8
     }
 
-    private fun createCustomerOnShopify(email: String, username: String) {
+    private fun createCustomerOnShopify(email: String, username: String , id:String) {
 
         val address = Address(
-        address1 = "123 Oak St",
-        city = "Ottawa",
-        province = "ON",
-        phone = "555-1212",
-        zip = "123 ABC",
-        last_name = "Lastnameson",
-        first_name = "Mother",
-        country = "CA"
-        )
+        address1 = " ", city = " ", province = " ", phone = " ",
+        zip = " ", last_name = " ", first_name = " ", country = " ")
 
         val customer = Customer(
-            first_name = "Steve", last_name = "Lastnameson", email = "mayarhassan@gmail.com", phone = "32355512", verified_email = true,
-            addresses = listOf(address), password = "newpass", password_confirmation = "newpass", send_email_welcome = false
+            first_name = username, last_name = id, email = email, phone = " ", verified_email = true,
+            addresses = listOf(address), password = "000000", password_confirmation = "000000", send_email_welcome = false
         )
         val customerRequest = CustomerRequest(customer)
         viewModel.createCustomer(customerRequest)
@@ -94,8 +84,11 @@ class SignupFragment : Fragment() {
             }
         }
     }
-    private fun signUp(){
+    private fun signUp() {
         binding.SignInButton.setOnClickListener {
+            email = binding.EmailTextField.editText?.text.toString()
+            password = binding.PasswordTextField.editText?.text.toString()
+            username = binding.UserNameTextField.editText?.text.toString()
             if ((isValidEmail(email) && isValidPassword(password)) && username.isNotBlank()) {
                 val user = User(email, password)
                 lifecycleScope.launch {
@@ -107,19 +100,21 @@ class SignupFragment : Fragment() {
                             }
                             is ViewState.Success -> {
                                 binding.progressBar.visibility = View.GONE
-                                val success = state.data
-                                if (success) {
-                                    Toast.makeText(requireContext(), "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
-                                    createCustomerOnShopify(email, username)
+                                val userId = state.data
+                                if (userId != null) {
+                                    Toast.makeText(requireContext(), "Signup successful! Your user ID is $userId. Please check your email for verification.", Toast.LENGTH_SHORT).show()
+                                    createCustomerOnShopify(email, username , userId)
                                     Navigation.findNavController(it).navigate(R.id.action_signupFragment_to_loginFragment)
                                 } else {
                                     Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                           is ViewState.Error -> {
+                            is ViewState.Error -> {
                                 binding.progressBar.visibility = View.GONE
                                 Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
                             }
+
+                            else -> {}
                         }
                     }
                 }
@@ -128,4 +123,5 @@ class SignupFragment : Fragment() {
             }
         }
     }
+
 }
