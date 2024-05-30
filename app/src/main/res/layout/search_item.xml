@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -11,28 +9,33 @@
 
     </data>
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card_product"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="320dp"
         android:layout_margin="4dp"
-        android:layout_marginStart="50dp"
         android:backgroundTint="@color/cardview_light_background"
         android:elevation="16dp"
         android:padding="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hello_text"
         app:cardCornerRadius="16dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            >
 
-            <ImageView
+        <ImageView
                 android:id="@+id/image_of_product"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/search_product"
                 android:src="@drawable/login2"
+                imageUrl="@{product.images.get(0).src}"
                 app:layout_constraintCircleRadius="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +57,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Brand : SHOES"
+                android:text="@{product.productType}"
                 app:layout_constraintStart_toStartOf="@+id/rate_of_product"
                 app:layout_constraintTop_toBottomOf="@+id/rate_of_product" />
 
@@ -64,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="Hamadddaa"
+                android:text="@string/brand_Products"
                 android:textColor="@color/xd_orange"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/type_name"

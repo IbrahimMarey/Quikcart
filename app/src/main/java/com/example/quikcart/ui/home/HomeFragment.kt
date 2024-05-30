@@ -37,8 +37,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         observeOnStateFlow()
-        binding.searchBar.isIconified= false
-        binding.searchBar.clearFocus()
         binding.searchBar.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
         }

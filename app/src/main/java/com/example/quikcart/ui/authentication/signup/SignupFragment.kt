@@ -12,12 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentSignupBinding
-import com.example.quikcart.models.entities.User
-import com.example.quikcart.ui.authentication.AuthViewModel
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.Address
 import com.example.quikcart.models.entities.Customer
 import com.example.quikcart.models.entities.CustomerRequest
+import com.example.quikcart.models.entities.User
+import com.example.quikcart.ui.authentication.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -26,7 +26,9 @@ import org.json.JSONObject
 class SignupFragment : Fragment() {
     private lateinit var binding: FragmentSignupBinding
     private lateinit var viewModel: AuthViewModel
-
+    private lateinit var email:String
+    private lateinit var password:String
+    private lateinit var username: String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,42 +39,13 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-          viewModel = ViewModelProvider (this)[AuthViewModel::class.java]
-
-        binding.SignInButton.setOnClickListener {
-            val email = binding.EmailTextField.editText?.text.toString()
-            val password = binding.PasswordTextField.editText?.text.toString()
-            val username = binding.UserNameTextField.editText?.text.toString()
-            if ((isValidEmail(email) && isValidPassword(password)) && username.isNotBlank()) {
-                val user = User(email, password)
-                lifecycleScope.launch {
-                    viewModel.signUp(user)
-                    viewModel.authState.collect { state ->
-                        when (state) {
-                            ViewState.Loading -> {
-                                 binding.progressBar.visibility = View.VISIBLE
-                            }
-                            is ViewState.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                val success = state.data
-                                if (success) {
-                                    Toast.makeText(requireContext(), "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
-                                    createCustomerOnShopify(email, username)
-                                    Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
-                                } else {
-                                    Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                            else -> {}
-                        }
-                    }
-                }
-            } else {
-                Toast.makeText(requireContext(), "Invalid email or password. Please check your input.", Toast.LENGTH_SHORT).show()
-            }
-        }
+        viewModel = ViewModelProvider (this)[AuthViewModel::class.java]
+        email = binding.EmailTextField.editText?.text.toString()
+        password = binding.PasswordTextField.editText?.text.toString()
+        username = binding.UserNameTextField.editText?.text.toString()
+        signUp()
         binding.signinText.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
+            Navigation.findNavController(it).navigate(R.id.action_signupFragment_to_loginFragment)
         }
     }
     private fun isValidEmail(email: String): Boolean {
@@ -96,15 +69,8 @@ class SignupFragment : Fragment() {
         )
 
         val customer = Customer(
-            first_name = "Steve",
-            last_name = "Lastnameson",
-            email = "mayarhassan@gmail.com",
-            phone = "32355512",
-            verified_email = true,
-            addresses = listOf(address),
-            password = "newpass",
-            password_confirmation = "newpass",
-            send_email_welcome = false
+            first_name = "Steve", last_name = "Lastnameson", email = "mayarhassan@gmail.com", phone = "32355512", verified_email = true,
+            addresses = listOf(address), password = "newpass", password_confirmation = "newpass", send_email_welcome = false
         )
         val customerRequest = CustomerRequest(customer)
         viewModel.createCustomer(customerRequest)
@@ -125,6 +91,40 @@ class SignupFragment : Fragment() {
 
                     else -> {}
                 }
+            }
+        }
+    }
+    private fun signUp(){
+        binding.SignInButton.setOnClickListener {
+            if ((isValidEmail(email) && isValidPassword(password)) && username.isNotBlank()) {
+                val user = User(email, password)
+                lifecycleScope.launch {
+                    viewModel.signUp(user)
+                    viewModel.authState.collect { state ->
+                        when (state) {
+                            ViewState.Loading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                            }
+                            is ViewState.Success -> {
+                                binding.progressBar.visibility = View.GONE
+                                val success = state.data
+                                if (success) {
+                                    Toast.makeText(requireContext(), "Signup successful! Please check your email for verification.", Toast.LENGTH_SHORT).show()
+                                    createCustomerOnShopify(email, username)
+                                    Navigation.findNavController(it).navigate(R.id.action_signupFragment_to_loginFragment)
+                                } else {
+                                    Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                           is ViewState.Error -> {
+                                binding.progressBar.visibility = View.GONE
+                                Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(requireContext(), "Invalid email or password. Please check your input.", Toast.LENGTH_SHORT).show()
             }
         }
     }
