@@ -16,23 +16,35 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val authRepository: AuthenticationRepository , private val repository: Repository) : ViewModel() {
 
-    private val _authState = MutableStateFlow<ViewState<Boolean>>(ViewState.Loading)
+    private val _loginState = MutableStateFlow<ViewState<Boolean>>(ViewState.Loading)
+    val loginState = _loginState
+
+    private val _authState = MutableStateFlow<ViewState<String?>>(ViewState.Loading)
     val authState = _authState
+
+
 
     private val _customerCreationState = MutableStateFlow<ViewState<Boolean>>(ViewState.Loading)
     val customerCreationState = _customerCreationState
     fun signUp(user: User) {
         viewModelScope.launch {
             _authState.value = ViewState.Loading
-            val success = authRepository.signUpWithEmailAndPassword(user)
-            _authState.value = ViewState.Success(success)
+            val result = authRepository.signUpWithEmailAndPassword(user)
+            if (result.isSuccess) {
+                val userId = result.getOrNull()
+                _authState.value = ViewState.Success(userId)
+                Log.i("TAG", "signUp: $userId")
+            } else {
+                _authState.value = ViewState.Error("Signup failed")
+            }
         }
     }
+
     fun login(user: User){
         viewModelScope.launch {
-            _authState.value = ViewState.Loading
+            _loginState.value = ViewState.Loading
             val success = authRepository.signInWithEmailAndPassword(user)
-            _authState.value = ViewState.Success(success)
+            _loginState.value = ViewState.Success(success)
         }
     }
 
@@ -44,11 +56,9 @@ class AuthViewModel @Inject constructor(private val authRepository: Authenticati
             if (response.isSuccessful) {
                 _customerCreationState.value = ViewState.Success(true)
             } else {
-                // ...
                 _customerCreationState.value = ViewState.Error("Failed to create customer")
             }
         } catch (e: Exception) {
-            // ...
             _customerCreationState.value = ViewState.Error("Network error occurred")
         }
     }

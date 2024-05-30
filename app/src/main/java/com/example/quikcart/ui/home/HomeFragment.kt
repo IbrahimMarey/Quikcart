@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentHomeBinding
 import com.example.quikcart.models.ViewState
@@ -32,16 +33,14 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         observeOnStateFlow()
-
-
-
+        binding.searchBar.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
-
     private fun initBrandsRecyclerView(brands:List<SmartCollectionsItem>) {
         brandAdapter.submitList(brands)
         binding.recyclerBrands.adapter = brandAdapter
