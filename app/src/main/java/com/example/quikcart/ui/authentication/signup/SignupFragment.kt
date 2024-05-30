@@ -24,11 +24,9 @@ import org.json.JSONObject
 
 @AndroidEntryPoint
 class SignupFragment : Fragment() {
+
     private lateinit var binding: FragmentSignupBinding
     private lateinit var viewModel: AuthViewModel
-    private lateinit var email:String
-    private lateinit var password:String
-    private lateinit var username: String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,14 +34,21 @@ class SignupFragment : Fragment() {
         binding = FragmentSignupBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider (this)[AuthViewModel::class.java]
-        signUp()
+        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        setupListeners()
+    }
+    private fun setupListeners() {
         binding.signinText.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_signupFragment_to_loginFragment)
+            navigateToLogin(it)
         }
+        binding.SignInButton.setOnClickListener {
+            handleSignUp()
+        }
+    }
+    private fun navigateToLogin(view: View) {
+        Navigation.findNavController(view).navigate(R.id.action_signupFragment_to_loginFragment)
     }
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -51,15 +56,16 @@ class SignupFragment : Fragment() {
     private fun isValidPassword(password: String): Boolean {
         return password.length >= 8
     }
-
-    private fun createCustomerOnShopify(email: String, username: String , id:String) {
-
+    private fun showErrorMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+    private fun createCustomerOnShopify(email: String, username: String, userId: String) {
         val address = Address(
-        address1 = " ", city = " ", province = " ", phone = " ",
-        zip = " ", last_name = " ", first_name = " ", country = " ")
-
+            address1 = " ", city = " ", province = " ", phone = " ",
+            zip = " ", last_name = " ", first_name = " ", country = " "
+        )
         val customer = Customer(
-            first_name = username, last_name = id, email = email, phone = " ", verified_email = true,
+            first_name = username, last_name = userId, email = email, phone = " ", verified_email = true,
             addresses = listOf(address), password = "000000", password_confirmation = "000000", send_email_welcome = false
         )
         val customerRequest = CustomerRequest(customer)
@@ -67,61 +73,92 @@ class SignupFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.customerCreationState.collect { state ->
                 when (state) {
-                    is ViewState.Error -> {
-                        val errorMessage = try {
-                            val errorJson = JSONObject(state.message)
-                            val customerErrors = errorJson.optJSONObject("errors")?.optJSONObject("customer")
-                            customerErrors?.toString(2) ?: state.message
-                        } catch (e: Exception) {
-                            state.message
-                        }
-                        Toast.makeText(requireContext(), "Error: $errorMessage", Toast.LENGTH_LONG).show()
-                        Log.e("CustomerCreationError", errorMessage)
-                    }
-
+                    is ViewState.Error -> handleCustomerCreationError(state.message)
+                    is ViewState.Success -> showErrorMessage("Customer created successfully!")
                     else -> {}
                 }
             }
         }
     }
-    private fun signUp() {
-        binding.SignInButton.setOnClickListener {
-            email = binding.EmailTextField.editText?.text.toString()
-            password = binding.PasswordTextField.editText?.text.toString()
-            username = binding.UserNameTextField.editText?.text.toString()
-            if ((isValidEmail(email) && isValidPassword(password)) && username.isNotBlank()) {
-                val user = User(email, password)
-                lifecycleScope.launch {
-                    viewModel.signUp(user)
-                    viewModel.authState.collect { state ->
-                        when (state) {
-                            ViewState.Loading -> {
-                                binding.progressBar.visibility = View.VISIBLE
-                            }
-                            is ViewState.Success -> {
-                                binding.progressBar.visibility = View.GONE
-                                val userId = state.data
-                                if (userId != null) {
-                                    Toast.makeText(requireContext(), "Signup successful! Your user ID is $userId. Please check your email for verification.", Toast.LENGTH_SHORT).show()
-                                    createCustomerOnShopify(email, username , userId)
-                                    Navigation.findNavController(it).navigate(R.id.action_signupFragment_to_loginFragment)
-                                } else {
-                                    Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                            is ViewState.Error -> {
-                                binding.progressBar.visibility = View.GONE
-                                Toast.makeText(requireContext(), "Signup failed. Please try again.", Toast.LENGTH_SHORT).show()
-                            }
 
-                            else -> {}
-                        }
-                    }
+    private fun handleCustomerCreationError(message: String) {
+        val errorMessage = try {
+            val errorJson = JSONObject(message)
+            val customerErrors = errorJson.optJSONObject("errors")?.optJSONObject("customer")
+            customerErrors?.toString(2) ?: message
+        } catch (e: Exception) {
+            message
+        }
+        showErrorMessage("Error: $errorMessage")
+        Log.e("CustomerCreationError", errorMessage)
+    }
+
+    private fun handleSignUp() {
+        val email = binding.EmailTextField.editText?.text.toString()
+        val password = binding.PasswordTextField.editText?.text.toString()
+        val username = binding.UserNameTextField.editText?.text.toString()
+
+        if (validateInputs(email, password, username)) {
+            performSignUp(User(email, password), email, username)
+        } else {
+            showErrorMessage("Please fix the errors in the form")
+        }
+    }
+
+    private fun validateInputs(email: String, password: String, username: String): Boolean {
+        var isValid = true
+
+        if (!isValidEmail(email)) {
+            binding.EmailTextField.error = "Invalid email address"
+            isValid = false
+        } else {
+            binding.EmailTextField.error = null
+        }
+
+        if (!isValidPassword(password)) {
+            binding.PasswordTextField.error = "Password must be at least 8 characters"
+            isValid = false
+        } else {
+            binding.PasswordTextField.error = null
+        }
+
+        if (username.isBlank()) {
+            binding.UserNameTextField.error = "Username cannot be blank"
+            isValid = false
+        } else {
+            binding.UserNameTextField.error = null
+        }
+
+        return isValid
+    }
+
+    private fun performSignUp(user: User, email: String, username: String) {
+        Log.i("TAG", "performSignUp: $user , $email , $username")
+        lifecycleScope.launch {
+            viewModel.signUp(user)
+            viewModel.authState.collect { state ->
+                when (state) {
+                    ViewState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                    is ViewState.Success -> handleSignUpSuccess(state.data, email, username)
+                    is ViewState.Error -> handleSignUpError()
                 }
-            } else {
-                Toast.makeText(requireContext(), "Invalid email or password. Please check your input.", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    private fun handleSignUpSuccess(userId: String?, email: String, username: String) {
+        binding.progressBar.visibility = View.GONE
+        if (userId != null) {
+            showErrorMessage("Signup successful! Please check your email for verification.")
+            createCustomerOnShopify(email, username, userId)
+            navigateToLogin(binding.SignInButton)
+        } else {
+            showErrorMessage("Signup failed. Please try again.")
+        }
+    }
+
+    private fun handleSignUpError() {
+        binding.progressBar.visibility = View.GONE
+        showErrorMessage("Signup failed. Please try again.")
+    }
 }
