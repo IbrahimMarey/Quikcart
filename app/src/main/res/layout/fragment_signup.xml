@@ -53,8 +53,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/your_name" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,16 +83,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/UserNameTextField"
                 app:startIconContentDescription="@string/email_address"
-                app:startIconDrawable="@drawable/ic_person">
+                app:startIconDrawable="@android:drawable/ic_dialog_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Email Address" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/PasswordTextField"
                 android:layout_width="0dp"
@@ -101,8 +97,6 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginBottom="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/SignInButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/EmailTextField"
@@ -111,7 +105,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/password"
+                    android:inputType="textPassword"
                     android:textSize="@dimen/text_medium" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,40 +124,35 @@
 
             <Button
                 android:id="@+id/SignInButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="59dp"
-                android:layout_marginStart="30dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/xd_orange"
                 android:text="@string/sign_up"
                 android:textSize="@dimen/text_medium"
-                app:layout_constraintBottom_toTopOf="@+id/textView6"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/PasswordTextField"
+                app:layout_constraintStart_toStartOf="@+id/PasswordTextField"
                 app:layout_constraintTop_toBottomOf="@+id/PasswordTextField" />
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:text="@string/already_have_account"
                 android:textSize="@dimen/text_large"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/SignInButton"
-                app:layout_constraintHorizontal_bias="0.401"
                 app:layout_constraintStart_toStartOf="@+id/SignInButton"
-                app:layout_constraintTop_toBottomOf="@+id/SignInButton" />
+                app:layout_constraintTop_toBottomOf="@+id/SignInButton"
+                app:layout_constraintVertical_bias="0.197" />
 
             <TextView
                 android:id="@+id/signinText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="2dp"
                 android:text="@string/sign_in"
                 android:textColor="@color/xd_blue"

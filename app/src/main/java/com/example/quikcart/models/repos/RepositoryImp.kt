@@ -6,7 +6,11 @@ import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+
 import com.example.quikcart.models.entities.PostAddressModel
+
+import com.example.quikcart.models.entities.ProductsItem
+
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.local.LocalDataSourceInterface
 import com.example.quikcart.models.remote.RemoteDataSource
@@ -22,6 +26,11 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override fun getBrands(): Flow<List<SmartCollectionsItem>> {
         return remoteDataSource.getBrands()
     }
+
+    override fun getProductsByBrandId(id: Long): Flow<List<ProductsItem>> {
+        return remoteDataSource.getProductsByBrandId(id)
+    }
+
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
@@ -30,6 +39,12 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
             emit(it)
             Log.i("TAG", "getAllAddressesShopify: ${it.addresses}")
         }
+
+
+    override fun getProducts(): Flow<List<ProductsItem>> {
+        return  remoteDataSource.getProducts()
+    }
+
     }.flowOn(Dispatchers.IO)
     override suspend fun postAddressShopify(address: PostAddressModel) {
         remoteDataSource.postAddress(address)

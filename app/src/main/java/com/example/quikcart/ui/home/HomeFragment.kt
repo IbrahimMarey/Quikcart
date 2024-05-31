@@ -10,6 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentHomeBinding
 import com.example.quikcart.models.ViewState
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
-    private var brandAdapter = BrandAdapter()
+    private lateinit var brandAdapter : BrandAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,19 +34,24 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         observeOnStateFlow()
-
-
-
+        binding.searchBar.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
-
     private fun initBrandsRecyclerView(brands:List<SmartCollectionsItem>) {
+        brandAdapter = BrandAdapter {brand->
+            brand.id?.let { navigateToProductsFragment(it) }
+        }
         brandAdapter.submitList(brands)
         binding.recyclerBrands.adapter = brandAdapter
+    }
+    private fun navigateToProductsFragment(brandId:Long){
+        val action = HomeFragmentDirections.actionHomeFragmentToProductFragment(brandId)
+        findNavController().navigate(action)
     }
 
     private fun observeOnStateFlow() {
