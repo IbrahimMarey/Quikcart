@@ -20,7 +20,7 @@ class PreferencesUtils private constructor(context: Context)
 
     fun getCurrencyType(): String?
     {
-        return sharedPreferences.getString(CURRENCY_PREFERENCE,"null")
+        return sharedPreferences.getString(CURRENCY_PREFERENCE,"EGP")
     }
 
     fun setUserID(id:String)
