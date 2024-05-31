@@ -30,7 +30,7 @@ class PreferencesUtils private constructor(context: Context)
 
     fun getUserId(): String?
     {
-        return sharedPreferences.getString(USER_ID_PREFERENCE,"null")
+        return sharedPreferences.getString(USER_ID_PREFERENCE,"7406457553131")
     }
 
     companion object{

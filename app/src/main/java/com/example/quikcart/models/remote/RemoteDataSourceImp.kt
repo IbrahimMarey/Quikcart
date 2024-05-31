@@ -34,21 +34,20 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
     }
 
 
-    override suspend fun postAddress(address: PostAddressModel): Response<FetchAddress> {
-        var r =apiService.postAddress(address)
-        Log.i("TAG", "postAddress: ${r.message()} \n\n ${r.body()}")
+    override suspend fun postAddress(customerID:Long,address: PostAddressModel): Response<FetchAddress> {
+        var r =apiService.postAddress(customerID,address)
         return r
     }
 
-    override suspend fun getCustomerAddresses(): Response<AddressesResponse> {
-        var r = apiService.getCustomerAddresses()
+    override suspend fun getCustomerAddresses(customerID:Long): Response<AddressesResponse> {
+        var r = apiService.getCustomerAddresses(customerID)
         Log.i("TAG", "getCustomerAddresses: ${r.message()}  \n\n ${r.body()}")
         return r
     }
 
-    override suspend fun delCustomerAddress(id: Long) {
-        apiService.delCustomerAddress(id)
-
+    override suspend fun delCustomerAddress(customerID:Long,id: Long) {
+        apiService.delCustomerAddress(customerID,id)
+    }
     override fun getProducts(): Flow<List<ProductsItem>> = flow{
         val response = apiService.getProducts().products
         response?.filterNotNull()?.let { emit(it) }

@@ -22,6 +22,7 @@ import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.PostAddressBodyModel
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.ui.adresses.AddressesViewModel
+import com.example.quikcart.utils.PreferencesUtils
 import com.example.quikcart.utils.getMarkerAddress
 import com.example.quikcart.utils.isEgyptianPhoneNumberValid
 import com.example.quikcart.utils.isLocationInEgypt
@@ -114,7 +115,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun confirmLocationDialog(address:PostAddressModel,alert:AlertDialog){
 
-        addressViewModel.postAddress(address)
+        addressViewModel.postAddress(
+            PreferencesUtils.getInstance(requireContext()).getUserId()
+            ?.toLong()?: "7406457553131".toLong(),address)
         alert.cancel()
         Navigation.findNavController(requireView()).navigateUp()
     }

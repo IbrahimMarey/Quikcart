@@ -20,9 +20,9 @@ interface Repository {
     fun getProductsByBrandId(id:Long):Flow<List<ProductsItem>>
     suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse>
     // shopify
-    suspend fun getAllAddressesShopify(): Flow<AddressesResponse>
-    suspend fun postAddressShopify(address: PostAddressModel)
-    suspend fun delAddressShopify(id:Long)
+    suspend fun getAllAddressesShopify(customerID:Long,): Flow<AddressesResponse>
+    suspend fun postAddressShopify(customerID:Long,address: PostAddressModel)
+    suspend fun delAddressShopify(customerID:Long,id:Long)
 
     fun getProducts(): Flow<List<ProductsItem>>
 
