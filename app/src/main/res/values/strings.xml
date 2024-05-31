@@ -156,4 +156,10 @@
     <string name="confirm">Confirm</string>
     <string name="give_title_to_location">Give Title To This Location</string>
     <string name="delete">Delete</string>
+    <string name="egp">EGP</string>
+    <string name="usd">USD</string>
+    <string name="not_allow_location">Not Allow Location outside Egypt</string>
+    <string name="default_phone">Default Phone</string>
+    <string name="new_phone">New Phone</string>
+    <string name="phone_miss_match">Phone Miss Match</string>
 </resources>

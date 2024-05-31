@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.Navigation
 import com.example.quikcart.R
 import com.example.quikcart.databinding.AboutUsDialogBinding
 import com.example.quikcart.databinding.FragmentProfileBinding
+import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ProfileFragment : Fragment() {
@@ -18,6 +21,9 @@ class ProfileFragment : Fragment() {
     private lateinit var binding:FragmentProfileBinding
     private lateinit var materialAboutUsBuilder: MaterialAlertDialogBuilder
     private lateinit var aboutUsDialog:AboutUsDialogBinding
+    private val preferencesUtils by lazy {
+        PreferencesUtils.getInstance(requireActivity().application)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,13 +44,17 @@ class ProfileFragment : Fragment() {
 
         binding.addressSittings.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToAddressesFragment()
-            Navigation.findNavController(it).navigate(R.id.addressesFragment)
+            Navigation.findNavController(it).navigate(action)//R.id.addressesFragment
         }
         binding.contactUs.setOnClickListener{
             contactUsDialog()
         }
         binding.aboutUs.setOnClickListener{
             aboutUsDialogOpening()
+        }
+
+        binding.currency.setOnClickListener {
+            currencyDialog()
         }
     }
 
@@ -75,6 +85,34 @@ class ProfileFragment : Fragment() {
             ).setCancelable(true).show()
 
         aboutUsView.findViewById<Button>(R.id.button_dismiss).setOnClickListener {
+            alertDialog.cancel()
+        }
+    }
+
+    private fun currencyDialog()
+    {
+        val currency = layoutInflater.inflate(R.layout.currency_dialog, null)
+
+        val alertDialog = materialAboutUsBuilder.setView(currency)
+            .setBackground(
+                ResourcesCompat.getDrawable(
+                    resources, R.drawable.dialogue_background, requireActivity().theme
+                )
+            ).setCancelable(true).show()
+
+        when(preferencesUtils.getCurrencyType())
+        {
+            PreferencesUtils.CURRENCY_USD ->currency.findViewById<RadioButton>(R.id.radioUSD).toggle()
+            PreferencesUtils.CURRENCY_EGP ->currency.findViewById<RadioButton>(R.id.radioEGP).toggle()
+        }
+        currency.findViewById<RadioGroup>(R.id.currencyGroup).setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.radioUSD -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_USD)
+                R.id.radioEGP -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_EGP)
+            }
+
+        }
+        currency.findViewById<Button>(R.id.button_save_currency).setOnClickListener {
             alertDialog.cancel()
         }
     }
