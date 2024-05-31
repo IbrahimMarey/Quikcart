@@ -1,6 +1,5 @@
 package com.example.quikcart.models.network
 
-import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.utils.Constants
 import com.example.quikcart.models.entities.BrandsResponse
@@ -9,6 +8,7 @@ import com.example.quikcart.models.entities.CustomerResponse
 
 import com.example.quikcart.models.entities.FetchAddress
 import com.example.quikcart.models.entities.PostAddressModel
+import com.example.quikcart.models.entities.ProductsResponse
 
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,7 +28,7 @@ interface ApiService {
     suspend fun getBrands():BrandsResponse
 
     @GET("products.json?access_token=${Constants.ACCESS_TOKEN}")
-    suspend fun getProductsByBrandId(@Query("collection_id") brandId:Long):ProductsResponse
+    suspend fun getProductsByBrandId(@Query("collection_id") brandId:Long): ProductsResponse
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @POST("customers.json")
@@ -38,18 +38,19 @@ interface ApiService {
 
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
-    @POST("customers/7406457553131/addresses.json")
+    @POST("customers/{customerID}/addresses.json")
     suspend fun postAddress(
+        @Path("customerID") customerID:Long,
         @Body address: PostAddressModel
     ): Response<FetchAddress>
 
     @Headers("X-Shopify-Access-Token:${Constants.PASSWORD}")
-    @GET("customers/7406457553131/addresses.json")
-    suspend fun getCustomerAddresses(): Response<AddressesResponse>
+    @GET("customers/{customerID}/addresses.json")
+    suspend fun getCustomerAddresses(@Path("customerID") customerID:Long): Response<AddressesResponse>
 
     @Headers("X-Shopify-Access-Token:${Constants.PASSWORD}")
-    @DELETE("customers/7406457553131/addresses/{id}.json")
-    suspend fun delCustomerAddress(@Path("id")id : Long)
+    @DELETE("customers/{customerID}/addresses/{id}.json")
+    suspend fun delCustomerAddress(@Path("customerID") customerID:Long,@Path("id")id : Long)
 
     @Headers("Content-Type:application/json", "X-Shopify-Access-Token:"+ Constants.ACCESS_TOKEN)
     @GET("products.json")

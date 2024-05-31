@@ -15,6 +15,7 @@ import com.example.quikcart.databinding.FragmentAddressesBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +47,8 @@ class AddressesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        addressesViewModel.getCustomerAddresses(PreferencesUtils.getInstance(requireContext()).getUserId()
+            ?.toLong()?: "7406457553131".toLong())
         setUpUI()
     }
     private fun setUpUI()
@@ -97,7 +100,8 @@ class AddressesFragment : Fragment() {
     private fun delAddress(addressesModel:AddressResponse){
         Snackbar.make(requireView(), getString(R.string.are_you_sure_you_want_to_delete_this_address), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.delete)) {
-                addressesViewModel.delCustomerAddress(addressesModel.id)
+                addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getUserId()
+                    ?.toLong()?: "7406457553131".toLong(),addressesModel.id)
             }.show()
     }
 }

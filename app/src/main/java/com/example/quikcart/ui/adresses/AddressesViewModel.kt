@@ -22,21 +22,21 @@ class AddressesViewModel @Inject constructor(private val _appRepo:Repository):Vi
     val customerAddresses : StateFlow<ViewState<List<AddressResponse>>> = _customerAddresses
 
     init {
-        getCustomerAddresses()
+
     }
 
 
-    fun postAddress(addressResponse: PostAddressModel){
+    fun postAddress(customerID:Long,addressResponse: PostAddressModel){
         viewModelScope.launch(Dispatchers.IO) {
-            _appRepo.postAddressShopify(addressResponse)
+            _appRepo.postAddressShopify(customerID,addressResponse)
         }
-        getCustomerAddresses()
+        getCustomerAddresses(customerID)
     }
 
-    fun getCustomerAddresses()
+    fun getCustomerAddresses(customerID:Long)
     {
         viewModelScope.launch {
-            _appRepo.getAllAddressesShopify().catch {
+            _appRepo.getAllAddressesShopify(customerID).catch {
                 Log.d("TAG", "getCustomerAddresses: ${it.message}")
             }.collect{
                 _customerAddresses.value = ViewState.Success(it.addresses)
@@ -44,11 +44,11 @@ class AddressesViewModel @Inject constructor(private val _appRepo:Repository):Vi
         }
     }
 
-    fun delCustomerAddress(id:Long)
+    fun delCustomerAddress(customerID:Long,id:Long)
     {
         viewModelScope.launch {
-            _appRepo.delAddressShopify(id)
+            _appRepo.delAddressShopify(customerID,id)
         }
-        getCustomerAddresses()
+        getCustomerAddresses(customerID)
     }
 }

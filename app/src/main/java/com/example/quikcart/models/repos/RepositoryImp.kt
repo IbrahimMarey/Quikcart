@@ -34,23 +34,23 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
-    override suspend fun getAllAddressesShopify() : Flow<AddressesResponse> = flow {
-        remoteDataSource.getCustomerAddresses().body()?.let {
+    override suspend fun getAllAddressesShopify(customerID:Long,) : Flow<AddressesResponse> = flow {
+        remoteDataSource.getCustomerAddresses(customerID).body()?.let {
             emit(it)
             Log.i("TAG", "getAllAddressesShopify: ${it.addresses}")
         }
 
+    }.flowOn(Dispatchers.IO)
 
     override fun getProducts(): Flow<List<ProductsItem>> {
         return  remoteDataSource.getProducts()
     }
 
-    }.flowOn(Dispatchers.IO)
-    override suspend fun postAddressShopify(address: PostAddressModel) {
-        remoteDataSource.postAddress(address)
+    override suspend fun postAddressShopify(customerID:Long,address: PostAddressModel) {
+        remoteDataSource.postAddress(customerID,address)
     }
-    override suspend fun delAddressShopify(id:Long) {
-        remoteDataSource.delCustomerAddress(id)
+    override suspend fun delAddressShopify(customerID:Long,id:Long) {
+        remoteDataSource.delCustomerAddress(customerID,id)
     }
 
 }

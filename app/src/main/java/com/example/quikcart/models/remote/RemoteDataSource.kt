@@ -18,10 +18,10 @@ interface RemoteDataSource {
      fun getProductsByBrandId(id:Long):Flow<List<ProductsItem>>
      suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse>
 
-     suspend fun postAddress(address: PostAddressModel): Response<FetchAddress>
-     suspend fun getCustomerAddresses(): Response<AddressesResponse>
+     suspend fun postAddress(customerID:Long,address: PostAddressModel): Response<FetchAddress>
+     suspend fun getCustomerAddresses(customerID:Long,): Response<AddressesResponse>
 
-     suspend fun delCustomerAddress(id : Long)
+     suspend fun delCustomerAddress(customerID:Long,id : Long)
 
 
      fun getProducts():Flow<List<ProductsItem>>
