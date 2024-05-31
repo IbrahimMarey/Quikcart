@@ -157,7 +157,11 @@
     <string name="confirm">تأكيد</string>
     <string name="give_title_to_location">تعريف المكان</string>
     <string name="delete">حذف</string>
-
-
+    <string name="egp">جنيه مصري</string>
+    <string name="usd">دولار امريكي</string>
+    <string name="not_allow_location">غير متاح اختيار مكان خارج مصر</string>
+    <string name="default_phone">الرقم الاصلي</string>
+    <string name="new_phone">رقم جديد</string>
+    <string name="phone_miss_match">الرقم غير متوافق</string>
 
 </resources>

@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.databinding.AddressesItemBinding
 import com.example.quikcart.utils.getMarkerAddress
-import com.example.quikcart.models.entities.AddressModel
+import com.example.quikcart.models.entities.AddressResponse
 
-class AddressesAdapter(private val delAddress:(AddressModel)->Unit) : ListAdapter<AddressModel,AddressesAdapter.ViewHolder>(DiffUtils) {
+class AddressesAdapter(private val delAddress:(AddressResponse)->Unit) : ListAdapter<AddressResponse,AddressesAdapter.ViewHolder>(DiffUtils) {
 
     private lateinit var ctx :Context
     class ViewHolder(val binding:AddressesItemBinding):RecyclerView.ViewHolder(binding.root)
@@ -24,8 +24,8 @@ class AddressesAdapter(private val delAddress:(AddressModel)->Unit) : ListAdapte
     {
         val model = getItem(position)
 
-        holder.binding.addressesItemTitle.text = model.title
-        holder.binding.addressesItemSubTitle.text = getMarkerAddress(ctx,model.lat,model.lng)
+        holder.binding.addressesItemTitle.text = model.address1
+        holder.binding.addressesItemSubTitle.text = model.address2
 
         holder.binding.btnRemoveItem.setOnClickListener {
             delAddress(model)
@@ -34,13 +34,13 @@ class AddressesAdapter(private val delAddress:(AddressModel)->Unit) : ListAdapte
     }
 
 
-    object DiffUtils : DiffUtil.ItemCallback<AddressModel>() {
-        override fun areItemsTheSame(oldItem: AddressModel, newItem: AddressModel): Boolean {
-            return oldItem.lat == newItem.lat && oldItem.lng == newItem.lng
+    object DiffUtils : DiffUtil.ItemCallback<AddressResponse>() {
+        override fun areItemsTheSame(oldItem: AddressResponse, newItem: AddressResponse): Boolean {
+            return oldItem.address1 == newItem.address1
         }
 
-        override fun areContentsTheSame(oldItem: AddressModel, newItem: AddressModel): Boolean {
-            return oldItem.lat == newItem.lat && oldItem.lng == newItem.lng
+        override fun areContentsTheSame(oldItem: AddressResponse, newItem: AddressResponse): Boolean {
+            return oldItem.address1 == newItem.address1
         }
 
     }

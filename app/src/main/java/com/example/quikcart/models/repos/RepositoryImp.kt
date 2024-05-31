@@ -1,9 +1,16 @@
 package com.example.quikcart.models.repos
 
+import android.util.Log
 import com.example.quikcart.models.entities.AddressModel
+import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+
+import com.example.quikcart.models.entities.PostAddressModel
+
 import com.example.quikcart.models.entities.ProductsItem
+
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.local.LocalDataSourceInterface
 import com.example.quikcart.models.remote.RemoteDataSource
@@ -27,22 +34,23 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
+    override suspend fun getAllAddressesShopify() : Flow<AddressesResponse> = flow {
+        remoteDataSource.getCustomerAddresses().body()?.let {
+            emit(it)
+            Log.i("TAG", "getAllAddressesShopify: ${it.addresses}")
+        }
+
 
     override fun getProducts(): Flow<List<ProductsItem>> {
         return  remoteDataSource.getProducts()
     }
 
-    override suspend fun getAllAddresses(): Flow<List<AddressModel>> = flow<List<AddressModel>>{
-        emit(localDataSourceInterface.getAllAddresses())
-
     }.flowOn(Dispatchers.IO)
-
-    override suspend fun insertAddress(addressModel: AddressModel): Long {
-        return localDataSourceInterface.insertAddress(addressModel)
+    override suspend fun postAddressShopify(address: PostAddressModel) {
+        remoteDataSource.postAddress(address)
     }
-
-    override suspend fun delAddress(addressModel: AddressModel): Int {
-        return localDataSourceInterface.delAddress(addressModel)
+    override suspend fun delAddressShopify(id:Long) {
+        remoteDataSource.delCustomerAddress(id)
     }
 
 }
