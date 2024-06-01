@@ -9,12 +9,5 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppDao {
-    @Query("SELECT * FROM addresses")
-    suspend fun getAllAddresses():List<AddressModel>
 
-    @Insert
-    suspend fun insertAddress(addressModel:AddressModel):Long
-
-    @Delete
-    suspend fun delAddress(addressModel: AddressModel):Int
 }

@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.adresses
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentAddressesBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressModel
+import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -40,15 +43,19 @@ class AddressesFragment : Fragment() {
             val action = AddressesFragmentDirections.actionAddressesFragmentToMapFragment()
             Navigation.findNavController(it).navigate(action)
         }
-
-        setUpUI()
     }
 
+    override fun onResume() {
+        super.onResume()
+        addressesViewModel.getCustomerAddresses(PreferencesUtils.getInstance(requireContext()).getUserId()
+            ?.toLong()?: "7406457553131".toLong())
+        setUpUI()
+    }
     private fun setUpUI()
     {
         binding.recyclerAddresses.visibility= View.GONE
         binding.notFoundAddresses.visibility = View.GONE
-        val delAction :(AddressModel)->Unit= {
+        val delAction :(AddressResponse)->Unit= {
             delAddress(it)
         }
         adapter = AddressesAdapter(delAction)
@@ -61,7 +68,7 @@ class AddressesFragment : Fragment() {
     private fun setUpAddressesData()
     {
         lifecycleScope.launch(Dispatchers.Main) {
-            addressesViewModel.addresses.collectLatest {
+            addressesViewModel.customerAddresses.collectLatest {
                 when(it)
                 {
                     is ViewState.Loading->{
@@ -90,10 +97,11 @@ class AddressesFragment : Fragment() {
             }
         }
     }
-    private fun delAddress(addressesModel:AddressModel){
+    private fun delAddress(addressesModel:AddressResponse){
         Snackbar.make(requireView(), getString(R.string.are_you_sure_you_want_to_delete_this_address), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.delete)) {
-                addressesViewModel.delAddress(addressesModel)
+                addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getUserId()
+                    ?.toLong()?: "7406457553131".toLong(),addressesModel.id)
             }.show()
     }
 }

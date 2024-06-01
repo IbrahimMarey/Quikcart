@@ -6,18 +6,4 @@ import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(appDao: AppDao) :LocalDataSourceInterface {
 
-    private val dao = appDao
-    override suspend fun getAllAddresses(): List<AddressModel> {
-        return dao.getAllAddresses()
-    }
-
-    override suspend fun insertAddress(addressModel: AddressModel): Long {
-        return dao.insertAddress(addressModel)
-    }
-
-    override suspend fun delAddress(addressModel: AddressModel): Int {
-        return dao.delAddress(addressModel)
-    }
-
-
 }
