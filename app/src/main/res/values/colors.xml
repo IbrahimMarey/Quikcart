@@ -25,5 +25,6 @@
     <color name="xd_btn_nav_item">#8e8e8e</color>
     <color name="xd_lemon">#dff8ea</color>
     <color name="xd_lemon_dark">#30a764</color>
+    <color name="xd_text_view_details">#424242</color>
 
 </resources>

@@ -22,7 +22,12 @@
         android:id="@+id/favoriteFragment"
         android:name="com.example.quikcart.ui.favorite.FavoriteFragment"
         android:label="@string/wish_list"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment"
+            app:launchSingleTop="false" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.quikcart.ui.cart.CartFragment"
@@ -64,7 +69,11 @@
         android:id="@+id/searchFragment"
         android:name="com.example.quikcart.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/productFragment"
@@ -74,5 +83,18 @@
         <argument
             android:name="brand_id"
             app:argType="long" />
+        <action
+            android:id="@+id/action_productFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.quikcart.ui.productdetails.ProductDetailsFragment"
+        android:label="ProductDetailsFragment"
+        tools:layout="@layout/fragment_product_details">
+        <argument
+            android:name="details"
+            app:argType="com.example.quikcart.models.entities.ProductsItem"
+            app:nullable="true" />
     </fragment>
 </navigation>

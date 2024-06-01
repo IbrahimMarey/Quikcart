@@ -18,6 +18,8 @@ class SearchAdapter : ListAdapter<ProductsItem, SearchAdapter.ProductsViewHolder
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
         holder.bind(getItem(position))
+        var product = getItem(position)
+
     }
 
     class ProductsViewHolder(private val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -25,6 +27,7 @@ class SearchAdapter : ListAdapter<ProductsItem, SearchAdapter.ProductsViewHolder
         fun bind(item: ProductsItem) {
             binding.product = item
             binding.executePendingBindings()
+
         }
 
     }
