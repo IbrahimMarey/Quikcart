@@ -1,5 +1,8 @@
 package com.example.quikcart.models.repos
 
+import com.example.quikcart.R
+import com.example.quikcart.models.entities.AddressModel
+import com.example.quikcart.models.entities.CategoryItem
 import android.util.Log
 import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.AddressResponse
@@ -31,6 +34,10 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
         return remoteDataSource.getProductsByBrandId(id)
     }
 
+    override fun getProductsBySubCategory(category: String): Flow<List<ProductsItem>> {
+        return remoteDataSource.getProductsBySubCategory(category)
+    }
+
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
@@ -46,8 +53,25 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
         return  remoteDataSource.getProducts()
     }
 
+    override fun getCategories(): List<CategoryItem> {
+        return listOf(
+            CategoryItem("women", R.drawable.woman),
+            CategoryItem("men", R.drawable.man),
+            CategoryItem("kid", R.drawable.kid),
+            CategoryItem("sale", R.drawable.shop_bag))
+    }
+
+    override suspend fun getAllAddresses(): Flow<List<AddressModel>> = flow<List<AddressModel>>{
+        emit(localDataSourceInterface.getAllAddresses())
+
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun insertAddress(addressModel: AddressModel): Long {
+        return localDataSourceInterface.insertAddress(addressModel)
+    }
     override suspend fun postAddressShopify(customerID:Long,address: PostAddressModel) {
         remoteDataSource.postAddress(customerID,address)
+
     }
     override suspend fun delAddressShopify(customerID:Long,id:Long) {
         remoteDataSource.delCustomerAddress(customerID,id)

@@ -1,7 +1,6 @@
 package com.example.quikcart.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentHomeBinding
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.utils.AlertUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,6 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var binding: FragmentHomeBinding
     private lateinit var brandAdapter : BrandAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,19 +39,29 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         observeOnStateFlow()
+        initCategoryRecyclerView()
         binding.searchBar.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
         }
     }
+
+    private fun initCategoryRecyclerView() {
+        categoryAdapter = CategoryAdapter{
+           navigateToProductsFragment(0,it,false)
+        }
+        categoryAdapter.submitList(viewModel.getCategories())
+        binding.recyclerCategories.adapter = categoryAdapter
+    }
+
     private fun initBrandsRecyclerView(brands:List<SmartCollectionsItem>) {
         brandAdapter = BrandAdapter {brand->
-            brand.id?.let { navigateToProductsFragment(it) }
+            brand.id?.let { navigateToProductsFragment(it,null,true) }
         }
         brandAdapter.submitList(brands)
         binding.recyclerBrands.adapter = brandAdapter
     }
-    private fun navigateToProductsFragment(brandId:Long){
-        val action = HomeFragmentDirections.actionHomeFragmentToProductFragment(brandId)
+    private fun navigateToProductsFragment(brandId: Long, categoryItem: CategoryItem?, isBrand:Boolean){
+        val action = HomeFragmentDirections.actionHomeFragmentToProductFragment(brandId,isBrand,categoryItem)
         findNavController().navigate(action)
     }
 

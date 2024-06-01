@@ -30,10 +30,36 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
         }
     }
 
+     fun getProductsBySubCategory(mainCategory: String,subCategory: String){
+         val productsOfCategory : MutableList<ProductsItem> = mutableListOf()
+        viewModelScope.launch {
+            _uiState.value = ViewState.Loading
+            repo.getProductsBySubCategory(subCategory).catch {error->
+                _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
+            }.collect{products->
+              products.forEach {product->
+
+                  if(product.tags?.contains(mainCategory) == true){
+                      productsOfCategory.add(product)
+                      Log.e("TAG", "getProductsBySubCategory:not found${mainCategory} ", )
+
+                  }
+                  else{
+                      Log.e("TAG", "getProductsBySubCategory:not found${mainCategory} ", )
+                  }
+              }
+
+                getPriceForEachProduct(productsOfCategory)
+                _uiState.value = ViewState.Success(productsOfCategory)
+            }
+        }
+
+    }
+
     private fun getPriceForEachProduct(products: List<ProductsItem>) {
         products.forEach { item ->
             item.variants?.forEach {
-                item.price = it?.price
+                item.price = it.price
             }
         }
     }

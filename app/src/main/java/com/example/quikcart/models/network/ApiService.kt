@@ -5,7 +5,6 @@ import com.example.quikcart.utils.Constants
 import com.example.quikcart.models.entities.BrandsResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
-
 import com.example.quikcart.models.entities.FetchAddress
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsResponse
@@ -29,6 +28,9 @@ interface ApiService {
 
     @GET("products.json?access_token=${Constants.ACCESS_TOKEN}")
     suspend fun getProductsByBrandId(@Query("collection_id") brandId:Long): ProductsResponse
+
+    @GET("products.json?access_token=${Constants.ACCESS_TOKEN}")
+    suspend fun getProductsBySubCategory(@Query("product_type") subCategory: String):ProductsResponse
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @POST("customers.json")

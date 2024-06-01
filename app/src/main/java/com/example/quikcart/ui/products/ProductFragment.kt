@@ -6,14 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.forEach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentProductBinding
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.utils.AlertUtil
+import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -22,6 +26,8 @@ class ProductFragment : Fragment() {
     private  var adapter = ProductAdapter()
     private lateinit var binding: FragmentProductBinding
     private lateinit var productsViewModel: ProductsViewModel
+
+
 
 
     override fun onCreateView(
@@ -34,13 +40,47 @@ class ProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initViewModel()
-        val brandId = ProductFragmentArgs.fromBundle(requireArguments()).brandId
-        Log.e("TAG", "onViewCreated:${brandId} ", )
-        productsViewModel.getProductsByBrandId(brandId)
+        binding.chipGroup.forEach {
+            Log.e("TAG", "onViewCreated:${(it as Chip).isChecked} ", )
+        }
+       val brandId = ProductFragmentArgs.fromBundle(requireArguments()).brandId
+        val categoryItem = ProductFragmentArgs.fromBundle(requireArguments()).categoryItem
+        val isBrand = ProductFragmentArgs.fromBundle(requireArguments()).isBrands
+        if(isBrand){
+            getProductsByBrand(brandId)
+        }else {
+            getProductsByCategory(categoryItem?.name)
+        }
         observeOnStateFlow()
+    }
+
+
+
+    private fun getProductsByCategory(category: String?) {
+        binding.chipGroup.visibility=View.VISIBLE
+        category?.let { productsViewModel.getProductsBySubCategory(it, "ACCESSORIES") }
+
+        binding.chipShirt.setOnClickListener {
+            category?.let { productsViewModel.getProductsBySubCategory(it, "T-SHIRTS") }
+        }
+        binding.chipShoes.setOnClickListener {
+            category?.let { productsViewModel.getProductsBySubCategory(it, "SHOES") }
+        }
+        binding.chipAccessories.setOnClickListener {
+            category?.let { productsViewModel.getProductsBySubCategory(it, "ACCESSORIES") }
+        }
 
     }
+
+
+    private fun getProductsByBrand(brandId:Long) {
+        productsViewModel.getProductsByBrandId(brandId)
+    }
+
+
+
     private fun observeOnStateFlow() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

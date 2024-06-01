@@ -9,6 +9,8 @@ plugins {
     id ("androidx.navigation.safeargs")
     id ("com.google.dagger.hilt.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("kotlin-parcelize")
+
 
 }
 
