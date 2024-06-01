@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val brandRepo: Repository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewState<List<SmartCollectionsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<SmartCollectionsItem>>> = _uiState
 
@@ -22,10 +23,14 @@ class HomeViewModel @Inject constructor(private val brandRepo: Repository) : Vie
         getBrands()
     }
 
+    fun getCategories():List<CategoryItem>{
+        return repo.getCategories()
+    }
+
     private fun getBrands() {
         viewModelScope.launch {
             _uiState.value = ViewState.Loading
-            brandRepo.getBrands().catch { error ->
+            repo.getBrands().catch { error ->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
             }.collect { smartCollectionsItem ->
                 _uiState.value = ViewState.Success(smartCollectionsItem)

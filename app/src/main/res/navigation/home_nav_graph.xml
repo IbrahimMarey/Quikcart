@@ -74,5 +74,12 @@
         <argument
             android:name="brand_id"
             app:argType="long" />
+        <argument
+            android:name="isBrands"
+            app:argType="boolean" />
+        <argument
+            android:name="categoryItem"
+            app:argType="com.example.quikcart.models.entities.CategoryItem"
+            app:nullable="true" />
     </fragment>
 </navigation>

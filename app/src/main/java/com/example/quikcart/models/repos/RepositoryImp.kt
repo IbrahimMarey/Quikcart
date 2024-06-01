@@ -1,6 +1,8 @@
 package com.example.quikcart.models.repos
 
+import com.example.quikcart.R
 import com.example.quikcart.models.entities.AddressModel
+import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.ProductsItem
@@ -24,12 +26,24 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
         return remoteDataSource.getProductsByBrandId(id)
     }
 
+    override fun getProductsBySubCategory(category: String): Flow<List<ProductsItem>> {
+        return remoteDataSource.getProductsBySubCategory(category)
+    }
+
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
 
     override fun getProducts(): Flow<List<ProductsItem>> {
         return  remoteDataSource.getProducts()
+    }
+
+    override fun getCategories(): List<CategoryItem> {
+        return listOf(
+            CategoryItem("women", R.drawable.woman),
+            CategoryItem("men", R.drawable.man),
+            CategoryItem("kid", R.drawable.kid),
+            CategoryItem("sale", R.drawable.shop_bag))
     }
 
     override suspend fun getAllAddresses(): Flow<List<AddressModel>> = flow<List<AddressModel>>{

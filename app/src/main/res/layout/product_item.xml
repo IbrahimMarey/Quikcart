@@ -19,6 +19,7 @@
         android:backgroundTint="@color/cardview_light_background"
         android:elevation="16dp"
         android:padding="4dp"
+        android:paddingBottom="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hello_text"
@@ -88,7 +89,9 @@
             android:textColor="@color/xd_blue"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/vendor_of_product" />
+            app:layout_constraintTop_toBottomOf="@+id/vendor_of_product"
+
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
