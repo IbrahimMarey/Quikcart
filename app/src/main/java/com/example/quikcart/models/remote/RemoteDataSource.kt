@@ -3,6 +3,7 @@ package com.example.quikcart.models.remote
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+import com.example.quikcart.models.entities.Customers
 
 import com.example.quikcart.models.entities.FetchAddress
 import com.example.quikcart.models.entities.PostAddressModel
@@ -24,7 +25,6 @@ interface RemoteDataSource {
 
      suspend fun delCustomerAddress(customerID:Long,id : Long)
 
-
      fun getProducts():Flow<List<ProductsItem>>
-
+     fun getCustomer():Flow<List<Customers>>
 }

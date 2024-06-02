@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.databinding.SearchItemBinding
 import com.example.quikcart.models.entities.ProductsItem
 
-class SearchAdapter : ListAdapter<ProductsItem, SearchAdapter.ProductsViewHolder>(DiffCallback()) {
+class SearchAdapter(private val itemClickListener: (ProductsItem) -> Unit) : ListAdapter<ProductsItem, SearchAdapter.ProductsViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -17,14 +17,17 @@ class SearchAdapter : ListAdapter<ProductsItem, SearchAdapter.ProductsViewHolder
     }
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position),itemClickListener)
     }
 
     class ProductsViewHolder(private val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ProductsItem) {
+        fun bind(item: ProductsItem,itemClickListener: (ProductsItem) -> Unit) {
             binding.product = item
             binding.executePendingBindings()
+            binding.root.setOnClickListener {
+                itemClickListener(item)
+            }
         }
 
     }

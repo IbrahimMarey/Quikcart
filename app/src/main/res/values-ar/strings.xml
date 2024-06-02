@@ -23,7 +23,7 @@
     <string name="remove_favourite">إزالة هذا المنتج إلى المفضلة</string>
     <string name="is_add_favourite">هل أنت متأكد أنك تريد إضافة هذا المنتج إلى المفضلة؟</string>
     <string name="is_remove_favourite">هل أنت متأكد أنك تريد إزالة هذا المنتج من المفضلة؟</string>
-    <string name="select_size">من فضلك، اختر مقاسك من قائمة المقاسات المتوفرة</string>
+    <string name="select_size_error">من فضلك، اختر مقاسك من قائمة المقاسات المتوفرة</string>
     <string name="my_favourite">المفضل لدي</string>
     <string name="wish_list">قائمة الرغبات</string>
     <string name="favourite_fail">الرجاء تسجيل الدخول أولا</string>
@@ -163,5 +163,9 @@
     <string name="default_phone">الرقم الاصلي</string>
     <string name="new_phone">رقم جديد</string>
     <string name="phone_miss_match">الرقم غير متوافق</string>
-
+    <string name="images_of_products">صور المنتج</string>
+    <string name="select_colors">"اختر اللون"</string>
+    <string name="select_size">"اختر المقاس "</string>
+    <string name="type_shoes">النوع</string>
+    <string name="product_title">عنوان المنتج</string>
 </resources>

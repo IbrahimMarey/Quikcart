@@ -32,7 +32,12 @@ class PreferencesUtils private constructor(context: Context)
     {
         return sharedPreferences.getString(USER_ID_PREFERENCE,"7406457553131")
     }
-
+    fun setCustomerId(id:Long){
+        editor.putLong("id",id).apply()
+    }
+    fun getCustomerId():Long{
+        return sharedPreferences.getLong("id",0)
+    }
     companion object{
         const val CURRENCY_USD = "USD"
         const val CURRENCY_EGP = "EGP"

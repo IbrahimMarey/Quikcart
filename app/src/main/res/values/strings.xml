@@ -22,7 +22,7 @@
     <string name="remove_favourite">remove this product to favorites</string>
     <string name="is_add_favourite">Are you sure you want to add this product to favorites?</string>
     <string name="is_remove_favourite">Are you sure you want to remove this product from favorites?</string>
-    <string name="select_size">Please, choose your size from Avaliable Size Menu.</string>
+    <string name="select_size_error">Please, choose your size from Avaliable Size Menu.</string>
     <string name="my_favourite">My Favourite</string>
     <string name="wish_list">Wish list</string>
     <string name="favourite_fail">please, login first.</string>
@@ -164,7 +164,11 @@
     <string name="new_phone">New Phone</string>
     <string name="phone_miss_match">Phone Miss Match</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="images_of_products">Images of Products</string>
+    <string name="select_colors">"Select color "</string>
+    <string name="select_size">"Select Size "</string>
+    <string name="product_title">Product Title</string>
+    <string name="type_shoes">Type : SHOES</string>
+
 
 </resources>

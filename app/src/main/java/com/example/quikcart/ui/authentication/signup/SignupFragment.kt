@@ -17,7 +17,6 @@ import com.example.quikcart.models.entities.Address
 import com.example.quikcart.models.entities.Customer
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.User
-import com.example.quikcart.ui.authentication.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -26,7 +25,7 @@ import org.json.JSONObject
 class SignupFragment : Fragment() {
 
     private lateinit var binding: FragmentSignupBinding
-    private lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: SignupViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,7 +35,7 @@ class SignupFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SignupViewModel::class.java]
         setupListeners()
     }
     private fun setupListeners() {
