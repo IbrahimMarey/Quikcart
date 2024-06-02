@@ -8,6 +8,7 @@ import com.paypal.checkout.config.SettingsConfig
 import com.paypal.checkout.createorder.CurrencyCode
 import com.paypal.checkout.createorder.UserAction
 import dagger.hilt.android.HiltAndroidApp
+
 private const val PAYPAL_CLIENT_ID = BuildConfig.PAYPAL_CLIENT_ID
 
 @HiltAndroidApp
