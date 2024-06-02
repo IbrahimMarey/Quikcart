@@ -2,7 +2,6 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
     <color name="xd_orange">#fd8700</color>
     <color name="xd_blue">#0274bc</color>
     <color name="xd_blue_asset">#48b6db</color>
@@ -25,5 +24,6 @@
     <color name="xd_btn_nav_item">#8e8e8e</color>
     <color name="xd_lemon">#dff8ea</color>
     <color name="xd_lemon_dark">#30a764</color>
+    <color name="xd_text_view_details">#424242</color>
 
 </resources>
