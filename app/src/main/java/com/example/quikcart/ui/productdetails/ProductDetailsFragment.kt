@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quikcart.databinding.FragmentProductDetailsBinding
 import com.example.quikcart.models.entities.ImagesItem
 import com.example.quikcart.models.entities.ProductsItem
+import com.example.quikcart.models.entities.VariantsItem
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +21,7 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var binding: FragmentProductDetailsBinding
     private var productItem: ProductsItem? = null
     private lateinit var imageAdapter: ImagesAdapter
-
+    private lateinit var variantAdapter: VariantsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -37,10 +38,21 @@ class ProductDetailsFragment : Fragment() {
         productItem?.let {
             binding.product = it
             setImages(it.images)
+            setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
     }
 
+    private fun setVariants(variants: List<VariantsItem>?) {
+        variantAdapter= VariantsAdapter()
+        binding.recyclerViewColors.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = variantAdapter
+        }
+        variants?.let {
+            variantAdapter.submitList(it)
+        }
+    }
     private fun setImages(images: List<ImagesItem>?) {
         imageAdapter = ImagesAdapter()
         binding.recyclerViewImages.apply {

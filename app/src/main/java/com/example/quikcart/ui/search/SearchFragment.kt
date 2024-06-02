@@ -10,9 +10,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentSearchBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.ProductsItem
+import com.example.quikcart.ui.products.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,7 +38,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-        adapter = SearchAdapter()
         getProducts()
         setupSearchBar()
         observeViewModel()
@@ -58,7 +60,7 @@ class SearchFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                             productList.clear()
                             productList.addAll(state.data)
-                            adapter.submitList(productList)
+                            initRecyclerView(productList)
                             binding.productRecyclerView.adapter = adapter
                             Log.i("SearchFragment", "Products: $productList.count()")
                         }
@@ -98,5 +100,18 @@ class SearchFragment : Fragment() {
             })
             adapter.submitList(filteredList.toList())
         }
+    }
+    private fun initRecyclerView(products: List<ProductsItem>) {
+        adapter = SearchAdapter { productItem ->
+            navigateToProductDetails(productItem)
+        }
+        binding.productRecyclerView.adapter = adapter
+        adapter.submitList(products)
+    }
+    private fun navigateToProductDetails(productItem: ProductsItem) {
+        val bundle = Bundle().apply {
+            putSerializable("details", productItem)
+        }
+        findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
     }
 }
