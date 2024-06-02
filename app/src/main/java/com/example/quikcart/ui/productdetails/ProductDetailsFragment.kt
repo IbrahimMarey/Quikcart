@@ -51,4 +51,6 @@ class ProductDetailsFragment : Fragment() {
             imageAdapter.submitList(it)
         }
     }
+
+
 }

@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(private val authRepository: AuthenticationRepository , private val repository: Repository) : ViewModel() {
 
-    private val _loginState = MutableStateFlow<ViewState<Boolean>>(ViewState.Loading)
+    private val _loginState = MutableStateFlow<ViewState<String?>>(ViewState.Loading)
     val loginState = _loginState
 
     private val _authState = MutableStateFlow<ViewState<String?>>(ViewState.Loading)
@@ -44,7 +44,11 @@ class AuthViewModel @Inject constructor(private val authRepository: Authenticati
         viewModelScope.launch {
             _loginState.value = ViewState.Loading
             val success = authRepository.signInWithEmailAndPassword(user)
-            _loginState.value = ViewState.Success(success)
+            if(success.isSuccess){
+                val userId = success.getOrNull()
+                _loginState.value = ViewState.Success(userId)
+
+            }
         }
     }
 

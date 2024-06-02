@@ -180,41 +180,17 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                     <TextView
-                        android:id="@+id/color"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/select_size"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/xd_text_view_details"
-                        android:layout_margin="24dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        tools:orientation="horizontal"
-                        app:layout_constraintTop_toBottomOf="@+id/recycler_view_colors" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler_view_variants"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="4dp"
-                        android:layout_margin="8dp"
-                        tools:listitem="@layout/variants_details_item"
-                        app:layout_constraintTop_toBottomOf="@+id/color"
-                        tools:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-                    <TextView
                         android:id="@+id/text_images"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/images_of_products"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:textColor="@color/xd_text_view_details"
                         android:layout_margin="16dp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/images_of_products"
+                        android:textColor="@color/xd_text_view_details"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/recycler_view_variants" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:layout_editor_absoluteY="335dp" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_images"

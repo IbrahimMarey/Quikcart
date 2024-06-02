@@ -22,12 +22,12 @@ class AuthRepositoryImp @Inject constructor() :AuthenticationRepository {
         }
     }
 
-    override suspend fun signInWithEmailAndPassword(user: User): Boolean {
+    override suspend fun signInWithEmailAndPassword(user: User): Result<String> {
         return try {
             auth.signInWithEmailAndPassword(user.email, user.password).await()
-            true
+            Result.success(auth.currentUser?.uid ?: "")
         } catch (e: Exception) {
-            false
+            Result.failure(e)
         }
     }
 }
