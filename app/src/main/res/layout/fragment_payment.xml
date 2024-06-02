@@ -19,6 +19,7 @@
         />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/paypalCheckOut"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
@@ -53,6 +54,19 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+        android:id="@+id/payment_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:paypal_button_color="silver"
+        app:paypal_button_label="pay"
+        app:paypal_button_shape="rectangle"
+        app:paypal_button_size="large"
+        app:paypal_button_enabled="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/xd_blue_asset1"
+        />
+    <!--
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -86,7 +100,7 @@
                 android:textColor="@color/xd_yellow_dark"
                 />
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>-->
 
 
     <androidx.cardview.widget.CardView
