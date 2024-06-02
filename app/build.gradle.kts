@@ -115,4 +115,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-location:21.1.0")
     implementation ("com.google.android.gms:play-services-maps:18.0.1")
 
+    //PayPal SDK
+    implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
+
 }
