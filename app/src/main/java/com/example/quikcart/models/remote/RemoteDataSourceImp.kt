@@ -8,6 +8,7 @@ import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
 
 import com.example.quikcart.models.entities.FetchAddress
+import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.PostAddressModel
 
 import com.example.quikcart.models.entities.ProductsItem
@@ -60,6 +61,10 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
     override fun getCustomer(): Flow<List<Customers>> = flow {
         val response = apiService.getCustomers().customers
         emit(response)
+    }
+
+    override fun getCustomerOrders(customerID: Long): Flow<List<OrdersItem>> = flow {
+        apiService.getCustomerOrders(customerID).orders?.filterNotNull()?.let { emit(it) }
     }
 
 }

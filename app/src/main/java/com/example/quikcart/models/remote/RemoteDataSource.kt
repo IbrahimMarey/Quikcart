@@ -6,6 +6,7 @@ import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
 
 import com.example.quikcart.models.entities.FetchAddress
+import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.PostAddressModel
 
 import com.example.quikcart.models.entities.ProductsItem
@@ -27,4 +28,5 @@ interface RemoteDataSource {
 
      fun getProducts():Flow<List<ProductsItem>>
      fun getCustomer():Flow<List<Customers>>
+     fun getCustomerOrders(customerID: Long):Flow<List<OrdersItem>>
 }
