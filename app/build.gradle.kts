@@ -117,5 +117,7 @@ dependencies {
 
     //PayPal SDK
     implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
+    implementation("com.paypal.checkout:android-sdk:1.3.2")
+
 
 }

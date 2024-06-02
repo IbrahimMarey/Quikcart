@@ -16,6 +16,7 @@
         android:theme="@style/Theme.Quikcart"
         tools:targetApi="31"
         android:name=".App"
+        android:usesCleartextTraffic="true"
         >
         <meta-data
             android:name="com.google.android.geo.API_KEY"

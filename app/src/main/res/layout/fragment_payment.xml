@@ -52,41 +52,54 @@
                 />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
+    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+        android:id="@+id/payment_button_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        app:cardCornerRadius="32dp"
-        app:cardBackgroundColor="@color/xd_yellow"
-        android:layout_margin="8dp"
-        >
-        <LinearLayout
+        android:layout_height="wrap_content"
+        app:paypal_button_color="silver"
+        app:paypal_button_label="pay"
+        app:paypal_button_shape="rectangle"
+        app:paypal_button_size="large"
+        app:paypal_button_enabled="true"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/xd_blue_asset1"
+        />
+
+    <!--
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="3"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            app:cardCornerRadius="32dp"
+            app:cardBackgroundColor="@color/xd_yellow"
+            android:layout_margin="8dp"
             >
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:src="@drawable/credit_card"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
-                />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="72dp"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:text="@string/credit_card"
-                android:textSize="24sp"
-                android:fontFamily="@font/barlow_bold"
-                android:textColor="@color/xd_yellow_dark"
-                />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                >
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/credit_card"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="@string/credit_card"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/barlow_bold"
+                    android:textColor="@color/xd_yellow_dark"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>-->
 
 
     <androidx.cardview.widget.CardView
@@ -145,7 +158,6 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:src="@drawable/google_pay"
                 android:layout_gravity="center"
                 android:padding="8dp"
                 />
