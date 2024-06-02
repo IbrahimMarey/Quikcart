@@ -1,4 +1,4 @@
-package com.example.quikcart.ui.authentication
+package com.example.quikcart.ui.authentication.signup
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -14,15 +14,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val authRepository: AuthenticationRepository , private val repository: Repository) : ViewModel() {
-
-    private val _loginState = MutableStateFlow<ViewState<String?>>(ViewState.Loading)
-    val loginState = _loginState
+class SignupViewModel @Inject constructor(private val authRepository: AuthenticationRepository, private val repository: Repository) : ViewModel() {
 
     private val _authState = MutableStateFlow<ViewState<String?>>(ViewState.Loading)
     val authState = _authState
-
-
 
     private val _customerCreationState = MutableStateFlow<ViewState<Boolean>>(ViewState.Loading)
     val customerCreationState = _customerCreationState
@@ -36,18 +31,6 @@ class AuthViewModel @Inject constructor(private val authRepository: Authenticati
                 Log.i("TAG", "signUp: $userId")
             } else {
                 _authState.value = ViewState.Error("Signup failed")
-            }
-        }
-    }
-
-    fun login(user: User){
-        viewModelScope.launch {
-            _loginState.value = ViewState.Loading
-            val success = authRepository.signInWithEmailAndPassword(user)
-            if(success.isSuccess){
-                val userId = success.getOrNull()
-                _loginState.value = ViewState.Success(userId)
-
             }
         }
     }

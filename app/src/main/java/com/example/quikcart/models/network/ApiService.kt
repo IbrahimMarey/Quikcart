@@ -58,6 +58,10 @@ interface ApiService {
     @GET("products.json")
     suspend fun getProducts(): ProductsResponse
 
+    @Headers("X-Shopify-Access-Token:"+ Constants.ACCESS_TOKEN)
+    @GET("customers.json")
+    suspend fun getCustomers(): CustomerResponse
+
 }
 
 

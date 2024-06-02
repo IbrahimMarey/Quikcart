@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+import com.example.quikcart.models.entities.Customers
 
 import com.example.quikcart.models.entities.PostAddressModel
 
@@ -57,6 +58,10 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
             CategoryItem("men", R.drawable.man),
             CategoryItem("kid", R.drawable.kid),
             CategoryItem("sale", R.drawable.shop_bag))
+    }
+
+    override fun getCustomer(): Flow<List<Customers>> {
+        return remoteDataSource.getCustomer()
     }
 
 

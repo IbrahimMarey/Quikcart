@@ -16,7 +16,6 @@ import com.example.quikcart.databinding.FragmentLoginBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.User
 import com.example.quikcart.ui.MainActivity
-import com.example.quikcart.ui.authentication.AuthViewModel
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -25,7 +24,7 @@ import kotlinx.coroutines.launch
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
-    private lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +36,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         setupListeners()
     }
 
@@ -103,12 +102,15 @@ class LoginFragment : Fragment() {
             viewModel.loginState.collect { state ->
                 when (state) {
                     ViewState.Loading -> showLoading(true)
-                    is ViewState.Success -> handleLoginSuccess(state.data)
+                    is ViewState.Success -> {
+                        handleLoginSuccess(state.data)
+                    }
                     is ViewState.Error -> handleLoginError(state.message)
                 }
             }
         }
     }
+
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
@@ -118,6 +120,7 @@ class LoginFragment : Fragment() {
         showLoading(false)
         if (userId != null) {
             PreferencesUtils.getInstance(requireContext()).setUserID(userId)
+            getCurrentCustomerID(userId)
             Log.i("TAG", "handleLoginSuccess: $userId")
             showMessage("Sign in successful")
             startActivity(Intent(requireContext(), MainActivity::class.java))
@@ -130,5 +133,29 @@ class LoginFragment : Fragment() {
     private fun handleLoginError(message: String) {
         showLoading(false)
         showMessage("Error: $message")
+    }
+    private fun getCurrentCustomerID(id: String) {
+        lifecycleScope.launch {
+            viewModel.getCustomer()
+            viewModel.customerCreationState.collect { state ->
+                when (state) {
+                    is ViewState.Success -> {
+                        Log.i("TAG", "getCurrentCustomerID: ${state.data}")
+                        val currentCustomer= state.data.filter { it.lastName == id }
+                        Log.i("TAG", "getCurrentCustomerID: ${currentCustomer[0].id}")
+                        PreferencesUtils.getInstance(requireContext()).setCustomerId(currentCustomer[0].id)
+                    }
+
+                    is ViewState.Error -> {
+                        showMessage("Error")
+                    }
+
+                    else -> {
+                        showMessage("Error")
+                    }
+                }
+            }
+
+        }
     }
 }

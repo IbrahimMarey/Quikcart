@@ -6,6 +6,7 @@ import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
+import com.example.quikcart.models.entities.Customers
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
@@ -26,6 +27,7 @@ interface Repository {
     fun getProducts(): Flow<List<ProductsItem>>
 
     fun getCategories():List<CategoryItem>
+    fun getCustomer():Flow<List<Customers>>
 
 
 }
