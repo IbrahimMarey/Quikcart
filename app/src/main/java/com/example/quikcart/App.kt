@@ -19,7 +19,7 @@ class App: Application()
             application = this,
             clientId = PAYPAL_CLIENT_ID,
             environment = Environment.SANDBOX,
-            returnUrl = "com.example.quikcart://paypalpay",
+            returnUrl = BuildConfig.PayPalUrl,
             currencyCode = CurrencyCode.USD,
             userAction = UserAction.PAY_NOW,
             settingsConfig = SettingsConfig(
