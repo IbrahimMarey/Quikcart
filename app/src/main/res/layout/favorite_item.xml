@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="product"
+            type="com.example.quikcart.models.entities.ProductsItem" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_product"
+        android:layout_width="160dp"
+        android:layout_height="320dp"
+        android:layout_margin="4dp"
+        android:backgroundTint="@color/cardview_light_background"
+        android:elevation="16dp"
+        android:padding="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hello_text"
+        app:cardCornerRadius="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp"
+            >
+
+            <ImageView
+                android:id="@+id/image_of_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/search_product"
+                android:src="@drawable/logo2"
+                imageUrl="@{product.images.get(0).src}"
+                app:layout_constraintCircleRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RatingBar
+                android:id="@+id/rate_of_product"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:isIndicator="true"
+                app:layout_constraintStart_toStartOf="@+id/image_of_product"
+                app:layout_constraintTop_toBottomOf="@+id/image_of_product" />
+
+            <TextView
+                android:id="@+id/type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                tools:text="Brand : SHOES"
+                android:text="@{product.productType}"
+                app:layout_constraintStart_toStartOf="@+id/rate_of_product"
+                app:layout_constraintTop_toBottomOf="@+id/rate_of_product" />
+
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                tools:text="220 $"
+                android:text='@{String.valueOf(product.variants.get(0).price)+"USD"}'
+                android:textColor="@color/xd_blue"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/type_name"
+                app:layout_constraintTop_toBottomOf="@+id/type_name" />
+
+            <TextView
+                android:id="@+id/vendor_of_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                tools:text="ADIDAS"
+                android:text="@{product.vendor}"
+                android:textColor="@color/xd_btn_nav_item"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/product_price"
+                app:layout_constraintTop_toBottomOf="@+id/product_price" />
+            <ImageView
+                android:id="@+id/delete_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/delete"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_delete"
+                android:layout_margin="8dp"
+                android:padding="4dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

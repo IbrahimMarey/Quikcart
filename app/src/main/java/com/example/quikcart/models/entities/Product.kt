@@ -1,6 +1,7 @@
 package com.example.quikcart.models.entities
 
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -10,6 +11,8 @@ data class ProductsResponse(
     @field:SerializedName("products")
     val products: List<ProductsItem>
 )
+
+@Entity (tableName = "products")
 data class ProductsItem(
 
     @field:SerializedName("image")
