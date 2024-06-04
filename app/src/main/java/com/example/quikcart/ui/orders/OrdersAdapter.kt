@@ -1,5 +1,6 @@
 package com.example.quikcart.ui.orders
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,7 +10,7 @@ import com.example.quikcart.R
 import com.example.quikcart.databinding.OrderItemBinding
 import com.example.quikcart.models.entities.OrdersItem
 
-class OrdersAdapter:ListAdapter<OrdersItem,OrdersAdapter.OrdersViewHolder>(DiffUtils()) {
+class OrdersAdapter(private val onItemClick:(OrdersItem)->Unit):ListAdapter<OrdersItem,OrdersAdapter.OrdersViewHolder>(DiffUtils()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrdersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -19,6 +20,9 @@ class OrdersAdapter:ListAdapter<OrdersItem,OrdersAdapter.OrdersViewHolder>(DiffU
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.itemView.setOnClickListener {
+            onItemClick.invoke(getItem(position))
+        }
     }
 
     class OrdersViewHolder(private val itemBinding: OrderItemBinding):ViewHolder(itemBinding.root){

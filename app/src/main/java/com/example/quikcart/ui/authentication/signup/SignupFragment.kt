@@ -64,7 +64,7 @@ class SignupFragment : Fragment() {
             zip = " ", last_name = " ", first_name = " ", country = " "
         )
         val customer = Customer(
-            first_name = username, last_name = userId, email = email, phone = " ", verified_email = true,
+            firstName = username, lastName = userId, email = email, phone = " ", verifiedEmail = true,
             addresses = listOf(address), password = "000000", password_confirmation = "000000", send_email_welcome = false
         )
         val customerRequest = CustomerRequest(customer)
