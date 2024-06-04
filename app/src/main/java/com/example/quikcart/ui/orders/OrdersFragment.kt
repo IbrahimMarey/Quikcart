@@ -10,6 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentOrdersBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.OrdersItem
@@ -47,6 +49,7 @@ class OrdersFragment : Fragment() {
                     when(orders){
                         is ViewState.Error -> {
                             binding.progressBar.visibility = View.GONE
+                            Log.e("TAG", "observeOnStateFlow: ${orders.message} ", )
                             AlertUtil.showToast(requireContext(),orders.message)
                         }
                         ViewState.Loading -> {
@@ -64,9 +67,17 @@ class OrdersFragment : Fragment() {
     }
 
     private fun initRecyclerView(orders:List<OrdersItem>){
-        adapter = OrdersAdapter()
+        adapter = OrdersAdapter{orderItem->
+            Log.e("TAG", "initRecyclerView: ${orderItem}", )
+            navigateToOrderDetails(orderItem)
+        }
         adapter.submitList(orders)
         binding.ordersRecycler.adapter = adapter
+    }
+
+    private fun navigateToOrderDetails(orderItem: OrdersItem) {
+        val action = OrdersFragmentDirections.actionOrdersFragmentToOrderDetailsFragment(orderItem)
+        findNavController().navigate(action)
     }
 
     private fun initViewModel() {

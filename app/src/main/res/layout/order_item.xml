@@ -23,9 +23,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:src="@drawable/ic_order"
-            app:civ_circle_background_color="@color/xd_yellow"
+            app:civ_circle_background_color="@color/xd_burgundy"
             app:civ_border_width="1dp"
-            app:civ_border_color="@color/xd_yellow"
+            app:civ_border_color="@color/xd_asset_burgundy"
 
             />
         <TextView

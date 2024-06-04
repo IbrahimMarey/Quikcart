@@ -5,16 +5,72 @@ import com.google.gson.annotations.SerializedName
 data class CustomerRequest(
      val customer: Customer
  )
+
+
 data class Customer(
-    val first_name: String,
-    val last_name: String,
-    val email: String,
-    val phone: String,
-    val verified_email: Boolean,
-    val addresses: List<Address>,
-    val password: String,
-    val password_confirmation: String,
-    val send_email_welcome: Boolean
+    var addresses: List<Address>?=null,
+    var password: String?=null,
+    var password_confirmation: String?=null,
+    var send_email_welcome: Boolean?=null,
+
+    @field:SerializedName("note")
+    val note: Any? = null,
+
+    @field:SerializedName("tax_exempt")
+    val taxExempt: Boolean? = null,
+
+    @field:SerializedName("email_marketing_consent")
+    val emailMarketingConsent: EmailMarketingConsent? = null,
+
+    @field:SerializedName("created_at")
+    val createdAt: String? = null,
+
+    @field:SerializedName("last_name")
+    val lastName: String? = null,
+
+    @field:SerializedName("multipass_identifier")
+    val multipassIdentifier: Any? = null,
+
+    @field:SerializedName("verified_email")
+    val verifiedEmail: Boolean? = null,
+
+    @field:SerializedName("tags")
+    val tags: String? = null,
+
+    @field:SerializedName("sms_marketing_consent")
+    val smsMarketingConsent: SmsMarketingConsent? = null,
+
+    @field:SerializedName("default_address")
+    val defaultAddress: DefaultAddress? = null,
+
+    @field:SerializedName("updated_at")
+    val updatedAt: String? = null,
+
+    @field:SerializedName("phone")
+    val phone: String? = null,
+
+    @field:SerializedName("admin_graphql_api_id")
+    val adminGraphqlApiId: String? = null,
+
+    @field:SerializedName("tax_exemptions")
+    val taxExemptions: List<Any?>? = null,
+
+    @field:SerializedName("currency")
+    val currency: String? = null,
+
+    @field:SerializedName("id")
+    val id: Long? = null,
+
+    @field:SerializedName("state")
+    val state: String? = null,
+
+    @field:SerializedName("first_name")
+    val firstName: String? = null,
+
+    @field:SerializedName("email")
+    val email: String? = null,
+
+
 )
 
 data class Address(

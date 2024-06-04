@@ -108,5 +108,18 @@
     <fragment
         android:id="@+id/ordersFragment"
         android:name="com.example.quikcart.ui.orders.OrdersFragment"
-        android:label="OrdersFragment" />
+        android:label="OrdersFragment" >
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.example.quikcart.ui.orderdetails.OrderDetailsFragment"
+        android:label="fragment_order_details"
+        tools:layout="@layout/fragment_order_details" >
+        <argument
+            android:name="orderItem"
+            app:argType="com.example.quikcart.models.entities.OrdersItem" />
+    </fragment>
 </navigation>
