@@ -63,4 +63,9 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
             }
         }
     }
+    fun addToFavourites(product: ProductsItem) {
+        viewModelScope.launch {
+            repo.inertProduct(product)
+        }
+    }
 }
