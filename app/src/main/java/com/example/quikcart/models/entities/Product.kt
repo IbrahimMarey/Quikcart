@@ -1,15 +1,18 @@
 package com.example.quikcart.models.entities
 
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-
 
 data class ProductsResponse(
 
     @field:SerializedName("products")
     val products: List<ProductsItem>
 )
+
+@Entity (tableName = "products")
 data class ProductsItem(
 
     @field:SerializedName("image")
@@ -53,13 +56,11 @@ data class ProductsItem(
 
     @field:SerializedName("admin_graphql_api_id")
     val adminGraphqlApiId: String?,
-
     @field:SerializedName("options")
     val options: List<OptionsItem>?,
-
+    @PrimaryKey(autoGenerate = true)
     @field:SerializedName("id")
     val id: Long?,
-
     @field:SerializedName("published_at")
     val publishedAt: String?,
 

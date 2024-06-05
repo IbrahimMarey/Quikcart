@@ -10,8 +10,6 @@ plugins {
     id ("com.google.dagger.hilt.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("kotlin-parcelize")
-
-
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -55,6 +53,9 @@ android {
         dataBinding = true
         buildConfig = true
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -73,10 +74,10 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //Room
-    implementation ("androidx.room:room-ktx:2.5.0")
-    implementation ("androidx.room:room-runtime:2.5.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
     kapt ("androidx.room:room-compiler:2.6.1")
-
 
     //nav
     implementation ("androidx.navigation:navigation-fragment:2.5.3")
@@ -118,6 +119,5 @@ dependencies {
     //PayPal SDK
     implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
     implementation("com.paypal.checkout:android-sdk:1.3.2")
-
 
 }

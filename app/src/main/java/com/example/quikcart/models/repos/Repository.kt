@@ -31,5 +31,7 @@ interface Repository {
     fun getCustomer():Flow<List<Customers>>
     fun getCustomerOrders(customerID: Long):Flow<List<OrdersItem>>
 
-
+    suspend fun inertProduct(product: ProductsItem)
+    suspend fun deleteProduct(product: ProductsItem)
+    fun getAllProducts():Flow<List<ProductsItem>>
 }

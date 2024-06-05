@@ -25,7 +25,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteDataSource, private val localDataSourceInterface: LocalDataSourceInterface):Repository{
+class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteDataSource, private val localDataSource: LocalDataSourceInterface):Repository{
     override fun getBrands(): Flow<List<SmartCollectionsItem>> {
         return remoteDataSource.getBrands()
     }
@@ -67,6 +67,18 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
 
     override fun getCustomerOrders(customerID: Long): Flow<List<OrdersItem>> {
         return remoteDataSource.getCustomerOrders(customerID)
+    }
+
+    override suspend fun inertProduct(product: ProductsItem) {
+        localDataSource.insertProducts(product)
+    }
+
+    override suspend fun deleteProduct(product: ProductsItem) {
+        localDataSource.deleteProducts(product)
+    }
+
+    override fun getAllProducts(): Flow<List<ProductsItem>> {
+        return localDataSource.getAllProducts()
     }
 
 

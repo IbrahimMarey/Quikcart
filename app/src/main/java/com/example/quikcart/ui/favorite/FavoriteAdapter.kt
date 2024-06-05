@@ -1,42 +1,39 @@
-package com.example.quikcart.ui.search
+package com.example.quikcart.ui.favorite
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quikcart.databinding.SearchItemBinding
+import com.example.quikcart.databinding.FavoriteItemBinding
 import com.example.quikcart.models.entities.ProductsItem
 
-class SearchAdapter(
-    private val itemClickListener: (ProductsItem) -> Unit,
-    private val addToFavoriteClickListener: (ProductsItem) -> Unit
-) : ListAdapter<ProductsItem, SearchAdapter.ProductsViewHolder>(DiffCallback()) {
+class FavoriteAdapter(private val itemClickListener: (ProductsItem) -> Unit , private val itemDeleteListener: (ProductsItem) -> Unit) : ListAdapter<ProductsItem, FavoriteAdapter.ProductsViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = SearchItemBinding.inflate(inflater, parent, false)
+        val binding = FavoriteItemBinding.inflate(inflater, parent, false)
         return ProductsViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ProductsViewHolder, position: Int) {
-        holder.bind(getItem(position), itemClickListener, addToFavoriteClickListener)
+        holder.bind(getItem(position), itemClickListener , itemDeleteListener)
     }
 
-    class ProductsViewHolder(private val binding: SearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ProductsViewHolder(private val binding: FavoriteItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
             item: ProductsItem,
             itemClickListener: (ProductsItem) -> Unit,
-            addToFavoriteClickListener: (ProductsItem) -> Unit
+            itemDeleteListener: (ProductsItem) -> Unit
         ) {
             binding.product = item
             binding.executePendingBindings()
             binding.root.setOnClickListener {
                 itemClickListener(item)
             }
-            binding.addToFavorite.setOnClickListener {
-                addToFavoriteClickListener(item)
+            binding.deleteItem.setOnClickListener{
+                itemDeleteListener(item)
             }
         }
 
@@ -44,7 +41,7 @@ class SearchAdapter(
 
     class DiffCallback : DiffUtil.ItemCallback<ProductsItem>() {
         override fun areItemsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {
-            return oldItem === newItem
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: ProductsItem, newItem: ProductsItem): Boolean {

@@ -103,9 +103,10 @@ class ProductFragment : Fragment() {
     }
 
     private fun initRecyclerView(products: List<ProductsItem>) {
-        adapter = ProductAdapter { productItem ->
-            navigateToProductDetails(productItem)
-        }
+        adapter = ProductAdapter(
+            { productItem -> navigateToProductDetails(productItem) },
+            {productItem -> productsViewModel.addToFavourites(productItem)}
+        )
         binding.recyclerProducts.adapter = adapter
         adapter.submitList(products)
     }
