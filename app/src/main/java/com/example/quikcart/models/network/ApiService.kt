@@ -8,7 +8,9 @@ import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.FetchAddress
 import com.example.quikcart.models.entities.OrderResponse
 import com.example.quikcart.models.entities.PostAddressModel
+import com.example.quikcart.models.entities.cart.PostCartItemModel
 import com.example.quikcart.models.entities.ProductsResponse
+import com.example.quikcart.models.entities.cart.CartResponse
 
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,7 +20,6 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 import retrofit2.http.Path
-import retrofit2.http.Url
 
 import retrofit2.http.Query
 
@@ -66,6 +67,20 @@ interface ApiService {
 
     @GET("customers/{customer_id}/orders.json?access_token=${Constants.ACCESS_TOKEN}")
     suspend fun getCustomerOrders(@Path("customer_id") customerID: Long):OrderResponse
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @POST("draft_orders.json")
+    suspend fun postCartItem(
+        @Body cartItem: PostCartItemModel
+    ): Response<PostCartItemModel>
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @GET("draft_orders.json")
+    suspend fun getCartItems(): Response<CartResponse>
+
+    @Headers("X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @DELETE("draft_orders/{id}.json")
+    suspend fun delCartItem(@Path("id") id : String)
 
 }
 

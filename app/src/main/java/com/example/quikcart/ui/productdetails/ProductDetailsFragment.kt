@@ -12,6 +12,12 @@ import com.example.quikcart.databinding.FragmentProductDetailsBinding
 import com.example.quikcart.models.entities.ImagesItem
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.VariantsItem
+import com.example.quikcart.models.entities.cart.CartAppliedDiscount
+import com.example.quikcart.models.entities.cart.CartCustomer
+import com.example.quikcart.models.entities.cart.CartItem
+import com.example.quikcart.models.entities.cart.CartLineItems
+import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,13 +40,25 @@ class ProductDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         productItem = arguments?.getSerializable("details") as? ProductsItem
-        Log.i("TAG", "onViewCreated: $productItem")
         productItem?.let {
             binding.product = it
             setImages(it.images)
             setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
+        binding.editProductBtn.setOnClickListener{
+
+            Log.i("TAG", "onViewCreated:========================= ${productItem?.image?.src}")
+            val item =PostCartItemModel(
+                CartItem(
+                    name = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",
+                    line_items = listOf(CartLineItems(productItem?.title?: "",productItem?.price?:"",1)),
+                    applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
+                    customer = CartCustomer(
+                        PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
+            ))
+            viewModel.postProductInCart(item)
+        }
     }
 
     private fun setVariants(variants: List<VariantsItem>?) {

@@ -11,6 +11,8 @@ import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
+import com.example.quikcart.models.entities.cart.CartResponse
+import com.example.quikcart.models.entities.cart.PostCartItemModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
@@ -31,7 +33,16 @@ interface Repository {
     fun getCustomer():Flow<List<Customers>>
     fun getCustomerOrders(customerID: Long):Flow<List<OrdersItem>>
 
+    suspend fun postCartItem(
+        cartItem: PostCartItemModel
+    ): Flow<PostCartItemModel>
+
+    suspend fun getCartItems(): Flow<CartResponse>
+    suspend fun delCartItem(id : String)
+
+
     suspend fun inertProduct(product: ProductsItem)
     suspend fun deleteProduct(product: ProductsItem)
     fun getAllProducts():Flow<List<ProductsItem>>
+
 }
