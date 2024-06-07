@@ -35,6 +35,7 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
@@ -55,16 +56,14 @@ class SearchFragment : Fragment() {
                         is ViewState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
-
                         is ViewState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             productList.clear()
                             productList.addAll(state.data)
                             initRecyclerView(productList)
                             binding.productRecyclerView.adapter = adapter
-                            Log.i("SearchFragment", "Products: $productList.count()")
+                            Log.i("SearchFragment", "Products: ${productList.count()}")
                         }
-
                         is ViewState.Error -> {
                             binding.progressBar.visibility = View.GONE
                         }
@@ -72,8 +71,8 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-
     }
+
     private fun setupSearchBar() {
         binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -101,13 +100,16 @@ class SearchFragment : Fragment() {
             adapter.submitList(filteredList.toList())
         }
     }
+
     private fun initRecyclerView(products: List<ProductsItem>) {
-        adapter = SearchAdapter { productItem ->
-            navigateToProductDetails(productItem)
-        }
+        adapter = SearchAdapter(
+            { productItem -> navigateToProductDetails(productItem) },
+            { productItem -> viewModel.addToFavourites(productItem) }
+        )
         binding.productRecyclerView.adapter = adapter
         adapter.submitList(products)
     }
+
     private fun navigateToProductDetails(productItem: ProductsItem) {
         val bundle = Bundle().apply {
             putSerializable("details", productItem)

@@ -27,8 +27,14 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
              }
                  .collect {productsItem->
                      _uiState.value = ViewState.Success(productsItem)
-                     Log.e("TAG", "getBrands: ${productsItem[0].title}", )
+                     Log.e("TAG", "getProduct: ${productsItem[0].title}", )
                  }
          }
      }
+
+    fun addToFavourites(productsItem: ProductsItem) {
+        viewModelScope.launch {
+            repo.inertProduct(productsItem)
+        }
+    }
 }

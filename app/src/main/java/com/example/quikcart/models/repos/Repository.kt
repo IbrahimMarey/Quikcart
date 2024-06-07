@@ -41,4 +41,8 @@ interface Repository {
     suspend fun delCartItem(id : String)
 
 
+    suspend fun inertProduct(product: ProductsItem)
+    suspend fun deleteProduct(product: ProductsItem)
+    fun getAllProducts():Flow<List<ProductsItem>>
+
 }
