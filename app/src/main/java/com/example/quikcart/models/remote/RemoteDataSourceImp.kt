@@ -14,6 +14,8 @@ import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 
 import com.example.quikcart.models.entities.SmartCollectionsItem
+import com.example.quikcart.models.entities.cart.CartResponse
+import com.example.quikcart.models.entities.cart.PostCartItemModel
 import com.example.quikcart.models.network.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -65,6 +67,25 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
 
     override fun getCustomerOrders(customerID: Long): Flow<List<OrdersItem>> = flow {
         apiService.getCustomerOrders(customerID).orders?.filterNotNull()?.let { emit(it) }
+    }
+
+    override suspend fun postCartItem(cartItem: PostCartItemModel): Flow<PostCartItemModel> = flow{
+        apiService.postCartItem(cartItem).body()?.let {
+            Log.i("TAG", "postCartItem: ${it}")
+            emit(it)
+        }
+
+    }
+
+    override suspend fun getCartItems(): Flow<CartResponse> = flow{
+        apiService.getCartItems().body()?.let {
+            Log.i("TAG", "getCartItems: $it")
+            emit(it)
+        }
+    }
+
+    override suspend fun delCartItem(id: String) {
+        apiService.delCartItem(id)
     }
 
 }

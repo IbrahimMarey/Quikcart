@@ -106,7 +106,7 @@
     <string name="more">أظهر المزيد</string>
     <string name="orders">طلبات</string>
     <string name="noInternet">لا انترنت</string>
-    <string name="cartIsEmpty">البطاقه خاليه</string>
+    <string name="cartIsEmpty">العربة خاليه</string>
     <string name="favoriteIsEmpty">المفضلة فارغة</string>
     <string name="email_address">عنوان البريد الإلكتروني</string>
     <string name="password">كلمة المرور</string>

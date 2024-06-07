@@ -15,6 +15,8 @@ import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 
 import com.example.quikcart.models.entities.SmartCollectionsItem
+import com.example.quikcart.models.entities.cart.CartResponse
+import com.example.quikcart.models.entities.cart.PostCartItemModel
 import com.example.quikcart.models.local.LocalDataSourceInterface
 import com.example.quikcart.models.remote.RemoteDataSource
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +69,18 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
 
     override fun getCustomerOrders(customerID: Long): Flow<List<OrdersItem>> {
         return remoteDataSource.getCustomerOrders(customerID)
+    }
+
+    override suspend fun postCartItem(cartItem: PostCartItemModel): Flow<PostCartItemModel> {
+        return remoteDataSource.postCartItem(cartItem)
+    }
+
+    override suspend fun getCartItems(): Flow<CartResponse> {
+        return remoteDataSource.getCartItems()
+    }
+
+    override suspend fun delCartItem(id: String) {
+        return remoteDataSource.delCartItem(id)
     }
 
 
