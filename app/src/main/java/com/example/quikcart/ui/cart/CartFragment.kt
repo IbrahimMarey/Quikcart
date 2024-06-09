@@ -14,7 +14,9 @@ import com.example.quikcart.databinding.FragmentCartBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.utils.PreferencesUtils
+import com.example.quikcart.utils.setPrice
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,7 @@ class CartFragment : Fragment() {
     private lateinit var viewModel: CartViewModel
     private lateinit var gridLayoutManager : GridLayoutManager
     private lateinit var cartAdapter: CartAdapter
+    lateinit var pref : PreferencesUtils
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -43,14 +46,16 @@ class CartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pref = PreferencesUtils.getInstance(requireActivity())
         viewModel = ViewModelProvider(this)[CartViewModel::class.java]
+        viewModel.getCart(pref.getCartId().toString())
         binding.proceedToPayBtn.setOnClickListener{
             val action = CartFragmentDirections.actionCartFragmentToPaymentFragment()
             Navigation.findNavController(it).navigate(action)
         }
 
-        val delAction :(DraftOrder)->Unit= {
-            delCartItem(it.id.toString())
+        val delAction :(LineItem)->Unit= {
+            delCartItem(it)
         }
         cartAdapter = CartAdapter(delAction)
         gridLayoutManager = GridLayoutManager(requireActivity(),2)
@@ -71,7 +76,7 @@ class CartFragment : Fragment() {
     private fun setUpUI()
     {
         lifecycleScope.launch(Dispatchers.Main) {
-            viewModel.cartItems.collectLatest {
+            viewModel.cart.collectLatest {
                 when(it){
                    is ViewState.Loading -> {
                        setInitialUI()
@@ -80,13 +85,15 @@ class CartFragment : Fragment() {
                         setUPErrorOrEmptyCart()
                     }
                     is ViewState.Success -> {
-                        if (it.data.isNotEmpty())
+                        if (it.data.lineItems.isNotEmpty())
                         {
                             binding.cartProgress.visibility = View.GONE
                             binding.cartEmpty.visibility = View.GONE
                             binding.recyclerCart.visibility = View.VISIBLE
                             binding.cartCardAddToPayment.visibility = View.VISIBLE
-                            cartAdapter.submitList(it.data)
+                            if (it.data.lineItems.isNotEmpty())
+                                cartAdapter.submitList(it.data.lineItems)
+                            binding.cartTotalPrice.setPrice(it.data.totalPrice.toFloat(),requireActivity())
                         }else{
                             setUPErrorOrEmptyCart()
                         }
@@ -101,10 +108,17 @@ class CartFragment : Fragment() {
         binding.recyclerCart.visibility = View.GONE
         binding.cartCardAddToPayment.visibility = View.GONE
     }
-    private fun delCartItem(id: String){
+    private fun delCartItem(item: LineItem){
         Snackbar.make(requireView(), getString(R.string.are_you_sure_you_want_to_delete_this_address), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.delete)) {
-                viewModel.delCartItem(id)
+                if (viewModel.lineItemsList.size >=2)
+                    viewModel.delCartItem(pref.getCartId().toString(),item)
+                else
+                {
+                    val id = pref.getCartId().toString()
+                    viewModel.delCart(id)
+                    pref.setCartId(0)
+                }
             }.show()
     }
 }
