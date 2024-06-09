@@ -12,10 +12,19 @@ import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.models.entities.cart.CartResponse
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
+import com.example.quikcart.models.entities.cart.DraftOrderResponse
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
+import com.example.quikcart.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface RemoteDataSource {
      fun getBrands():Flow<List<SmartCollectionsItem>>
@@ -33,9 +42,14 @@ interface RemoteDataSource {
      fun getCustomerOrders(customerID: Long):Flow<List<OrdersItem>>
 
      suspend fun postCartItem(
-          cartItem: PostCartItemModel
-     ): Flow<PostCartItemModel>
+          cartItem: PostDraftOrderItemModel
+     ): Flow<PostDraftOrderItemModel>
 
-     suspend fun getCartItems(): Flow<CartResponse>
+     suspend fun getCartItems(): Flow<AllDraftOrdersResponse>
      suspend fun delCartItem(id : String)
+     suspend fun postDraftOrder(draftOrderPostBody: PostDraftOrderItemModel) : Flow<DraftOrderResponse>
+     suspend fun putDraftOrder(id : String,draftOrderPutBody: PutDraftOrderItemModel) : Flow<DraftOrderResponse>
+     suspend fun getAllDraftOrders() : Flow<AllDraftOrdersResponse>
+     suspend fun getDraftOrderById(id : String) : Flow<DraftOrderResponse>
+
 }

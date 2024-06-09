@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.databinding.CartItemAddedBinding
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.utils.ImageUtils
 import com.example.quikcart.utils.setPrice
 
-class CartAdapter(private val delAddress:(DraftOrder)->Unit) : ListAdapter<DraftOrder, CartAdapter.ViewHolder>(DiffUtils) {
+class CartAdapter(private val delCartItem:(LineItem)->Unit) : ListAdapter<LineItem, CartAdapter.ViewHolder>(DiffUtils) {
 
     private lateinit var ctx : Context
     class ViewHolder(val binding: CartItemAddedBinding): RecyclerView.ViewHolder(binding.root)
@@ -24,27 +25,47 @@ class CartAdapter(private val delAddress:(DraftOrder)->Unit) : ListAdapter<Draft
     override fun onBindViewHolder(holder: ViewHolder, position: Int)
     {
         val model = getItem(position)
-        holder.binding.cartItemTitle.text = model.lineItems[0].title
-        holder.binding.cartItemSubTitle.text = model.lineItems[0].quantity.toString()
-        holder.binding.cartItemPrice.setPrice(model.totalPrice.toFloat(),ctx)
-        model.appliedDiscount?.description?.let {
-            ImageUtils.loadImage(holder.binding.cartItemImage,
-                it
-            )
-        }
+        holder.binding.cartItemTitle.text = model.title
+        holder.binding.cartItemPrice.setPrice(model.price.toFloat(),ctx)
+        holder.binding.cartItemQuntity.text = model.quantity.toString()
+//        model.appliedDiscount?.description?.let {
+//            ImageUtils.loadImage(holder.binding.cartItemImage,
+//                it
+//            )
+//        }
         holder.binding.btnRemoveItem.setOnClickListener {
-            delAddress(model)
+            delCartItem(model)
+        }
+        holder.binding.btnIncrease.setOnClickListener {
+//            val price = model.price.toFloat() / model.quantity.toFloat()
+            model.quantity++
+            var newPrice = model.price.toFloat()*model.quantity
+//            model.price = newPrice.toString()
+            holder.binding.cartItemPrice.setPrice(newPrice,ctx)
+            holder.binding.cartItemQuntity.text = model.quantity.toString()
+
+        }
+        holder.binding.btnDecrease.setOnClickListener {
+            if (model.quantity>1)
+            {
+                val price = model.price.toFloat() / model.quantity.toFloat()
+                model.quantity--
+                var newPrice = model.price.toFloat()*model.quantity
+//                model.price = newPrice.toString()
+                holder.binding.cartItemPrice.setPrice(newPrice,ctx)
+                holder.binding.cartItemQuntity.text = model.quantity.toString()
+            }
         }
 
     }
 
 
-    object DiffUtils : DiffUtil.ItemCallback<DraftOrder>() {
-        override fun areItemsTheSame(oldItem: DraftOrder, newItem: DraftOrder): Boolean {
+    object DiffUtils : DiffUtil.ItemCallback<LineItem>() {
+        override fun areItemsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: DraftOrder, newItem: DraftOrder): Boolean {
+        override fun areContentsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
             return oldItem.id == newItem.id
         }
 

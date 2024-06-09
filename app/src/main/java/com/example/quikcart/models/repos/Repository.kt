@@ -1,8 +1,6 @@
 package com.example.quikcart.models.repos
 
-import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.CategoryItem
-import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
@@ -11,8 +9,10 @@ import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.models.entities.cart.CartResponse
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
+import com.example.quikcart.models.entities.cart.DraftOrderResponse
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
@@ -34,15 +34,20 @@ interface Repository {
     fun getCustomerOrders(customerID: Long):Flow<List<OrdersItem>>
 
     suspend fun postCartItem(
-        cartItem: PostCartItemModel
-    ): Flow<PostCartItemModel>
+        cartItem: PostDraftOrderItemModel
+    ): Flow<PostDraftOrderItemModel>
 
-    suspend fun getCartItems(): Flow<CartResponse>
+    suspend fun getCartItems(): Flow<AllDraftOrdersResponse>
     suspend fun delCartItem(id : String)
 
 
     suspend fun inertProduct(product: ProductsItem)
     suspend fun deleteProduct(product: ProductsItem)
     fun getAllProducts():Flow<List<ProductsItem>>
+
+    suspend fun postDraftOrder(draftOrderPostBody: PostDraftOrderItemModel) : Flow<DraftOrderResponse>
+    suspend fun putDraftOrder(id : String,draftOrderPutBody: PutDraftOrderItemModel) : Flow<DraftOrderResponse>
+    suspend fun getAllDraftOrders() : Flow<AllDraftOrdersResponse>
+    suspend fun getDraftOrderById(id : String) : Flow<DraftOrderResponse>
 
 }

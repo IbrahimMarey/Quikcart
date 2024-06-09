@@ -4,41 +4,83 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
-import com.example.quikcart.models.entities.AddressResponse
-import com.example.quikcart.models.entities.cart.CartResponse
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.DraftOrderLineItem
+import com.example.quikcart.models.entities.cart.LineItem
+import com.example.quikcart.models.entities.cart.PutDraftItem
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.models.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(private val repo: Repository) : ViewModel()
 {
-    private val _cartItems : MutableStateFlow<ViewState<List<DraftOrder>>> = MutableStateFlow(
+    private val _cart : MutableStateFlow<ViewState<DraftOrder>> = MutableStateFlow(
         ViewState.Loading)
-    val cartItems : StateFlow<ViewState<List<DraftOrder>>> = _cartItems
+    val cart : StateFlow<ViewState<DraftOrder>> = _cart
+    var lineItemsList:MutableList<LineItem> = mutableListOf()
+    fun delCartItem(id:String,item:LineItem){
 
-    init {
-        getAllCartItems()
+//        for (itemLine in lineItemsList)
+//        {
+//            if(itemLine.id == item.id)
+                lineItemsList.remove(item)
+//        }
+//        lineItemsList.removeIf { it.id == item.id }
+//        if (lineItemsList.isNotEmpty()){
+
+            val data =PutDraftOrderItemModel(PutDraftItem(
+                getLineItemsFormDraftOrderLineItem(lineItemsList)
+            ))
+            editCart(id,data)
+//        }else
+//        {
+//
+//        }
     }
 
-    private fun getAllCartItems()
+    fun getCart(id: String)
     {
         viewModelScope.launch(Dispatchers.IO) {
-            repo.getCartItems().collect{
-                _cartItems.value = ViewState.Success(it.draftOrders)
+            repo.getDraftOrderById(id)
+                .catch {
+                    _cart.value = ViewState.Error(it.message ?: "Error")
+                }
+                .collect{
+                _cart.value = ViewState.Success(it.draft_order)
+                lineItemsList.addAll(it.draft_order.lineItems)
             }
         }
     }
+    private fun editCart(id:String,cartItem: PutDraftOrderItemModel)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.putDraftOrder(id ,cartItem).collect{
 
-    fun delCartItem(id:String){
+            }
+            getCart(id)
+        }
+    }
+    private fun getLineItemsFormDraftOrderLineItem(items:List<LineItem>):List<DraftOrderLineItem>{
+        var lineItemsList:MutableList<DraftOrderLineItem> = mutableListOf()
+        for (it in items)
+        {
+            var draftOrderLineItem = DraftOrderLineItem(it.title,it.price,it.quantity.toInt())
+            lineItemsList.add(draftOrderLineItem)
+        }
+        return lineItemsList
+    }
+
+    fun delCart(id:String){
         viewModelScope.launch(Dispatchers.IO) {
             repo.delCartItem(id)
-            getAllCartItems()
+            _cart.value = ViewState.Error("Not Found")
         }
     }
 }

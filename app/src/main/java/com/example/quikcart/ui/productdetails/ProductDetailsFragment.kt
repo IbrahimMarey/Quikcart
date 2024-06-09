@@ -1,12 +1,12 @@
 package com.example.quikcart.ui.productdetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quikcart.databinding.FragmentProductDetailsBinding
 import com.example.quikcart.models.entities.ImagesItem
@@ -14,11 +14,14 @@ import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.VariantsItem
 import com.example.quikcart.models.entities.cart.CartAppliedDiscount
 import com.example.quikcart.models.entities.cart.CartCustomer
-import com.example.quikcart.models.entities.cart.CartItem
-import com.example.quikcart.models.entities.cart.CartLineItems
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.DraftItem
+import com.example.quikcart.models.entities.cart.DraftOrderLineItem
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftItem
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
@@ -28,6 +31,7 @@ class ProductDetailsFragment : Fragment() {
     private var productItem: ProductsItem? = null
     private lateinit var imageAdapter: ImagesAdapter
     private lateinit var variantAdapter: VariantsAdapter
+    private lateinit var pref : PreferencesUtils
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -38,6 +42,8 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pref = PreferencesUtils.getInstance(requireActivity())
+        val cartID = pref.getCartId()
         viewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         productItem = arguments?.getSerializable("details") as? ProductsItem
         productItem?.let {
@@ -46,18 +52,28 @@ class ProductDetailsFragment : Fragment() {
             setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
+        if (cartID.toInt() != 0)
+            viewModel.getCart(cartID.toString())
         binding.editProductBtn.setOnClickListener{
+            if (cartID == 0.toLong())
+            {
+                val item =PostDraftOrderItemModel(
+                    DraftItem(
+                        line_items = listOf(DraftOrderLineItem(productItem?.title?: "",productItem?.price?:"",1)),
+                        applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
+                        customer = CartCustomer(
+                            PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
+                    ))
 
-            Log.i("TAG", "onViewCreated:========================= ${productItem?.image?.src}")
-            val item =PostCartItemModel(
-                CartItem(
-                    name = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",
-                    line_items = listOf(CartLineItems(productItem?.title?: "",productItem?.price?:"",1)),
-                    applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
-                    customer = CartCustomer(
-                        PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
-            ))
-            viewModel.postProductInCart(item)
+                lifecycleScope.launch{
+                    pref.setCartId(viewModel.postProductInCart(item))
+                }
+            }else{
+                var data =PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
+                var request = PutDraftOrderItemModel(data)
+                viewModel.putProductInCart(cartID.toString(),request)
+            }
+
         }
     }
 
