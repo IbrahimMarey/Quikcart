@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentProductDetailsBinding
 import com.example.quikcart.models.entities.ImagesItem
 import com.example.quikcart.models.entities.ProductsItem
@@ -46,6 +48,7 @@ class ProductDetailsFragment : Fragment() {
             setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
+        showReview(productItem?.productType.toString())
         binding.editProductBtn.setOnClickListener{
 
             Log.i("TAG", "onViewCreated:========================= ${productItem?.image?.src}")
@@ -60,7 +63,11 @@ class ProductDetailsFragment : Fragment() {
             viewModel.postProductInCart(item)
         }
     }
-
+   private fun showReview(type: String) {
+       binding.reviews.setOnClickListener {
+           navigateToProductDetails(type)
+       }
+   }
     private fun setVariants(variants: List<VariantsItem>?) {
         variantAdapter= VariantsAdapter()
         binding.recyclerViewColors.apply {
@@ -82,5 +89,10 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
-
+    private fun navigateToProductDetails(type: String) {
+        val bundle = Bundle().apply {
+            putSerializable("productType", type)
+        }
+        findNavController().navigate(R.id.action_productDetailsFragment_to_reviewFragment, bundle)
+    }
 }

@@ -98,6 +98,14 @@ class SearchFragment : Fragment() {
                 it.title!!.contains(query, ignoreCase = true) || it.productType!!.contains(query, ignoreCase = true)
             })
             adapter.submitList(filteredList.toList())
+
+            if (filteredList.isEmpty()) {
+                binding.emptyImageView.visibility = View.VISIBLE
+                binding.productRecyclerView.visibility = View.GONE
+            } else {
+                binding.emptyImageView.visibility = View.GONE
+                binding.productRecyclerView.visibility = View.VISIBLE
+            }
         }
     }
 

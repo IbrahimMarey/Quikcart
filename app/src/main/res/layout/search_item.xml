@@ -12,8 +12,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_product"
-        android:layout_width="160dp"
-        android:layout_height="320dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:backgroundTint="@color/cardview_light_background"
         android:elevation="16dp"
@@ -46,8 +46,8 @@
                 style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/margin_medium"
+                android:layout_marginTop="@dimen/margin_small"
                 android:isIndicator="true"
                 app:layout_constraintStart_toStartOf="@+id/image_of_product"
                 app:layout_constraintTop_toBottomOf="@+id/image_of_product" />

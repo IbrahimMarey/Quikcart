@@ -1,6 +1,5 @@
 package com.example.quikcart.ui.favorite
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
@@ -27,7 +26,6 @@ class FavoriteViewModel  @Inject constructor(private val repo: Repository) : Vie
             }
                 .collect {productsItem->
                     _uiState.value = ViewState.Success(productsItem)
-                    Log.e("TAG", "getProduct: ${productsItem[0].title}", )
                 }
         }
     }
