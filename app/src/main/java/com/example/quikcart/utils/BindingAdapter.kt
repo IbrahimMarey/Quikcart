@@ -1,6 +1,7 @@
 package com.example.quikcart.utils
 
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.quikcart.R
 import com.example.quikcart.utils.ImageUtils
@@ -41,4 +42,9 @@ fun setSliderValue(slider: Slider, value: Int?) {
 @BindingAdapter("onChangeListener")
 fun setOnSliderChangeListener(slider: Slider,listener:Slider.OnChangeListener){
     slider.addOnChangeListener(listener)
+}
+
+@BindingAdapter("app:price")
+fun setPriceBasedOnCurrency(text:TextView,price:String){
+    text.setPrice(price.toFloat(),text.context)
 }

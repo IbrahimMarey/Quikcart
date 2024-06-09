@@ -14,11 +14,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.products.ProductFragment">
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/slider"
+            app:layout_constraintBottom_toBottomOf="@id/slider"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            android:text="@string/filter_by_price"
+            android:fontFamily="@font/pacifico"
+            android:textSize="15sp"
+            />
         <com.google.android.material.slider.Slider
             android:id="@+id/slider"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/price_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
             android:text="@string/total_price"
             app:valueFrom="@{vm.minPrice}"
             app:valueTo="@{vm.maxPrice}"

@@ -1,24 +1,23 @@
 package com.example.quikcart.ui.products
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentProductBinding
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.utils.AlertUtil
-import com.google.android.material.chip.Chip
-import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -27,9 +26,8 @@ class ProductFragment : Fragment() {
     private lateinit var adapter : ProductAdapter
     private lateinit var binding: FragmentProductBinding
     private lateinit var productsViewModel: ProductsViewModel
-
-
-
+    private var brandId:Long?=null
+    private var categoryItem:CategoryItem?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,18 +43,21 @@ class ProductFragment : Fragment() {
         initViewModel()
         binding.lifecycleOwner=this
         binding.vm=productsViewModel
-       val brandId = ProductFragmentArgs.fromBundle(requireArguments()).brandId
-        val categoryItem = ProductFragmentArgs.fromBundle(requireArguments()).categoryItem
+        brandId = ProductFragmentArgs.fromBundle(requireArguments()).brandId
+        categoryItem = ProductFragmentArgs.fromBundle(requireArguments()).categoryItem
         val isBrand = ProductFragmentArgs.fromBundle(requireArguments()).isBrands
+        getProducts(isBrand)
+        observeOnStateFlow()
+    }
+
+    private fun getProducts(isBrand: Boolean) {
         if(isBrand){
-            getProductsByBrand(brandId)
+            brandId?.let { getProductsByBrand(it) }
         }else {
             getProductsByCategory(categoryItem?.name)
         }
 
-        observeOnStateFlow()
     }
-
 
 
     private fun getProductsByCategory(category: String?) {
