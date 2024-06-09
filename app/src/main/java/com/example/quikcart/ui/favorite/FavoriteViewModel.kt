@@ -27,7 +27,6 @@ class FavoriteViewModel  @Inject constructor(private val repo: Repository) : Vie
             }
                 .collect {productsItem->
                     _uiState.value = ViewState.Success(productsItem)
-                    Log.e("TAG", "getProduct: ${productsItem[0].title}", )
                 }
         }
     }

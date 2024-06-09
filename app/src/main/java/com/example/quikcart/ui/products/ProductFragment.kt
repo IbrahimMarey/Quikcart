@@ -18,6 +18,7 @@ import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.utils.AlertUtil
 import com.google.android.material.chip.Chip
+import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -42,9 +43,8 @@ class ProductFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initViewModel()
-        binding.chipGroup.forEach {
-            Log.e("TAG", "onViewCreated:${(it as Chip).isChecked} ", )
-        }
+        binding.lifecycleOwner=this
+        binding.vm=productsViewModel
        val brandId = ProductFragmentArgs.fromBundle(requireArguments()).brandId
         val categoryItem = ProductFragmentArgs.fromBundle(requireArguments()).categoryItem
         val isBrand = ProductFragmentArgs.fromBundle(requireArguments()).isBrands
@@ -53,6 +53,7 @@ class ProductFragment : Fragment() {
         }else {
             getProductsByCategory(categoryItem?.name)
         }
+
         observeOnStateFlow()
     }
 
