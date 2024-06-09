@@ -8,9 +8,11 @@ import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.FetchAddress
 import com.example.quikcart.models.entities.OrderResponse
 import com.example.quikcart.models.entities.PostAddressModel
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
 import com.example.quikcart.models.entities.ProductsResponse
-import com.example.quikcart.models.entities.cart.CartResponse
+import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
+import com.example.quikcart.models.entities.cart.DraftOrderResponse
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,6 +20,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 import retrofit2.http.Path
 
@@ -71,16 +74,33 @@ interface ApiService {
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
     @POST("draft_orders.json")
     suspend fun postCartItem(
-        @Body cartItem: PostCartItemModel
-    ): Response<PostCartItemModel>
+        @Body cartItem: PostDraftOrderItemModel
+    ): Response<PostDraftOrderItemModel>
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
     @GET("draft_orders.json")
-    suspend fun getCartItems(): Response<CartResponse>
+    suspend fun getCartItems(): Response<AllDraftOrdersResponse>
 
     @Headers("X-Shopify-Access-Token:${Constants.PASSWORD}")
     @DELETE("draft_orders/{id}.json")
     suspend fun delCartItem(@Path("id") id : String)
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @POST("draft_orders.json")
+    suspend fun postDraftOrder(@Body draftOrderPostBody: PostDraftOrderItemModel) : DraftOrderResponse
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @PUT("draft_orders/{id}.json")
+    suspend fun putDraftOrder(@Path("id") id : String, @Body draftOrderPutBody: PutDraftOrderItemModel) : DraftOrderResponse
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @GET("draft_orders.json")
+    suspend fun getAllDraftOrders() : AllDraftOrdersResponse
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @GET("draft_orders/{id}.json")
+    suspend fun getDraftOrderById(@Path("id") id : String) : DraftOrderResponse
+
 
 }
 

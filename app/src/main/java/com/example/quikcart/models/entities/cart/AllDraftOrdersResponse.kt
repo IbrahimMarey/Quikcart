@@ -2,11 +2,13 @@ package com.example.quikcart.models.entities.cart
 
 import com.google.gson.annotations.SerializedName
 
-data class CartResponse (
+data class AllDraftOrdersResponse (
     @SerializedName("draft_orders")
     val draftOrders: List<DraftOrder>
 )
-
+data class DraftOrderResponse(
+    val draft_order: DraftOrder
+)
 data class DraftOrder (
     val id: Long,
     val note: Any? = null,
@@ -217,7 +219,7 @@ data class LineItem (
 
     val sku: Any? = null,
     val vendor: Any? = null,
-    val quantity: Long,
+    var quantity: Long,
 
     @SerializedName("requires_shipping")
     val requiresShipping: Boolean,
@@ -230,7 +232,7 @@ data class LineItem (
     @SerializedName("fulfillment_service")
     val fulfillmentService: String,
 
-    val grams: Long,
+    var grams: Long,
 
     @SerializedName("tax_lines")
     val taxLines: List<Any?>,
@@ -241,7 +243,7 @@ data class LineItem (
     val name: String,
     val properties: List<Any?>,
     val custom: Boolean,
-    val price: String,
+    var price: String,
 
     @SerializedName("admin_graphql_api_id")
     val adminGraphqlAPIID: String
