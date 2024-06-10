@@ -1,12 +1,12 @@
 package com.example.quikcart.ui.productdetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quikcart.R
@@ -16,11 +16,14 @@ import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.VariantsItem
 import com.example.quikcart.models.entities.cart.CartAppliedDiscount
 import com.example.quikcart.models.entities.cart.CartCustomer
-import com.example.quikcart.models.entities.cart.CartItem
-import com.example.quikcart.models.entities.cart.CartLineItems
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.DraftItem
+import com.example.quikcart.models.entities.cart.DraftOrderLineItem
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftItem
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
@@ -54,19 +57,21 @@ class ProductDetailsFragment : Fragment() {
         binding.editProductBtn.setOnClickListener{
             if (cartID == 0.toLong())
             {
-                val item =PostDraftOrderItemModel(
+                val item = PostDraftOrderItemModel(
                     DraftItem(
                         line_items = listOf(DraftOrderLineItem(productItem?.title?: "",productItem?.price?:"",1)),
                         applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
                         customer = CartCustomer(
                             PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
-                    ))
+                    )
+                )
 
                 lifecycleScope.launch{
                     pref.setCartId(viewModel.postProductInCart(item))
                 }
             }else{
-                var data =PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
+                var data =
+                    PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
                 var request = PutDraftOrderItemModel(data)
                 viewModel.putProductInCart(cartID.toString(),request)
             }
