@@ -120,4 +120,7 @@ dependencies {
     implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
     implementation("com.paypal.checkout:android-sdk:1.3.2")
 
+    //Lottie
+    implementation ("com.airbnb.android:lottie:5.2.0")
+
 }

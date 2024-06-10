@@ -82,6 +82,11 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigation.visibility = View.GONE
                 binding.appToolBar.visibility = View.GONE
             }
+            else if (destination.id == R.id.profileFragment)
+            {
+                binding.bottomNavigation.visibility = View.GONE
+                binding.appToolBar.visibility = View.GONE
+            }
             else{
                 binding.bottomNavigation.visibility = View.VISIBLE
 
