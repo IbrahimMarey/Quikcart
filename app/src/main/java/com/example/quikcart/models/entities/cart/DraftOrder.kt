@@ -1,13 +1,16 @@
 package com.example.quikcart.models.entities.cart
 
 
-data class PostCartItemModel(val draft_order : CartItem)
-data class CartItem(val name : String,val line_items : List<CartLineItems>, val applied_discount : CartAppliedDiscount?, val customer: CartCustomer, val use_customer_default_address : Boolean = true)
+data class PostDraftOrderItemModel(val draft_order : DraftItem)
+data class PutDraftOrderItemModel(val draft_order: PutDraftItem)
+data class PutDraftItem(val line_items: List<DraftOrderLineItem> )
+data class DraftItem(val line_items : List<DraftOrderLineItem>, val applied_discount : CartAppliedDiscount?, val customer: CartCustomer, val use_customer_default_address : Boolean = true)
 
-data class CartLineItems(
+data class DraftOrderLineItem(
     val title:String,
     val price: String,
     val quantity: Int,
+//    var grams : Int = price.toInt()
 )
 
 data class CartAppliedDiscount(

@@ -1,7 +1,6 @@
 package com.example.quikcart.models.remote
 
 import android.util.Log
-import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
@@ -14,8 +13,10 @@ import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.models.entities.cart.CartResponse
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
+import com.example.quikcart.models.entities.cart.DraftOrderResponse
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.models.network.ApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -69,7 +70,7 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
         apiService.getCustomerOrders(customerID).orders?.filterNotNull()?.let { emit(it) }
     }
 
-    override suspend fun postCartItem(cartItem: PostCartItemModel): Flow<PostCartItemModel> = flow{
+    override suspend fun postCartItem(cartItem: PostDraftOrderItemModel): Flow<PostDraftOrderItemModel> = flow{
         apiService.postCartItem(cartItem).body()?.let {
             Log.i("TAG", "postCartItem: ${it}")
             emit(it)
@@ -77,7 +78,7 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
 
     }
 
-    override suspend fun getCartItems(): Flow<CartResponse> = flow{
+    override suspend fun getCartItems(): Flow<AllDraftOrdersResponse> = flow{
         apiService.getCartItems().body()?.let {
             Log.i("TAG", "getCartItems: $it")
             emit(it)
@@ -86,6 +87,25 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
 
     override suspend fun delCartItem(id: String) {
         apiService.delCartItem(id)
+    }
+
+    override suspend fun postDraftOrder(draftOrderPostBody: PostDraftOrderItemModel): Flow<DraftOrderResponse> =flow{
+        emit(apiService.postDraftOrder(draftOrderPostBody))
+    }
+
+    override suspend fun putDraftOrder(
+        id: String,
+        draftOrderPutBody: PutDraftOrderItemModel
+    ): Flow<DraftOrderResponse> = flow{
+        emit(apiService.putDraftOrder(id,draftOrderPutBody))
+    }
+
+    override suspend fun getAllDraftOrders(): Flow<AllDraftOrdersResponse> = flow{
+        emit(apiService.getAllDraftOrders())
+    }
+
+    override suspend fun getDraftOrderById(id: String): Flow<DraftOrderResponse> = flow{
+        emit(apiService.getDraftOrderById(id))
     }
 
 }

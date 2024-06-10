@@ -1,7 +1,6 @@
 package com.example.quikcart.models.repos
 
 import com.example.quikcart.R
-import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.CategoryItem
 import android.util.Log
 import com.example.quikcart.models.entities.AddressesResponse
@@ -15,8 +14,10 @@ import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 
 import com.example.quikcart.models.entities.SmartCollectionsItem
-import com.example.quikcart.models.entities.cart.CartResponse
-import com.example.quikcart.models.entities.cart.PostCartItemModel
+import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
+import com.example.quikcart.models.entities.cart.DraftOrderResponse
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.models.local.LocalDataSourceInterface
 import com.example.quikcart.models.remote.RemoteDataSource
 import kotlinx.coroutines.Dispatchers
@@ -72,11 +73,11 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     }
 
 
-    override suspend fun postCartItem(cartItem: PostCartItemModel): Flow<PostCartItemModel> {
+    override suspend fun postCartItem(cartItem: PostDraftOrderItemModel): Flow<PostDraftOrderItemModel> {
         return remoteDataSource.postCartItem(cartItem)
     }
 
-    override suspend fun getCartItems(): Flow<CartResponse> {
+    override suspend fun getCartItems(): Flow<AllDraftOrdersResponse> {
         return remoteDataSource.getCartItems()
     }
 
@@ -94,6 +95,25 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override fun getAllProducts(): Flow<List<ProductsItem>> {
         return localDataSource.getAllProducts()
 
+    }
+
+    override suspend fun postDraftOrder(draftOrderPostBody: PostDraftOrderItemModel): Flow<DraftOrderResponse> {
+        return remoteDataSource.postDraftOrder(draftOrderPostBody)
+    }
+
+    override suspend fun putDraftOrder(
+        id: String,
+        draftOrderPutBody: PutDraftOrderItemModel
+    ): Flow<DraftOrderResponse> {
+        return remoteDataSource.putDraftOrder(id,draftOrderPutBody)
+    }
+
+    override suspend fun getAllDraftOrders(): Flow<AllDraftOrdersResponse> {
+        return remoteDataSource.getAllDraftOrders()
+    }
+
+    override suspend fun getDraftOrderById(id: String): Flow<DraftOrderResponse> {
+        return remoteDataSource.getDraftOrderById(id)
     }
 
 

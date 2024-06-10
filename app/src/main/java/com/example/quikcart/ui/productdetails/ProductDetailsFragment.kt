@@ -30,6 +30,7 @@ class ProductDetailsFragment : Fragment() {
     private var productItem: ProductsItem? = null
     private lateinit var imageAdapter: ImagesAdapter
     private lateinit var variantAdapter: VariantsAdapter
+    private lateinit var pref : PreferencesUtils
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -40,6 +41,8 @@ class ProductDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pref = PreferencesUtils.getInstance(requireActivity())
+        val cartID = pref.getCartId()
         viewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         productItem = arguments?.getSerializable("details") as? ProductsItem
         productItem?.let {
@@ -48,19 +51,26 @@ class ProductDetailsFragment : Fragment() {
             setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
-        showReview(productItem?.productType.toString())
         binding.editProductBtn.setOnClickListener{
+            if (cartID == 0.toLong())
+            {
+                val item =PostDraftOrderItemModel(
+                    DraftItem(
+                        line_items = listOf(DraftOrderLineItem(productItem?.title?: "",productItem?.price?:"",1)),
+                        applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
+                        customer = CartCustomer(
+                            PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
+                    ))
 
-            Log.i("TAG", "onViewCreated:========================= ${productItem?.image?.src}")
-            val item =PostCartItemModel(
-                CartItem(
-                    name = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",
-                    line_items = listOf(CartLineItems(productItem?.title?: "",productItem?.price?:"",1)),
-                    applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
-                    customer = CartCustomer(
-                        PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
-            ))
-            viewModel.postProductInCart(item)
+                lifecycleScope.launch{
+                    pref.setCartId(viewModel.postProductInCart(item))
+                }
+            }else{
+                var data =PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
+                var request = PutDraftOrderItemModel(data)
+                viewModel.putProductInCart(cartID.toString(),request)
+            }
+
         }
     }
    private fun showReview(type: String) {
