@@ -9,7 +9,7 @@ private const val USER_ID_PREFERENCE = "USER_ID"
 private const val CART_ID_PREFERENCE = "CART_ID"
 private const val CUSTOMER_ID = "CUSTOMER_ID"
 private const val USD_RATE = "USD_RATE"
-class PreferencesUtils private constructor(context: Context)
+class PreferencesUtils internal constructor(context: Context)
 {
     private var sharedPreferences : SharedPreferences = context.getSharedPreferences(
         SETTINGS_SHARED_PREFERENCES,Context.MODE_PRIVATE)
