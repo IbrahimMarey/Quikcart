@@ -23,15 +23,13 @@
                 app:searchIcon="@drawable/ic_search"
                 android:background="@drawable/rounded_bg" />
 
-            <androidx.recyclerview.widget.RecyclerView
+            <Button
                 android:id="@+id/recycler_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/search_bar"
                 android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                tools:listitem="@layout/address_item"
+                android:text="test"
                 android:padding="8dp" />
 
             <TextView
