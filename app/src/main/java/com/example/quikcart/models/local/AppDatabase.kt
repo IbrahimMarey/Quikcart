@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.utils.Constants
 import com.example.quikcart.utils.Converters
 
-@Database(entities = [ProductsItem::class], version = 2, exportSchema = false)
+@Database(entities = [ProductsItem::class, PriceRule::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao():AppDao

@@ -2,6 +2,7 @@ package com.example.quikcart.models.remote
 
 import android.util.Log
 import com.example.quikcart.models.entities.AddressesResponse
+import com.example.quikcart.models.entities.CouponModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
@@ -106,6 +107,10 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
 
     override suspend fun getDraftOrderById(id: String): Flow<DraftOrderResponse> = flow{
         emit(apiService.getDraftOrderById(id))
+    }
+
+    override suspend fun getCoupons(): Flow<CouponModel> = flow{
+        emit(apiService.getCoupons())
     }
 
 }
