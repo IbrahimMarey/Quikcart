@@ -175,6 +175,8 @@
     <string name="vendor">"Vendor: "</string>
     <string name="filter_by_price">Filter By Price</string>
     <string name="skip_now">Skip Now</string>
+    <string name="enter_coupon">Enter Coupon</string>
+    <string name="continue_small">Continue</string>
 
 
 </resources>
