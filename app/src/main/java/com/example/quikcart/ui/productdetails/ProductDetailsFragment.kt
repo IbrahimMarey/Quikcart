@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.productdetails
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -54,24 +55,23 @@ class ProductDetailsFragment : Fragment() {
             setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
+        if (cartID.toInt() != 0)
+            viewModel.getCart(cartID.toString())
         binding.editProductBtn.setOnClickListener{
             if (cartID == 0.toLong())
             {
-                val item = PostDraftOrderItemModel(
+                val item =PostDraftOrderItemModel(
                     DraftItem(
                         line_items = listOf(DraftOrderLineItem(productItem?.title?: "",productItem?.price?:"",1)),
-                        applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
-                        customer = CartCustomer(
-                            PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
-                    )
-                )
+                        applied_discount = null,
+                        customer = CartCustomer(pref.getCustomerId()),
+                    ))
 
                 lifecycleScope.launch{
                     pref.setCartId(viewModel.postProductInCart(item))
                 }
             }else{
-                var data =
-                    PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
+                var data =PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
                 var request = PutDraftOrderItemModel(data)
                 viewModel.putProductInCart(cartID.toString(),request)
             }

@@ -85,9 +85,9 @@ interface ApiService {
     @DELETE("draft_orders/{id}.json")
     suspend fun delCartItem(@Path("id") id : String)
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @POST("draft_orders.json")
-    suspend fun postDraftOrder(@Body draftOrderPostBody: PostDraftOrderItemModel) : DraftOrderResponse
+    suspend fun postDraftOrder(@Body draftOrderPostBody: PostDraftOrderItemModel) : DraftOrderResponse //Response<DraftOrderResponse>
 
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
     @PUT("draft_orders/{id}.json")

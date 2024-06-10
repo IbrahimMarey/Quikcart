@@ -40,7 +40,7 @@ class ProductDetailsViewModel @Inject constructor(private val repo: Repository) 
     }
     fun getCart(id: String)
     {
-        Log.i("TAG", "getCart=================:---- $id")
+        Log.i("TAG", "getCart============================================ $id")
         viewModelScope.launch(Dispatchers.IO) {
             repo.getDraftOrderById(id).collect{
                 lineItemsList.addAll(it.draft_order.lineItems)

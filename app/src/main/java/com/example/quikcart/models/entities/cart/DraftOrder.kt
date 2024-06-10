@@ -10,7 +10,6 @@ data class DraftOrderLineItem(
     val title:String,
     val price: String,
     val quantity: Int,
-//    var grams : Int = price.toInt()
 )
 
 data class CartAppliedDiscount(
