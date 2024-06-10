@@ -151,7 +151,7 @@ class LoginFragment : Fragment() {
                     }
 
                     else -> {
-                        showMessage("Error")
+
                     }
                 }
             }

@@ -47,7 +47,7 @@ class AddressesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        addressesViewModel.getCustomerAddresses(PreferencesUtils.getInstance(requireContext()).getUserId()
+        addressesViewModel.getCustomerAddresses(PreferencesUtils.getInstance(requireContext()).getCustomerId()
             ?.toLong()?: "7406457553131".toLong())
         setUpUI()
     }

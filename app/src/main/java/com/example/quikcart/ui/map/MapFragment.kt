@@ -116,7 +116,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun confirmLocationDialog(address:PostAddressModel,alert:AlertDialog){
 
         addressViewModel.postAddress(
-            PreferencesUtils.getInstance(requireContext()).getUserId()
+            PreferencesUtils.getInstance(requireContext()).getCustomerId()
             ?.toLong()?: "7406457553131".toLong(),address)
         alert.cancel()
         Navigation.findNavController(requireView()).navigateUp()
