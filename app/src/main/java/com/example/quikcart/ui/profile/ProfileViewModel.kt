@@ -3,25 +3,31 @@ package com.example.quikcart.ui.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.repos.CurrencyRepoInterface
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
 class ProfileViewModel(private val repo: CurrencyRepoInterface) :ViewModel() {
-     var navigator:Navigator?=null
+    private var _usdCurrency = MutableStateFlow<ViewState<Double>>(ViewState.Loading)
+    var usdCurrency: StateFlow<ViewState<Double>> = _usdCurrency
+    var navigator:Navigator?=null
     fun navigateToOrdersFragment(){
         navigator?.navigateToOrdersFragment()
     }
 
-    fun getCurrency(): Double {
-        var usdRate: Double = 0.02102
+    init {
+        getCurrency()
+    }
+    private fun getCurrency() {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCurrency().collect { response ->
-                usdRate = response.conversionRates["USD"] ?: 0.02102
+                _usdCurrency.value = ViewState.Success(response.conversionRates["USD"]?: 0.02102)
             }
         }
-        return usdRate
     }
 }
 
