@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_productFragment"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_confirmOrderFirstScreenFragment"
+            app:destination="@id/confirmOrderFirstScreenFragment" />
 
     </fragment>
     <fragment
@@ -134,4 +137,8 @@
             android:name="productType"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/confirmOrderFirstScreenFragment"
+        android:name="com.example.quikcart.ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragment"
+        android:label="ConfirmOrderFirstScreenFragment" />
 </navigation>

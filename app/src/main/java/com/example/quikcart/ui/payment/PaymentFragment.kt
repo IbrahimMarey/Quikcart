@@ -100,6 +100,7 @@ class PaymentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        binding.paymentButtonContainer.visibility = View.GONE
 
         binding.paypalPayCard.setOnClickListener{
             payWithPayPal()
@@ -174,10 +175,10 @@ class PaymentFragment : Fragment() {
     // Google Pay End Functions End
 
 
-    // PayPal Functions Start
+    // PayPal SDK Functions Start
     private fun payWithPayPal()
     {
-        var payment = PayPalPayment(BigDecimal("0.01"),"USD","Donate for EDMTDev",PayPalPayment.PAYMENT_INTENT_SALE)
+        var payment = PayPalPayment(BigDecimal("10.0"),"USD","Donate for EDMTDev",PayPalPayment.PAYMENT_INTENT_SALE)
         var intent = Intent(requireActivity(),PaymentActivity::class.java)
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
         intent.putExtra(PaymentActivity.EXTRA_PAYMENT,payment)
@@ -213,7 +214,11 @@ class PaymentFragment : Fragment() {
         }
     }
 
-    // PayPal Functions End
+    // PayPal SDK Functions End
+
+    // PayPal checkout Functions Start
+
+    // PayPal checkout Functions End
     override fun onDestroyView() {
         super.onDestroyView()
         stopPayPalService()
