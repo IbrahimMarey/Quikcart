@@ -7,7 +7,9 @@ private const val SETTINGS_SHARED_PREFERENCES = "SETTINGS_SHARED_PREFERENCES"
 private const val CURRENCY_PREFERENCE = "SETTING_CURRENCY"
 private const val USER_ID_PREFERENCE = "USER_ID"
 private const val CART_ID_PREFERENCE = "CART_ID"
-class PreferencesUtils(context: Context)
+private const val CUSTOMER_ID = "CUSTOMER_ID"
+private const val USD_RATE = "USD_RATE"
+class PreferencesUtils private constructor(context: Context)
 {
     private var sharedPreferences : SharedPreferences = context.getSharedPreferences(
         SETTINGS_SHARED_PREFERENCES,Context.MODE_PRIVATE)
@@ -40,10 +42,17 @@ class PreferencesUtils(context: Context)
         return sharedPreferences.getLong(CART_ID_PREFERENCE,0)
     }
     fun setCustomerId(id:Long){
-        editor.putLong("id",id).apply()
+        editor.putLong(CUSTOMER_ID,id).apply()
     }
     fun getCustomerId():Long{
-        return sharedPreferences.getLong("id",0)
+        return sharedPreferences.getLong(CUSTOMER_ID,0)
+    }
+
+    fun setUSDRate(id:Float){
+        editor.putFloat(USD_RATE,id).apply()
+    }
+    fun getUSDRate():Float{
+        return sharedPreferences.getFloat(USD_RATE, 0.0F)
     }
     companion object{
         const val CURRENCY_USD = "USD"

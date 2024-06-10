@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.profile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +17,14 @@ import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.AboutUsDialogBinding
 import com.example.quikcart.databinding.FragmentProfileBinding
+import com.example.quikcart.models.network.CurrencyHelper
+import com.example.quikcart.models.remote.CurrencySource
+import com.example.quikcart.models.repos.CurrencyRepo
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment(),Navigator {
 
     private lateinit var binding:FragmentProfileBinding
@@ -66,7 +72,9 @@ class ProfileFragment : Fragment(),Navigator {
     }
 
     private fun initViewModel() {
-        viewModel=ViewModelProvider(this)[ProfileViewModel::class.java]
+        val factory = ProfileModelFactory(CurrencyRepo.getInstance(CurrencySource(CurrencyHelper.currencyService)))
+        viewModel = ViewModelProvider(this,factory)[ProfileViewModel::class.java]
+//        viewModel=ViewModelProvider(this)[ProfileViewModel::class.java]
     }
 
     private fun contactUsDialog(){
@@ -118,7 +126,11 @@ class ProfileFragment : Fragment(),Navigator {
         }
         currency.findViewById<RadioGroup>(R.id.currencyGroup).setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
-                R.id.radioUSD -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_USD)
+                R.id.radioUSD -> {
+                    preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_USD)
+                    preferencesUtils.setUSDRate(viewModel.getCurrency().toFloat())
+                    Log.i("TAG", "currencyDialog: ${viewModel.getCurrency().toFloat()}")
+                }
                 R.id.radioEGP -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_EGP)
             }
 

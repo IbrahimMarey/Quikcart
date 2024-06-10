@@ -3,6 +3,7 @@ package com.example.quikcart.models.repos
 import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CouponModel
+import com.example.quikcart.models.entities.CurrencyModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
@@ -57,5 +58,6 @@ interface Repository {
     suspend fun deleteAllCoupons(): Int
     suspend fun insertAllCoupons(coupons: List<PriceRule>): LongArray
     suspend fun getAllCoupons(): Flow<List<PriceRule>>
+
 
 }
