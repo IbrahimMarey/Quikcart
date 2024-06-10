@@ -230,7 +230,7 @@ data class LineItem (
     val giftCard: Boolean,
 
     @SerializedName("fulfillment_service")
-    val fulfillmentService: String,
+    var fulfillmentService: String,
 
     var grams: Long,
 

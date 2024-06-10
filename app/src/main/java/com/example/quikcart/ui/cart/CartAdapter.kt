@@ -28,19 +28,13 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit) : ListAdapter<LineIt
         holder.binding.cartItemTitle.text = model.title
         holder.binding.cartItemPrice.setPrice(model.price.toFloat(),ctx)
         holder.binding.cartItemQuntity.text = model.quantity.toString()
-//        model.appliedDiscount?.description?.let {
-//            ImageUtils.loadImage(holder.binding.cartItemImage,
-//                it
-//            )
-//        }
+        ImageUtils.loadImage(holder.binding.cartItemImage,model.fulfillmentService)
         holder.binding.btnRemoveItem.setOnClickListener {
             delCartItem(model)
         }
         holder.binding.btnIncrease.setOnClickListener {
-//            val price = model.price.toFloat() / model.quantity.toFloat()
             model.quantity++
             var newPrice = model.price.toFloat()*model.quantity
-//            model.price = newPrice.toString()
             holder.binding.cartItemPrice.setPrice(newPrice,ctx)
             holder.binding.cartItemQuntity.text = model.quantity.toString()
 
@@ -51,7 +45,6 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit) : ListAdapter<LineIt
                 val price = model.price.toFloat() / model.quantity.toFloat()
                 model.quantity--
                 var newPrice = model.price.toFloat()*model.quantity
-//                model.price = newPrice.toString()
                 holder.binding.cartItemPrice.setPrice(newPrice,ctx)
                 holder.binding.cartItemQuntity.text = model.quantity.toString()
             }

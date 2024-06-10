@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+private const val IMAGE_NOT_FOUND = "https://i.vimeocdn.com/video/443809727-02de8fe8dfa0df7806ebceb3e9e52991f3ff640b12ddabbb06051f04d1af765f-d_640?f=webp"
 @HiltViewModel
 class CartViewModel @Inject constructor(private val repo: Repository) : ViewModel()
 {
@@ -81,6 +81,25 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
         viewModelScope.launch(Dispatchers.IO) {
             repo.delCartItem(id)
             _cart.value = ViewState.Error("Not Found")
+        }
+    }
+
+    fun getProducts()
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getProducts().collect{
+
+
+                for(lineItem in lineItemsList)
+                {
+                    for (product in it) {
+                        if (lineItem.title == product.title)
+                        {
+                            lineItem.fulfillmentService = product.images?.get(0)?.src?: IMAGE_NOT_FOUND
+                        }
+                    }
+                }
+            }
         }
     }
 }
