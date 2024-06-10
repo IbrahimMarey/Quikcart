@@ -12,17 +12,22 @@ import android.widget.RadioGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.AboutUsDialogBinding
 import com.example.quikcart.databinding.FragmentProfileBinding
+import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.network.CurrencyHelper
 import com.example.quikcart.models.remote.CurrencySource
 import com.example.quikcart.models.repos.CurrencyRepo
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment(),Navigator {
@@ -65,10 +70,10 @@ class ProfileFragment : Fragment(),Navigator {
         binding.aboutUs.setOnClickListener{
             aboutUsDialogOpening()
         }
-
         binding.currency.setOnClickListener {
             currencyDialog()
         }
+        getUSDCurrency()
     }
 
     private fun initViewModel() {
@@ -128,8 +133,6 @@ class ProfileFragment : Fragment(),Navigator {
             when(checkedId){
                 R.id.radioUSD -> {
                     preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_USD)
-                    preferencesUtils.setUSDRate(viewModel.getCurrency().toFloat())
-                    Log.i("TAG", "currencyDialog: ${viewModel.getCurrency().toFloat()}")
                 }
                 R.id.radioEGP -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_EGP)
             }
@@ -137,6 +140,21 @@ class ProfileFragment : Fragment(),Navigator {
         }
         currency.findViewById<Button>(R.id.button_save_currency).setOnClickListener {
             alertDialog.cancel()
+        }
+    }
+    private fun getUSDCurrency()
+    {
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.usdCurrency.collect{
+                when(it)
+                {
+                    is ViewState.Error -> {}
+                    ViewState.Loading -> {}
+                    is ViewState.Success -> {
+                        preferencesUtils.setUSDRate(it.data.toFloat())
+                    }
+                }
+            }
         }
     }
 
