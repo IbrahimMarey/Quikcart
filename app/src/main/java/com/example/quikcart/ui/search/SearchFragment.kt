@@ -10,9 +10,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentSearchBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.ProductsItem
+import com.example.quikcart.ui.products.ProductAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,10 +35,10 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-        adapter = SearchAdapter()
         getProducts()
         setupSearchBar()
         observeViewModel()
@@ -53,16 +56,14 @@ class SearchFragment : Fragment() {
                         is ViewState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
-
                         is ViewState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             productList.clear()
                             productList.addAll(state.data)
-                            adapter.submitList(productList)
+                            initRecyclerView(productList)
                             binding.productRecyclerView.adapter = adapter
-                            Log.i("SearchFragment", "Products: $productList.count()")
+                            Log.i("SearchFragment", "Products: ${productList.count()}")
                         }
-
                         is ViewState.Error -> {
                             binding.progressBar.visibility = View.GONE
                         }
@@ -70,8 +71,8 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-
     }
+
     private fun setupSearchBar() {
         binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -97,6 +98,30 @@ class SearchFragment : Fragment() {
                 it.title!!.contains(query, ignoreCase = true) || it.productType!!.contains(query, ignoreCase = true)
             })
             adapter.submitList(filteredList.toList())
+
+            if (filteredList.isEmpty()) {
+                binding.emptyImageView.visibility = View.VISIBLE
+                binding.productRecyclerView.visibility = View.GONE
+            } else {
+                binding.emptyImageView.visibility = View.GONE
+                binding.productRecyclerView.visibility = View.VISIBLE
+            }
         }
+    }
+
+    private fun initRecyclerView(products: List<ProductsItem>) {
+        adapter = SearchAdapter(
+            { productItem -> navigateToProductDetails(productItem) },
+            { productItem -> viewModel.addToFavourites(productItem) }
+        )
+        binding.productRecyclerView.adapter = adapter
+        adapter.submitList(products)
+    }
+
+    private fun navigateToProductDetails(productItem: ProductsItem) {
+        val bundle = Bundle().apply {
+            putSerializable("details", productItem)
+        }
+        findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
     }
 }

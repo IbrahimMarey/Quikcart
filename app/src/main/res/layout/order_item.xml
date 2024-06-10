@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="orderItem"
+            type="com.example.quikcart.models.entities.OrdersItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_marginVertical="4dp"
+
+        >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/ic_order"
+            app:civ_circle_background_color="@color/xd_burgundy"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/xd_asset_burgundy"
+
+            />
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/img"
+            android:text="@string/createdAt"
+            android:layout_marginStart="16dp"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            tools:text="Feb "
+
+            />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/date_tv"
+            android:text="@{orderItem.createdAt}"
+            android:textSize="15sp"
+            tools:text="Feb "
+
+            />
+        <TextView
+            android:id="@+id/price_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/date_tv"
+            app:layout_constraintStart_toStartOf="@id/date_tv"
+            android:text="@string/price"
+            android:textSize="15sp"
+            android:textStyle="bold"
+
+            />
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/date"
+            app:layout_constraintStart_toEndOf="@id/price_tv"
+            android:text="@{orderItem.totalPrice}"
+            tools:text="42$"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/xd_blue"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@id/img"
+            android:background="@color/amp_gray"
+            android:layout_marginTop="8dp"
+
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

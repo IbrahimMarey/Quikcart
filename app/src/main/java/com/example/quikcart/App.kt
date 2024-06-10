@@ -9,6 +9,8 @@ import com.paypal.checkout.createorder.CurrencyCode
 import com.paypal.checkout.createorder.UserAction
 import dagger.hilt.android.HiltAndroidApp
 
+private const val PAYPAL_CLIENT_ID = BuildConfig.PAYPAL_CLIENT_ID
+
 @HiltAndroidApp
 class App: Application()
 {
@@ -16,9 +18,9 @@ class App: Application()
         super.onCreate()
         val config = CheckoutConfig(
             application = this,
-            clientId = BuildConfig.PAYPAL_CLIENT_ID,
+            clientId = PAYPAL_CLIENT_ID,
             environment = Environment.SANDBOX,
-            returnUrl = BuildConfig.PayPalUrl,
+            returnUrl = "com.example.quikcart://paypalpay",
             currencyCode = CurrencyCode.USD,
             userAction = UserAction.PAY_NOW,
             settingsConfig = SettingsConfig(

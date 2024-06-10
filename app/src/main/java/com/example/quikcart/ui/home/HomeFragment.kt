@@ -1,9 +1,14 @@
 package com.example.quikcart.ui.home
 
+import android.content.ClipData
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.text.ClipboardManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentHomeBinding
 import com.example.quikcart.models.ViewState
@@ -76,6 +83,7 @@ class HomeFragment : Fragment() {
                         is ViewState.Success -> {
                             initBrandsRecyclerView(it.data)
                             binding.brandsProgressbar.visibility = View.GONE
+                            initImageSlider()
                         }
                         is ViewState.Loading -> binding.brandsProgressbar.visibility = View.VISIBLE
 
@@ -89,5 +97,32 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
     }
 
+    private fun initImageSlider()
+    {
+        binding.imageSlider.setImageList(viewModel.couponsList,ScaleTypes.FIT)
+        binding.imageSlider.startSliding(1500)
+        binding.imageSlider.setItemClickListener(object : ItemClickListener{
+            override fun doubleClick(position: Int) {
 
+            }
+            override fun onItemSelected(position: Int) {
+                copyCoupon(position)
+            }
+        })
+    }
+
+    private fun copyCoupon(index:Int)
+    {
+        val sdk = Build.VERSION.SDK_INT
+        if (sdk < Build.VERSION_CODES.HONEYCOMB) {
+            val clipboard =
+                requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.text = viewModel.couponsIDs[index]
+        } else {
+            val clipboard =
+                requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clip = ClipData.newPlainText("text", viewModel.couponsIDs[index])
+            clipboard.setPrimaryClip(clip)
+        }
+    }
 }

@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 private const val SETTINGS_SHARED_PREFERENCES = "SETTINGS_SHARED_PREFERENCES"
 private const val CURRENCY_PREFERENCE = "SETTING_CURRENCY"
 private const val USER_ID_PREFERENCE = "USER_ID"
+private const val CART_ID_PREFERENCE = "CART_ID"
 class PreferencesUtils private constructor(context: Context)
 {
     private var sharedPreferences : SharedPreferences = context.getSharedPreferences(
@@ -32,7 +33,18 @@ class PreferencesUtils private constructor(context: Context)
     {
         return sharedPreferences.getString(USER_ID_PREFERENCE,"7406457553131")
     }
-
+    fun setCartId(id:Long){
+        editor.putLong(CART_ID_PREFERENCE,id).apply()
+    }
+    fun getCartId():Long{
+        return sharedPreferences.getLong(CART_ID_PREFERENCE,0)
+    }
+    fun setCustomerId(id:Long){
+        editor.putLong("id",id).apply()
+    }
+    fun getCustomerId():Long{
+        return sharedPreferences.getLong("id",0)
+    }
     companion object{
         const val CURRENCY_USD = "USD"
         const val CURRENCY_EGP = "EGP"

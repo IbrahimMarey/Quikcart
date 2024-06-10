@@ -6,7 +6,7 @@
     <string name="profile">Profile</string>
     <string name="searchForProduct">Search for product</string>
     <string name="brand">Brands</string>
-    <string name="reviews">View reviews</string>
+    <string name="reviews">Reviews</string>
     <string name="add_to_cart">Add to cart</string>
     <string name="description">"Description "</string>
     <string name="more_than">more..</string>
@@ -22,7 +22,7 @@
     <string name="remove_favourite">remove this product to favorites</string>
     <string name="is_add_favourite">Are you sure you want to add this product to favorites?</string>
     <string name="is_remove_favourite">Are you sure you want to remove this product from favorites?</string>
-    <string name="select_size">Please, choose your size from Avaliable Size Menu.</string>
+    <string name="select_size_error">Please, choose your size from Avaliable Size Menu.</string>
     <string name="my_favourite">My Favourite</string>
     <string name="wish_list">Wish list</string>
     <string name="favourite_fail">please, login first.</string>
@@ -105,7 +105,7 @@
     <string name="more">show more</string>
     <string name="orders">Orders</string>
     <string name="noInternet">No internet</string>
-    <string name="cartIsEmpty">Cart is empty</string>
+    <string name="cartIsEmpty">Cart is Empty</string>
     <string name="favoriteIsEmpty">Favorite is empty</string>
     <string name="email_address">Email address</string>
     <string name="password">Password</string>
@@ -164,7 +164,17 @@
     <string name="new_phone">New Phone</string>
     <string name="phone_miss_match">Phone Miss Match</string>
 
+    <string name="images_of_products">Images of Products</string>
+    <string name="select_colors">"Select color "</string>
+    <string name="select_size">"Select Size "</string>
+    <string name="product_title">Product Title</string>
+    <string name="type_shoes">Type : SHOES</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="quantity">Quantity</string>
+    <string name="vendor">"Vendor: "</string>
+    <string name="filter_by_price">Filter By Price</string>
+    <string name="skip_now">Skip Now</string>
+
 
 </resources>

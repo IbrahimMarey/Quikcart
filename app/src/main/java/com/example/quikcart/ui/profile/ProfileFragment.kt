@@ -9,18 +9,22 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.AboutUsDialogBinding
 import com.example.quikcart.databinding.FragmentProfileBinding
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(),Navigator {
 
     private lateinit var binding:FragmentProfileBinding
     private lateinit var materialAboutUsBuilder: MaterialAlertDialogBuilder
     private lateinit var aboutUsDialog:AboutUsDialogBinding
+    private lateinit var viewModel: ProfileViewModel
     private val preferencesUtils by lazy {
         PreferencesUtils.getInstance(requireActivity().application)
     }
@@ -42,6 +46,9 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initViewModel()
+        viewModel.navigator=this
+        binding.profileViewModel=viewModel
         binding.addressSittings.setOnClickListener {
             val action = ProfileFragmentDirections.actionProfileFragmentToAddressesFragment()
             Navigation.findNavController(it).navigate(action)//R.id.addressesFragment
@@ -56,6 +63,10 @@ class ProfileFragment : Fragment() {
         binding.currency.setOnClickListener {
             currencyDialog()
         }
+    }
+
+    private fun initViewModel() {
+        viewModel=ViewModelProvider(this)[ProfileViewModel::class.java]
     }
 
     private fun contactUsDialog(){
@@ -115,5 +126,9 @@ class ProfileFragment : Fragment() {
         currency.findViewById<Button>(R.id.button_save_currency).setOnClickListener {
             alertDialog.cancel()
         }
+    }
+
+    override fun navigateToOrdersFragment() {
+        findNavController().navigate(R.id.action_profileFragment_to_ordersFragment)
     }
 }
