@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentProductDetailsBinding
 import com.example.quikcart.models.entities.ImagesItem
 import com.example.quikcart.models.entities.ProductsItem
@@ -52,31 +54,35 @@ class ProductDetailsFragment : Fragment() {
             setVariants(it.variants)
         }
         binding.rateOfProductDetails.rating = 4.7f
-        if (cartID.toInt() != 0)
-            viewModel.getCart(cartID.toString())
         binding.editProductBtn.setOnClickListener{
             if (cartID == 0.toLong())
             {
-                val item =PostDraftOrderItemModel(
+                val item = PostDraftOrderItemModel(
                     DraftItem(
                         line_items = listOf(DraftOrderLineItem(productItem?.title?: "",productItem?.price?:"",1)),
                         applied_discount = CartAppliedDiscount(description = productItem?.image?.src ?: "https://www.shutterstock.com/image-vector/shopping-cart-icon-vector-illustration-600nw-1726574749.jpg",null,null,null,null),
                         customer = CartCustomer(
                             PreferencesUtils.getInstance(requireActivity()).getUserId()?.toLong()?:7406457553131),
-                    ))
+                    )
+                )
 
                 lifecycleScope.launch{
                     pref.setCartId(viewModel.postProductInCart(item))
                 }
             }else{
-                var data =PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
+                var data =
+                    PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
                 var request = PutDraftOrderItemModel(data)
                 viewModel.putProductInCart(cartID.toString(),request)
             }
 
         }
     }
-
+   private fun showReview(type: String) {
+       binding.reviews.setOnClickListener {
+           navigateToProductDetails(type)
+       }
+   }
     private fun setVariants(variants: List<VariantsItem>?) {
         variantAdapter= VariantsAdapter()
         binding.recyclerViewColors.apply {
@@ -98,5 +104,10 @@ class ProductDetailsFragment : Fragment() {
         }
     }
 
-
+    private fun navigateToProductDetails(type: String) {
+        val bundle = Bundle().apply {
+            putSerializable("productType", type)
+        }
+        findNavController().navigate(R.id.action_productDetailsFragment_to_reviewFragment, bundle)
+    }
 }

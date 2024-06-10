@@ -24,6 +24,7 @@ class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var viewModel: FavoriteViewModel
     private lateinit var adapter: FavoriteAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +40,7 @@ class FavoriteFragment : Fragment() {
         getProducts()
         observeViewModel()
     }
+
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -49,9 +51,15 @@ class FavoriteFragment : Fragment() {
                         }
                         is ViewState.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            setupRecyclerView(state.data)
-                            binding.rvFavorite.adapter = adapter
-                            Log.i("SearchFragment", "Products: ${state.data}.count()")
+                            if (state.data.isEmpty()) {
+                                binding.emptyImageView.visibility = View.VISIBLE
+                                binding.rvFavorite.visibility = View.GONE
+                            } else {
+                                binding.emptyImageView.visibility = View.GONE
+                                binding.rvFavorite.visibility = View.VISIBLE
+                                setupRecyclerView(state.data)
+                            }
+                            Log.i("FavoriteFragment", "Products: ${state.data.count()}")
                         }
                         is ViewState.Error -> {
                             binding.progressBar.visibility = View.GONE
@@ -61,6 +69,7 @@ class FavoriteFragment : Fragment() {
             }
         }
     }
+
     private fun getProducts() {
         viewModel.getProducts()
     }
@@ -68,17 +77,16 @@ class FavoriteFragment : Fragment() {
     private fun setupRecyclerView(products: List<ProductsItem>) {
         adapter = FavoriteAdapter(
             { productItem -> navigateToProductDetails(productItem) },
-            {productItem -> viewModel.deleteProduct(productItem) }
+            { productItem -> viewModel.deleteProduct(productItem) }
         )
         binding.rvFavorite.adapter = adapter
         adapter.submitList(products)
     }
+
     private fun navigateToProductDetails(productItem: ProductsItem) {
         val bundle = Bundle().apply {
             putSerializable("details", productItem)
         }
         findNavController().navigate(R.id.action_favoriteFragment_to_productDetailsFragment, bundle)
     }
-
-
 }

@@ -168,4 +168,6 @@
     <string name="select_size">"اختر المقاس "</string>
     <string name="type_shoes">النوع</string>
     <string name="product_title">عنوان المنتج</string>
+    <string name="skip_now">تخطي الان</string>
+
 </resources>
