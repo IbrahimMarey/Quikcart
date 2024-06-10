@@ -13,8 +13,8 @@ import com.example.quikcart.models.entities.AddressResponse
 
 class OrderCustomerAddressesAdapter(private val onItemClick:(AddressResponse)->Unit) :
     ListAdapter<AddressResponse, OrderCustomerAddressesAdapter.ViewHolder>(DiffUtils) {
-        var selectedPosition=-1
-    var lastSelectedPosition=-1
+        private var selectedPosition=0
+        private var lastSelectedPosition=0
 
     class ViewHolder(val binding: AddressItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(address: AddressResponse) {
@@ -30,6 +30,7 @@ class OrderCustomerAddressesAdapter(private val onItemClick:(AddressResponse)->U
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
+
         holder.binding.root.setOnClickListener {
             lastSelectedPosition = selectedPosition
             selectedPosition = holder.adapterPosition
@@ -37,13 +38,21 @@ class OrderCustomerAddressesAdapter(private val onItemClick:(AddressResponse)->U
             notifyItemChanged(selectedPosition)
         }
         if (selectedPosition == holder.adapterPosition) {
-            holder.binding.cardItem.setCardBackgroundColor(Color.LTGRAY)
-            changeBorderItemColor(holder,R.color.xd_text_view_details)
+            changeCardItemStyle(holder,Color.LTGRAY,R.color.xd_lemon_dark)
             onItemClick.invoke(getItem(position))
         } else {
-            holder.binding.cardItem.setCardBackgroundColor(Color.WHITE)
-            changeBorderItemColor(holder, com.paypal.pyplcheckout.R.color.amp_light_gray)
+            changeCardItemStyle(holder,Color.WHITE, R.color.xd_btn_nav_item)
         }
+
+    }
+
+    private fun changeCardItemStyle(
+        holder: ViewHolder,
+        cardBackground: Int,
+        cardStrokeColor: Int
+    ) {
+        holder.binding.cardItem.setCardBackgroundColor(cardBackground)
+        changeBorderItemColor(holder,cardStrokeColor)
 
     }
 

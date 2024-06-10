@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -16,21 +17,18 @@
         app:cardCornerRadius="15dp"
         android:layout_margin="8dp"
         app:strokeWidth="2dp"
-        app:strokeColor="@color/amp_light_gray"
-
-
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+
 
             >
 
             <ImageView
                 android:id="@+id/map_img"
-                android:layout_width="60dp"
+                android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:src="@drawable/location_img"
                 android:background="@drawable/rounded_bg"
@@ -40,25 +38,33 @@
 
             <TextView
                 android:id="@+id/address1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{addressItem.address1}"
-                app:layout_constraintStart_toEndOf="@id/map_img"
+                tools:text="Address"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="@id/map_img"
                 app:layout_constraintTop_toTopOf="@id/map_img"
-                android:layout_margin="4dp"
+                app:layout_constraintEnd_toEndOf="@id/map_img"
+                android:layout_marginTop="40dp"
                 android:textStyle="bold"
-
+                android:background="@color/xd_burgundy_transparent"
+                android:fontFamily="@font/barlow"
                 />
 
             <TextView
                 android:id="@+id/address2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/address2"
-                app:layout_constraintStart_toStartOf="@id/address2"
-                app:layout_constraintEnd_toEndOf="@id/address1"
+                app:layout_constraintTop_toBottomOf="@id/address1"
+                app:layout_constraintStart_toStartOf="@id/map_img"
+               app:layout_constraintEnd_toEndOf="@id/map_img"
                 android:text="@{addressItem.address2}"
-                android:layout_marginStart="4dp" />
+                tools:text="Egypt, Ismailia Governorate, Ismailia 3"
+               android:gravity="center"
+                android:background="@color/xd_burgundy_transparent"
+                android:fontFamily="@font/pacifico"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
