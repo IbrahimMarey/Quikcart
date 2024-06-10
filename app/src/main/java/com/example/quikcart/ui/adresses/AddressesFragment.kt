@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -100,7 +101,10 @@ class AddressesFragment : Fragment() {
     private fun delAddress(addressesModel:AddressResponse){
         Snackbar.make(requireView(), getString(R.string.are_you_sure_you_want_to_delete_this_address), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.delete)) {
-                addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getCustomerId(),addressesModel.id)
+                if (addressesViewModel.addressesList.size >=2)
+                    addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getCustomerId(),addressesModel.id)
+                else
+                    Toast.makeText(requireActivity(), getString(R.string.cannot_delete_the_customer_s_default_address), Toast.LENGTH_SHORT).show()
             }.show()
     }
 }

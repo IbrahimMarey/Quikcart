@@ -2,11 +2,14 @@ package com.example.quikcart.models.repos
 
 import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.AddressesResponse
+import com.example.quikcart.models.entities.CouponModel
+import com.example.quikcart.models.entities.CurrencyModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
 import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.PostAddressModel
+import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
@@ -49,5 +52,12 @@ interface Repository {
     suspend fun putDraftOrder(id : String,draftOrderPutBody: PutDraftOrderItemModel) : Flow<DraftOrderResponse>
     suspend fun getAllDraftOrders() : Flow<AllDraftOrdersResponse>
     suspend fun getDraftOrderById(id : String) : Flow<DraftOrderResponse>
+    suspend fun getCoupons(): Flow<CouponModel>
+
+    suspend fun insertCoupon(coupon: PriceRule): Long
+    suspend fun deleteAllCoupons(): Int
+    suspend fun insertAllCoupons(coupons: List<PriceRule>): LongArray
+    suspend fun getAllCoupons(): Flow<List<PriceRule>>
+
 
 }

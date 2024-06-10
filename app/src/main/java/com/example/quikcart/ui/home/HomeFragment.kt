@@ -45,12 +45,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        binding.recyclerAddress.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_confirmOrderFirstScreenFragment)
+        }
         observeOnStateFlow()
         initCategoryRecyclerView()
         binding.searchBar.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
         }
-        initImageSlider()
     }
 
     private fun initCategoryRecyclerView() {
@@ -84,6 +86,7 @@ class HomeFragment : Fragment() {
                         is ViewState.Success -> {
                             initBrandsRecyclerView(it.data)
                             binding.brandsProgressbar.visibility = View.GONE
+                            initImageSlider()
                         }
                         is ViewState.Loading -> binding.brandsProgressbar.visibility = View.VISIBLE
 
@@ -106,24 +109,23 @@ class HomeFragment : Fragment() {
 
             }
             override fun onItemSelected(position: Int) {
-                copyCoupon()
+                copyCoupon(position)
             }
         })
     }
 
-    private fun copyCoupon()
+    private fun copyCoupon(index:Int)
     {
         val sdk = Build.VERSION.SDK_INT
         if (sdk < Build.VERSION_CODES.HONEYCOMB) {
             val clipboard =
                 requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            clipboard.text = "Coupon"
+            clipboard.text = viewModel.couponsIDs[index]
         } else {
             val clipboard =
                 requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-            val clip = ClipData.newPlainText("text", "Coupon")
+            val clip = ClipData.newPlainText("text", viewModel.couponsIDs[index])
             clipboard.setPrimaryClip(clip)
         }
-//        Toast.makeText(requireActivity(), "Coupon", Toast.LENGTH_SHORT).show()
     }
 }

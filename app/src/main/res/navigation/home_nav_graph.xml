@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_productFragment"
             app:destination="@id/productFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_confirmOrderFirstScreenFragment"
+            app:destination="@id/confirmOrderFirstScreenFragment" />
 
     </fragment>
     <fragment
@@ -134,4 +137,17 @@
             android:name="productType"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/confirmOrderFirstScreenFragment"
+        android:name="com.example.quikcart.ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragment"
+        android:label="ConfirmOrderFirstScreenFragment" >
+        <action
+            android:id="@+id/action_confirmOrderFirstScreenFragment_to_placeOrderFragment"
+            app:destination="@id/placeOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/placeOrderFragment"
+        android:name="com.example.quikcart.ui.placeorder.secondscreen.PlaceOrderFragment"
+        android:label="fragment_place_order"
+        tools:layout="@layout/fragment_place_order" />
 </navigation>

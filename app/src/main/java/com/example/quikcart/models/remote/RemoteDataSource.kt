@@ -1,6 +1,8 @@
 package com.example.quikcart.models.remote
 
 import com.example.quikcart.models.entities.AddressesResponse
+import com.example.quikcart.models.entities.CouponModel
+import com.example.quikcart.models.entities.CurrencyModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
@@ -51,5 +53,9 @@ interface RemoteDataSource {
      suspend fun putDraftOrder(id : String,draftOrderPutBody: PutDraftOrderItemModel) : Flow<DraftOrderResponse>
      suspend fun getAllDraftOrders() : Flow<AllDraftOrdersResponse>
      suspend fun getDraftOrderById(id : String) : Flow<DraftOrderResponse>
+     suspend fun getCoupons(): Flow<CouponModel>
+
+
+
 
 }

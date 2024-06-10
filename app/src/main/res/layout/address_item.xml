@@ -1,51 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="15dp"
-    android:layout_margin="8dp"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="addressItem"
+            type="com.example.quikcart.models.entities.AddressResponse" />
 
-    >
+    </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-
+        app:cardCornerRadius="15dp"
+        android:layout_margin="8dp"
+        app:strokeWidth="2dp"
         >
-        <ImageView
-            android:id="@+id/map_img"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/location_img"
-            android:background="@drawable/rounded_bg"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            />
-        <TextView
-            android:id="@+id/title"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Home Address"
-            app:layout_constraintStart_toEndOf="@id/map_img"
-            app:layout_constraintTop_toTopOf="@id/map_img"
-            android:layout_margin="4dp"
-            android:textStyle="bold"
-            />
-        <TextView
-            android:id="@+id/subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            app:layout_constraintStart_toStartOf="@id/title"
-            app:layout_constraintEnd_toEndOf="@id/title"
-            android:text="cairo 1, street 1"
-            android:layout_marginStart="4dp"
-            />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.cardview.widget.CardView>
+            >
+
+            <ImageView
+                android:id="@+id/map_img"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:src="@drawable/location_img"
+                android:background="@drawable/rounded_bg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/address1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{addressItem.address1}"
+                tools:text="Address"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="@id/map_img"
+                app:layout_constraintTop_toTopOf="@id/map_img"
+                app:layout_constraintEnd_toEndOf="@id/map_img"
+                android:layout_marginTop="40dp"
+                android:textStyle="bold"
+                android:background="@color/xd_burgundy_transparent"
+                android:fontFamily="@font/barlow"
+                />
+
+            <TextView
+                android:id="@+id/address2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/address1"
+                app:layout_constraintStart_toStartOf="@id/map_img"
+               app:layout_constraintEnd_toEndOf="@id/map_img"
+                android:text="@{addressItem.address2}"
+                tools:text="Egypt, Ismailia Governorate, Ismailia 3"
+               android:gravity="center"
+                android:background="@color/xd_burgundy_transparent"
+                android:fontFamily="@font/pacifico"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

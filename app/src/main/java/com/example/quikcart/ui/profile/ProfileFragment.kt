@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.profile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +12,24 @@ import android.widget.RadioGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.AboutUsDialogBinding
 import com.example.quikcart.databinding.FragmentProfileBinding
+import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.network.CurrencyHelper
+import com.example.quikcart.models.remote.CurrencySource
+import com.example.quikcart.models.repos.CurrencyRepo
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment(),Navigator {
 
     private lateinit var binding:FragmentProfileBinding
@@ -59,14 +70,16 @@ class ProfileFragment : Fragment(),Navigator {
         binding.aboutUs.setOnClickListener{
             aboutUsDialogOpening()
         }
-
         binding.currency.setOnClickListener {
             currencyDialog()
         }
+        getUSDCurrency()
     }
 
     private fun initViewModel() {
-        viewModel=ViewModelProvider(this)[ProfileViewModel::class.java]
+        val factory = ProfileModelFactory(CurrencyRepo.getInstance(CurrencySource(CurrencyHelper.currencyService)))
+        viewModel = ViewModelProvider(this,factory)[ProfileViewModel::class.java]
+//        viewModel=ViewModelProvider(this)[ProfileViewModel::class.java]
     }
 
     private fun contactUsDialog(){
@@ -118,13 +131,30 @@ class ProfileFragment : Fragment(),Navigator {
         }
         currency.findViewById<RadioGroup>(R.id.currencyGroup).setOnCheckedChangeListener { group, checkedId ->
             when(checkedId){
-                R.id.radioUSD -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_USD)
+                R.id.radioUSD -> {
+                    preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_USD)
+                }
                 R.id.radioEGP -> preferencesUtils.setCurrencyType(PreferencesUtils.CURRENCY_EGP)
             }
 
         }
         currency.findViewById<Button>(R.id.button_save_currency).setOnClickListener {
             alertDialog.cancel()
+        }
+    }
+    private fun getUSDCurrency()
+    {
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.usdCurrency.collect{
+                when(it)
+                {
+                    is ViewState.Error -> {}
+                    ViewState.Loading -> {}
+                    is ViewState.Success -> {
+                        preferencesUtils.setUSDRate(it.data.toFloat())
+                    }
+                }
+            }
         }
     }
 

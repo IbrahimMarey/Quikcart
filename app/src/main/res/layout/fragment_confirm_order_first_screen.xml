@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragment"
+
+        >
+
+       <ProgressBar
+           android:id="@+id/progress_bar"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toTopOf="@id/address_recycler"
+           app:layout_constraintBottom_toBottomOf="@id/address_recycler"
+           app:layout_constraintStart_toStartOf="@id/address_recycler"
+           app:layout_constraintEnd_toEndOf="@id/address_recycler"
+           />
+        <TextView
+            android:id="@+id/address_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/choose_the_address"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/pacifico"
+            android:textSize="15sp"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/address_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/address_tv"
+            tools:listitem="@layout/address_item"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/rounded_transparent_bg"
+            />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/address_floating_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/address_recycler"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/xd_burgundy"
+            android:src="@drawable/ic_add"
+            />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_layout_coupon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/address_recycler"
+            app:layout_constraintEnd_toStartOf="@id/validate_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:hint="@string/enter_coupon"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            app:boxStrokeWidth="1dp"
+
+            app:boxStrokeColor="@color/xd_text_view_details"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+
+            >
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+       <androidx.appcompat.widget.AppCompatButton
+           android:id="@+id/validate_btn"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toTopOf="@id/text_layout_coupon"
+           app:layout_constraintBottom_toBottomOf="@id/text_layout_coupon"
+           app:layout_constraintEnd_toEndOf="parent"
+           android:layout_marginEnd="8dp"
+           android:text="@string/validate"
+           android:textColor="@color/white"
+           android:backgroundTint="@color/xd_lemon_dark"
+           />
+        <Button
+            android:id="@+id/continue_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/text_layout_coupon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/xd_burgundy"
+            android:text="@string/continue_small"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
