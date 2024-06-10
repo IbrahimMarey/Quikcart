@@ -20,7 +20,7 @@ import javax.inject.Inject
 class AddressesViewModel @Inject constructor(private val _appRepo:Repository):ViewModel() {
     private val _customerAddresses :MutableStateFlow<ViewState<List<AddressResponse>>> = MutableStateFlow(ViewState.Loading)
     val customerAddresses : StateFlow<ViewState<List<AddressResponse>>> = _customerAddresses
-
+    var addressesList = ArrayList<AddressResponse>()
     init {
 
     }
@@ -37,10 +37,10 @@ class AddressesViewModel @Inject constructor(private val _appRepo:Repository):Vi
     {
         viewModelScope.launch {
             _appRepo.getAllAddressesShopify(customerID).catch {
-                Log.d("TAG", "getCustomerAddresses: ${it.message}")
                 _customerAddresses.value = ViewState.Error(it.message?:"Can't Delete Defualt Address")
             }.collect{
                 _customerAddresses.value = ViewState.Success(it.addresses)
+                addressesList.addAll(it.addresses)
             }
         }
     }

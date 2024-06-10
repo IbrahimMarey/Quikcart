@@ -101,9 +101,6 @@ class PaymentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        binding.paymentButtonContainer.visibility = View.GONE
-        binding.paypalCheckOut.setOnClickListener {
-
-        }
 
         binding.paypalPayCard.setOnClickListener{
             payWithPayPal()
