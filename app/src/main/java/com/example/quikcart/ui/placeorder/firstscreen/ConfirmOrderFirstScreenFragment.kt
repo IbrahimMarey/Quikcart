@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentConfirmOrderFirstScreenBinding
 import com.example.quikcart.models.ViewState
@@ -43,6 +44,10 @@ class ConfirmOrderFirstScreenFragment : Fragment() {
         initViewModel()
         viewModel.getCustomerAddresses(preferenceManager.getCustomerId())
         observeOnStateFlow()
+        binding.continueBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_confirmOrderFirstScreenFragment_to_placeOrderFragment)
+        }
+
     }
 
     private fun observeOnStateFlow(){
@@ -66,8 +71,10 @@ class ConfirmOrderFirstScreenFragment : Fragment() {
     }
     private fun initAddressesRecycler(addresses: List<AddressResponse>) {
         adapter= OrderCustomerAddressesAdapter {address->
-            Log.e("TAG", "initAddressesRecycler: ${address.address1}" +
-                    "", )
+            Log.e("TAG", "initAddressesRecycler: ${address.address1}, address2: ${address.address2}," +
+                    "cit: ${address.city}, county: ${address.country}, countyName: ${address.country_name}," +
+                    "province: ${address.province}" +
+                    "name: ${address.name}", )
         }
         adapter.submitList(addresses)
         binding.addressRecycler.adapter=adapter

@@ -1,4 +1,4 @@
-package com.example.quikcart.utils.sharedPref
+package com.example.quikcart.utils
 
 import android.content.Context
 import android.content.SharedPreferences

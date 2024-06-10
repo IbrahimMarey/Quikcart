@@ -1,6 +1,5 @@
 package com.example.quikcart.ui.placeorder.firstscreen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
@@ -15,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repository):ViewModel() {
+    lateinit var navigator: Navigator
     private val _uiState : MutableStateFlow<ViewState<List<AddressResponse>>> = MutableStateFlow(
         ViewState.Loading)
     val uiState : StateFlow<ViewState<List<AddressResponse>>> = _uiState
@@ -29,6 +29,10 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
                 _uiState.value = ViewState.Success(it.addresses)
             }
         }
+    }
+
+    fun navigateToMapFragment(){
+        navigator.navigateToMapFragment()
     }
 
 }

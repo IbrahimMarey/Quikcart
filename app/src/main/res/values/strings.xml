@@ -177,6 +177,11 @@
     <string name="skip_now">Skip Now</string>
     <string name="enter_coupon">Enter Coupon</string>
     <string name="continue_small">Continue</string>
+    <string name="shipping_fees">Shipping Fees</string>
+    <string name="place_order">Place Order</string>
+    <string name="validate">Validate</string>
+    <string name="choose_payment_method">Choose payment method:</string>
+    <string name="choose_the_address">Choose the address:</string>
 
 
 </resources>
