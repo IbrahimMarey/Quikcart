@@ -3,6 +3,7 @@ package com.example.quikcart.models.network
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.utils.Constants
 import com.example.quikcart.models.entities.BrandsResponse
+import com.example.quikcart.models.entities.CouponModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.FetchAddress
@@ -100,6 +101,10 @@ interface ApiService {
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
     @GET("draft_orders/{id}.json")
     suspend fun getDraftOrderById(@Path("id") id : String) : DraftOrderResponse
+
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:"+Constants.PASSWORD)
+    @GET("price_rules.json")
+    suspend fun getCoupons(): CouponModel
 
 
 }

@@ -4,12 +4,14 @@ import com.example.quikcart.R
 import com.example.quikcart.models.entities.CategoryItem
 import android.util.Log
 import com.example.quikcart.models.entities.AddressesResponse
+import com.example.quikcart.models.entities.CouponModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
 import com.example.quikcart.models.entities.OrdersItem
 
 import com.example.quikcart.models.entities.PostAddressModel
+import com.example.quikcart.models.entities.PriceRule
 
 import com.example.quikcart.models.entities.ProductsItem
 
@@ -114,6 +116,26 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
 
     override suspend fun getDraftOrderById(id: String): Flow<DraftOrderResponse> {
         return remoteDataSource.getDraftOrderById(id)
+    }
+
+    override suspend fun getCoupons(): Flow<CouponModel> {
+        return remoteDataSource.getCoupons()
+    }
+
+    override suspend fun insertCoupon(coupon: PriceRule): Long {
+        return localDataSource.insertCoupon(coupon)
+    }
+
+    override suspend fun deleteAllCoupons(): Int {
+        return localDataSource.deleteAllCoupons()
+    }
+
+    override suspend fun insertAllCoupons(coupons: List<PriceRule>): LongArray {
+        return localDataSource.insertAllCoupons(coupons)
+    }
+
+    override suspend fun getAllCoupons(): Flow<List<PriceRule>> {
+        return localDataSource.getAllCoupons()
     }
 
 
