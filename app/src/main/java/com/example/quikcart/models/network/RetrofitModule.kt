@@ -41,6 +41,10 @@ class RetrofitModule {
     fun provideApiService(retrofit: Retrofit):ApiService{
         return retrofit.create(ApiService::class.java)
     }
-
+/*
+    @Provides
+    fun provideCurrencyService(): CurrencyService {
+        return CurrencyHelper.currencyService
+    }*/
 
 }

@@ -5,6 +5,7 @@ import com.example.quikcart.models.entities.CategoryItem
 import android.util.Log
 import com.example.quikcart.models.entities.AddressesResponse
 import com.example.quikcart.models.entities.CouponModel
+import com.example.quikcart.models.entities.CurrencyModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers

@@ -62,14 +62,23 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
     private fun getCoupon()
     {
+        //delCoupons()
+        couponsList.clear()
+        couponsIDs.clear()
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCoupons().collect{
                 getCouponImages(it.priceRules)
-                saveCouponsLocally(it.priceRules)
+                //saveCouponsLocally(it.priceRules)
             }
         }
     }
 
+    private fun delCoupons()
+    {
+        viewModelScope.launch {
+            repo.deleteAllCoupons()
+        }
+    }
     private fun saveCouponsLocally(coupons:List<PriceRule>)
     {
         viewModelScope.launch {

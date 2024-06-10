@@ -4,10 +4,11 @@ import android.content.Context
 import android.widget.TextView
 
 fun TextView.setPrice(price:Float,ctx: Context){
+    val pref = PreferencesUtils.getInstance(ctx)
     var txtPrice = price
-    if (!PreferencesUtils.getInstance(ctx).getCurrencyType().equals(PreferencesUtils.CURRENCY_EGP))
+    if (!pref.getCurrencyType().equals(PreferencesUtils.CURRENCY_EGP))
     {
-        txtPrice *= 0.021f
+        txtPrice *= pref.getUSDRate()//0.021f
     }
     text = buildString {
         append(txtPrice)
