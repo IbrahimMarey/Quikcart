@@ -45,9 +45,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
-        binding.recyclerAddress.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_confirmOrderFirstScreenFragment)
-        }
         observeOnStateFlow()
         initCategoryRecyclerView()
         binding.searchBar.setOnClickListener {
