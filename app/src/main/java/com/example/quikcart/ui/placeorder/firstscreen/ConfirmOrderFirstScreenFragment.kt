@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ConfirmOrderFirstScreenFragment : Fragment() {
+class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     lateinit var binding: FragmentConfirmOrderFirstScreenBinding
     lateinit var viewModel: ConfirmOrderFirstScreenViewModel
     lateinit var adapter: OrderCustomerAddressesAdapter
@@ -42,6 +42,8 @@ class ConfirmOrderFirstScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
+        binding.vm=viewModel
+        viewModel.navigator=this
         viewModel.getCustomerAddresses(preferenceManager.getCustomerId())
         observeOnStateFlow()
         binding.continueBtn.setOnClickListener {
@@ -82,5 +84,9 @@ class ConfirmOrderFirstScreenFragment : Fragment() {
 
     private fun initViewModel() {
          viewModel=ViewModelProvider(this)[ConfirmOrderFirstScreenViewModel::class]
+    }
+
+    override fun navigateToMapFragment() {
+        findNavController().navigate(R.id.action_confirmOrderFirstScreenFragment_to_mapFragment)
     }
 }

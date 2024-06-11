@@ -31,6 +31,7 @@ import retrofit2.http.Path
 interface RemoteDataSource {
      fun getBrands():Flow<List<SmartCollectionsItem>>
      fun getProductsByBrandId(id:Long):Flow<List<ProductsItem>>
+     fun getProductById(id:Long):Flow<ProductsItem>
      fun getProductsBySubCategory(category:String):Flow<List<ProductsItem>>
      suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse>
 

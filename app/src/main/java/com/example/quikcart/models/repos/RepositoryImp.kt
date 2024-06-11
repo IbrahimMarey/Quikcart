@@ -40,6 +40,10 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
         return remoteDataSource.getProductsByBrandId(id)
     }
 
+    override fun getProductById(id: Long): Flow<ProductsItem> {
+        return remoteDataSource.getProductById(id)
+    }
+
     override fun getProductsBySubCategory(category: String): Flow<List<ProductsItem>> {
         return remoteDataSource.getProductsBySubCategory(category)
     }

@@ -18,7 +18,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/subtotal"
         android:textStyle="bold"
-        android:textSize="20sp"
+        android:textSize="25sp"
+        android:fontFamily="@font/pacifico"
          />
     <TextView
         android:id="@+id/sub_total"
@@ -38,8 +39,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/discount_applied"
         android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_marginTop="8dp"
+        android:textSize="25sp"
+        android:fontFamily="@font/pacifico"
         />
 
     <TextView
@@ -63,8 +64,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/shipping_fees"
         android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_marginTop="8dp"
+        android:textSize="25sp"
+        android:fontFamily="@font/pacifico"
         />
 
     <TextView
@@ -86,9 +87,11 @@
         app:layout_constraintTop_toBottomOf="@id/fees_tv"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/total_price"
+
+
         android:textStyle="bold"
-        android:textSize="20sp"
-        android:layout_marginTop="8dp"
+        android:textSize="25sp"
+        android:fontFamily="@font/pacifico"
         />
     <TextView
         android:id="@+id/total"
