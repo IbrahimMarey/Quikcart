@@ -62,7 +62,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
     private fun getCoupon()
     {
-        //delCoupons()
+        delCoupons()
         couponsList.clear()
         couponsIDs.clear()
         viewModelScope.launch(Dispatchers.IO) {
