@@ -44,7 +44,7 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
             repo.inertProduct(productsItem)
         }
     }
-    fun putProductInCart(id:String,cartItem: PutDraftOrderItemModel)
+    fun putProductInFav(id:String, cartItem: PutDraftOrderItemModel)
     {
         viewModelScope.launch(Dispatchers.IO) {
             repo.putDraftOrder(id ,cartItem).collect{
@@ -52,7 +52,7 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
         }
     }
 
-    suspend fun postProductInCart(cartItem: PostDraftOrderItemModel): Long {
+    suspend fun postProductInFav(cartItem: PostDraftOrderItemModel): Long {
         return withContext(Dispatchers.IO) {
             var draftOrderId: Long = 0
             repo.postDraftOrder(cartItem).collect { result ->
@@ -61,7 +61,7 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
             draftOrderId
         }
     }
-    fun getCart(id: String)
+    fun getFav(id: String)
     {
         viewModelScope.launch(Dispatchers.IO) {
             repo.getDraftOrderById(id).collect{

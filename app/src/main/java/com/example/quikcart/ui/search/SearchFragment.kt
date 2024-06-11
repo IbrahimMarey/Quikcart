@@ -127,7 +127,8 @@ class SearchFragment : Fragment() {
 
         val price = productItem.price ?: "0.00"
         val title = productItem.title ?: ""
-
+        if (favID.toInt() != 0 && favID.toInt() != -1)
+            viewModel.getFav(favID.toString())
         if (favID.toInt() == 0) {
             val draftItem = PostDraftOrderItemModel(
                 DraftItem(
@@ -138,12 +139,12 @@ class SearchFragment : Fragment() {
             )
 
             lifecycleScope.launch {
-                preferences.setCartId(viewModel.postProductInCart(draftItem))
+                preferences.setCartId(viewModel.postProductInFav(draftItem))
             }
         } else {
             val draftItem = PutDraftItem(viewModel.getItemLineList(title, price))
             val request = PutDraftOrderItemModel(draftItem)
-            viewModel.putProductInCart(favID.toString(), request)
+            viewModel.putProductInFav(favID.toString(), request)
         }
     }
 }
