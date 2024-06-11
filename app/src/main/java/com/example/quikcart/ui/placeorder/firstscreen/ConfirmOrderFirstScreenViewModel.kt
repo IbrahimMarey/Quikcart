@@ -1,11 +1,15 @@
 package com.example.quikcart.ui.placeorder.firstscreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.models.entities.PriceRule
+import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.models.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -18,7 +22,14 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
     private val _uiState : MutableStateFlow<ViewState<List<AddressResponse>>> = MutableStateFlow(
         ViewState.Loading)
     val uiState : StateFlow<ViewState<List<AddressResponse>>> = _uiState
+    private val _couponsState : MutableStateFlow<ViewState<List<PriceRule>>> = MutableStateFlow(
+        ViewState.Loading)
+    val couponsState : StateFlow<ViewState<List<PriceRule>>> = _couponsState
+    var couponsList:List<PriceRule> = listOf()
 
+    init {
+        getAllCoupons()
+    }
     fun getCustomerAddresses(customerID:Long)
     {
         viewModelScope.launch {
@@ -33,6 +44,17 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
 
     fun navigateToMapFragment(){
         navigator.navigateToMapFragment()
+    }
+
+    private fun getAllCoupons()
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getAllCoupons().collect{
+                _couponsState.value = ViewState.Success(it)
+                couponsList = it
+                Log.i("TAG", "getAllCoupons: = = = = = = = = = = = = = = = = = = = $it")
+            }
+        }
     }
 
 }

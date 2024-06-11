@@ -36,8 +36,8 @@
         android:label="@string/cart"
         tools:layout="@layout/fragment_cart" >
         <action
-            android:id="@+id/action_cartFragment_to_paymentFragment"
-            app:destination="@id/paymentFragment" />
+            android:id="@+id/action_cartFragment_to_confirmOrderFirstScreenFragment"
+            app:destination="@id/confirmOrderFirstScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -144,10 +144,17 @@
         <action
             android:id="@+id/action_confirmOrderFirstScreenFragment_to_placeOrderFragment"
             app:destination="@id/placeOrderFragment" />
+        <argument
+            android:name="totalPrice"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/placeOrderFragment"
         android:name="com.example.quikcart.ui.placeorder.secondscreen.PlaceOrderFragment"
         android:label="fragment_place_order"
-        tools:layout="@layout/fragment_place_order" />
+        tools:layout="@layout/fragment_place_order" >
+        <argument
+            android:name="totalPrice"
+            app:argType="string" />
+    </fragment>
 </navigation>
