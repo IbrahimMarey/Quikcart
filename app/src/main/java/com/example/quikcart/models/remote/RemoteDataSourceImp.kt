@@ -37,6 +37,10 @@ class RemoteDataSourceImp @Inject constructor(private val apiService: ApiService
         apiService.getProductsByBrandId(id).products.let { emit(it) }
     }
 
+    override fun getProductById(id: Long): Flow<ProductsItem> = flow{
+        emit(apiService.getProductById(id))
+    }
+
     override fun getProductsBySubCategory(category: String): Flow<List<ProductsItem>> = flow{
         apiService.getProductsBySubCategory(category).products.let { emit(it) }
     }
