@@ -17,9 +17,17 @@ import com.example.quikcart.databinding.FragmentProductBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.ProductsItem
+import com.example.quikcart.models.entities.cart.CartCustomer
+import com.example.quikcart.models.entities.cart.DraftItem
+import com.example.quikcart.models.entities.cart.DraftOrderLineItem
+import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
+import com.example.quikcart.models.entities.cart.PutDraftItem
+import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.utils.AlertUtil
+import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ProductFragment : Fragment() {
@@ -28,6 +36,8 @@ class ProductFragment : Fragment() {
     private lateinit var productsViewModel: ProductsViewModel
     private var brandId:Long?=null
     private var categoryItem:CategoryItem?=null
+    private lateinit var preferences: PreferencesUtils
+    private var favID by Delegates.notNull<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +56,8 @@ class ProductFragment : Fragment() {
         brandId = ProductFragmentArgs.fromBundle(requireArguments()).brandId
         categoryItem = ProductFragmentArgs.fromBundle(requireArguments()).categoryItem
         val isBrand = ProductFragmentArgs.fromBundle(requireArguments()).isBrands
+        preferences = PreferencesUtils.getInstance(requireActivity())
+        favID = preferences.getFavouriteId()
         getProducts(isBrand)
         observeOnStateFlow()
     }
@@ -107,7 +119,7 @@ class ProductFragment : Fragment() {
     private fun initRecyclerView(products: List<ProductsItem>) {
         adapter = ProductAdapter(
             { productItem -> navigateToProductDetails(productItem) },
-            {productItem -> productsViewModel.addToFavourites(productItem)}
+            { productItem -> addToFavorite(productItem) }
         )
         binding.recyclerProducts.adapter = adapter
         adapter.submitList(products)
@@ -120,5 +132,31 @@ class ProductFragment : Fragment() {
             putSerializable("details", productItem)
         }
         findNavController().navigate(R.id.action_productFragment_to_productDetailsFragment, bundle)
+    }
+
+    private fun addToFavorite(productItem: ProductsItem) {
+        productsViewModel.addToFavourites(productItem)
+
+        val price = productItem.price ?: "0.00"
+        val title = productItem.title ?: ""
+        if (favID.toInt() != 0 && favID.toInt() != -1)
+            productsViewModel.getFav(favID.toString())
+        if (favID.toInt() == 0) {
+            val draftItem = PostDraftOrderItemModel(
+                DraftItem(
+                    line_items = listOf(DraftOrderLineItem(title, price, 1)),
+                    applied_discount = null,
+                    customer = CartCustomer(preferences.getCustomerId())
+                )
+            )
+
+            lifecycleScope.launch {
+                preferences.setCartId(productsViewModel.postProductInFav(draftItem))
+            }
+        } else {
+            val draftItem = PutDraftItem(productsViewModel.getItemLineList(title, price))
+            val request = PutDraftOrderItemModel(draftItem)
+            productsViewModel.putProductInFav(favID.toString(), request)
+        }
     }
 }

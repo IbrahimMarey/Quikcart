@@ -47,7 +47,6 @@ interface Repository {
     suspend fun inertProduct(product: ProductsItem)
     suspend fun deleteProduct(product: ProductsItem)
     fun getAllProducts():Flow<List<ProductsItem>>
-
     suspend fun postDraftOrder(draftOrderPostBody: PostDraftOrderItemModel) : Flow<DraftOrderResponse>
     suspend fun putDraftOrder(id : String,draftOrderPutBody: PutDraftOrderItemModel) : Flow<DraftOrderResponse>
     suspend fun getAllDraftOrders() : Flow<AllDraftOrdersResponse>

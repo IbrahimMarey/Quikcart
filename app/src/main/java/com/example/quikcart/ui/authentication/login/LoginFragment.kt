@@ -38,8 +38,16 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         setupListeners()
+        guestMode()
     }
-
+    private fun guestMode(){
+        binding.skipText.setOnClickListener{
+            PreferencesUtils.getInstance(requireContext()).setUserID("-1")
+            PreferencesUtils.getInstance(requireContext()).setCustomerId(-1)
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
+        }
+    }
     private fun setupListeners() {
         binding.signinText.setOnClickListener {
             navigateToSignUp(it)
