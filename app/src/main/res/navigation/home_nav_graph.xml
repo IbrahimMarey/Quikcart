@@ -144,6 +144,10 @@
         <action
             android:id="@+id/action_confirmOrderFirstScreenFragment_to_placeOrderFragment"
             app:destination="@id/placeOrderFragment" />
+        <action
+            android:id="@+id/action_confirmOrderFirstScreenFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+
         <argument
             android:name="totalPrice"
             app:argType="string" />
