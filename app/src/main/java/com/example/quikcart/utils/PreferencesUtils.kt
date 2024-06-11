@@ -9,6 +9,7 @@ private const val USER_ID_PREFERENCE = "USER_ID"
 private const val CART_ID_PREFERENCE = "CART_ID"
 private const val CUSTOMER_ID = "CUSTOMER_ID"
 private const val USD_RATE = "USD_RATE"
+private const val FAVOURITE_ID = "FAVOURITE_LIST"
 class PreferencesUtils internal constructor(context: Context)
 {
     private var sharedPreferences : SharedPreferences = context.getSharedPreferences(
@@ -40,6 +41,12 @@ class PreferencesUtils internal constructor(context: Context)
     }
     fun getCartId():Long{
         return sharedPreferences.getLong(CART_ID_PREFERENCE,0)
+    }
+    fun setFavouriteId(id:Long){
+        editor.putLong(FAVOURITE_ID,id).apply()
+    }
+    fun getFavouriteId():Long{
+        return sharedPreferences.getLong(FAVOURITE_ID,0)
     }
     fun setCustomerId(id:Long){
         editor.putLong(CUSTOMER_ID,id).apply()

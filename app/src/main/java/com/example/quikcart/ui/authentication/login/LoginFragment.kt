@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
         guestMode()
     }
     private fun guestMode(){
-        binding.signinText.setOnClickListener{
+        binding.skipText.setOnClickListener{
             PreferencesUtils.getInstance(requireContext()).setUserID("-1")
             PreferencesUtils.getInstance(requireContext()).setCustomerId(-1)
             startActivity(Intent(requireContext(), MainActivity::class.java))

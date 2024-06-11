@@ -15,9 +15,11 @@ import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentSearchBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.ProductsItem
-import com.example.quikcart.ui.products.ProductAdapter
+import com.example.quikcart.models.entities.cart.*
+import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class SearchFragment : Fragment() {
@@ -27,6 +29,8 @@ class SearchFragment : Fragment() {
     private lateinit var adapter: SearchAdapter
     private var productList = mutableListOf<ProductsItem>()
     private var filteredList = mutableListOf<ProductsItem>()
+    private lateinit var preferences: PreferencesUtils
+    private var favID by Delegates.notNull<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,9 +43,16 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        preferences = PreferencesUtils.getInstance(requireActivity())
+        favID = preferences.getFavouriteId()
+
+        setupUI()
+        observeViewModel()
+    }
+
+    private fun setupUI() {
         getProducts()
         setupSearchBar()
-        observeViewModel()
     }
 
     private fun getProducts() {
@@ -53,20 +64,15 @@ class SearchFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     when (state) {
-                        is ViewState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
+                        is ViewState.Loading -> binding.progressBar.visibility = View.VISIBLE
                         is ViewState.Success -> {
                             binding.progressBar.visibility = View.GONE
                             productList.clear()
                             productList.addAll(state.data)
                             initRecyclerView(productList)
-                            binding.productRecyclerView.adapter = adapter
                             Log.i("SearchFragment", "Products: ${productList.count()}")
                         }
-                        is ViewState.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                        }
+                        is ViewState.Error -> binding.progressBar.visibility = View.GONE
                     }
                 }
             }
@@ -76,16 +82,12 @@ class SearchFragment : Fragment() {
     private fun setupSearchBar() {
         binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let {
-                    filterProducts(it)
-                }
+                query?.let { filterProducts(it) }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let {
-                    filterProducts(it)
-                }
+                newText?.let { filterProducts(it) }
                 return true
             }
         })
@@ -99,20 +101,15 @@ class SearchFragment : Fragment() {
             })
             adapter.submitList(filteredList.toList())
 
-            if (filteredList.isEmpty()) {
-                binding.emptyImageView.visibility = View.VISIBLE
-                binding.productRecyclerView.visibility = View.GONE
-            } else {
-                binding.emptyImageView.visibility = View.GONE
-                binding.productRecyclerView.visibility = View.VISIBLE
-            }
+            binding.emptyImageView.visibility = if (filteredList.isEmpty()) View.VISIBLE else View.GONE
+            binding.productRecyclerView.visibility = if (filteredList.isEmpty()) View.GONE else View.VISIBLE
         }
     }
 
     private fun initRecyclerView(products: List<ProductsItem>) {
         adapter = SearchAdapter(
             { productItem -> navigateToProductDetails(productItem) },
-            { productItem -> viewModel.addToFavourites(productItem) }
+            { productItem -> addToFavorite(productItem) }
         )
         binding.productRecyclerView.adapter = adapter
         adapter.submitList(products)
@@ -123,5 +120,30 @@ class SearchFragment : Fragment() {
             putSerializable("details", productItem)
         }
         findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
+    }
+
+    private fun addToFavorite(productItem: ProductsItem) {
+        viewModel.addToFavourites(productItem)
+
+        val price = productItem.price ?: "0.00"
+        val title = productItem.title ?: ""
+
+        if (favID.toInt() == 0) {
+            val draftItem = PostDraftOrderItemModel(
+                DraftItem(
+                    line_items = listOf(DraftOrderLineItem(title, price, 1)),
+                    applied_discount = null,
+                    customer = CartCustomer(preferences.getCustomerId())
+                )
+            )
+
+            lifecycleScope.launch {
+                preferences.setCartId(viewModel.postProductInCart(draftItem))
+            }
+        } else {
+            val draftItem = PutDraftItem(viewModel.getItemLineList(title, price))
+            val request = PutDraftOrderItemModel(draftItem)
+            viewModel.putProductInCart(favID.toString(), request)
+        }
     }
 }

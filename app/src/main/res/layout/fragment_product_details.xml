@@ -155,6 +155,19 @@
                         app:layout_constraintStart_toStartOf="@id/text_description"
                         app:layout_constraintTop_toBottomOf="@id/text_description" />
 
+                    <Button
+                        android:id="@+id/edit_product_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="16dp"
+                        android:backgroundTint="@color/xd_dark_burgundy"
+                        android:text="@string/add_to_cart"
+                        android:textStyle="bold"
+                        layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/description"
+                        app:layout_constraintTop_toBottomOf="@id/description"
+                        android:layout_gravity="bottom" />
+
                     <TextView
                         android:id="@+id/text_variants"
                         android:layout_width="match_parent"
@@ -221,17 +234,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/rate_of_product_details" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <Button
-            android:id="@+id/edit_product_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingVertical="16dp"
-            android:backgroundTint="@color/xd_dark_burgundy"
-            android:text="@string/add_to_cart"
-            android:textStyle="bold"
-            android:layout_margin="16dp"
-            android:layout_gravity="bottom" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
