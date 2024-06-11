@@ -49,11 +49,6 @@ class CartFragment : Fragment() {
         pref = PreferencesUtils.getInstance(requireActivity())
         viewModel = ViewModelProvider(this)[CartViewModel::class.java]
         viewModel.getCart(pref.getCartId().toString())
-        binding.proceedToPayBtn.setOnClickListener{
-            val action = CartFragmentDirections.actionCartFragmentToPaymentFragment()
-            Navigation.findNavController(it).navigate(action)
-        }
-
         val delAction :(LineItem)->Unit= {
             delCartItem(it)
         }
@@ -87,13 +82,14 @@ class CartFragment : Fragment() {
                     is ViewState.Success -> {
                         if (it.data.lineItems.isNotEmpty())
                         {
-                            binding.cartProgress.visibility = View.GONE
+                            /*binding.cartProgress.visibility = View.GONE
                             binding.cartEmpty.visibility = View.GONE
                             binding.recyclerCart.visibility = View.VISIBLE
                             binding.cartCardAddToPayment.visibility = View.VISIBLE
                             if (it.data.lineItems.isNotEmpty())
                                 cartAdapter.submitList(it.data.lineItems)
-                            binding.cartTotalPrice.setPrice(it.data.totalPrice.toFloat(),requireActivity())
+                            binding.cartTotalPrice.setPrice(it.data.totalPrice.toFloat(),requireActivity())*/
+                            setUPSuccessCart(it.data)
                         }else{
                             setUPErrorOrEmptyCart()
                         }
@@ -120,5 +116,20 @@ class CartFragment : Fragment() {
                     pref.setCartId(0)
                 }
             }.show()
+    }
+
+    private fun setUPSuccessCart(cart:DraftOrder)
+    {
+        binding.cartProgress.visibility = View.GONE
+        binding.cartEmpty.visibility = View.GONE
+        binding.recyclerCart.visibility = View.VISIBLE
+        binding.cartCardAddToPayment.visibility = View.VISIBLE
+        if (cart.lineItems.isNotEmpty())
+            cartAdapter.submitList(cart.lineItems)
+        binding.cartTotalPrice.setPrice(cart.totalPrice.toFloat(),requireActivity())
+        binding.proceedToPayBtn.setOnClickListener{
+            val action = CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(cart.totalPrice)
+            Navigation.findNavController(it).navigate(action)
+        }
     }
 }

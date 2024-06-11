@@ -67,6 +67,7 @@
     <string name="change"><u>تغير</u></string>
     <string name="no_address_associated_with_this_account">لا يوجد عنوان مرتبط بهذا الحساب</string>
     <string name="coupon_is_expired">انتهت صلاحية القسيمة</string>
+    <string name="coupon_confirmed">تم تفعيل الكوبون</string>
     <string name="coupon_is_not_found">لم يتم العثور على القسيمة</string>
     <string name="discount_applied">الخصم قد تم</string>
     <string name="can_t_apply_that_coupon_to_that_pilling">لا يمكن تطبيق هذه القسيمة على هذه الفاتورة</string>

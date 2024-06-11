@@ -68,7 +68,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
         viewModelScope.launch(Dispatchers.IO) {
             repo.getCoupons().collect{
                 getCouponImages(it.priceRules)
-                //saveCouponsLocally(it.priceRules)
+                saveCouponsLocally(it.priceRules)
             }
         }
     }
