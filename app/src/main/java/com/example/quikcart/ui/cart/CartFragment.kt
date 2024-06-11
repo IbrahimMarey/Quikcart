@@ -61,6 +61,10 @@ class CartFragment : Fragment() {
         setUpUI()
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveCartWhileLeaving(pref.getCartId().toString())
+    }
     private fun setInitialUI()
     {
         binding.cartProgress.visibility = View.VISIBLE
@@ -82,13 +86,6 @@ class CartFragment : Fragment() {
                     is ViewState.Success -> {
                         if (it.data.lineItems.isNotEmpty())
                         {
-                            /*binding.cartProgress.visibility = View.GONE
-                            binding.cartEmpty.visibility = View.GONE
-                            binding.recyclerCart.visibility = View.VISIBLE
-                            binding.cartCardAddToPayment.visibility = View.VISIBLE
-                            if (it.data.lineItems.isNotEmpty())
-                                cartAdapter.submitList(it.data.lineItems)
-                            binding.cartTotalPrice.setPrice(it.data.totalPrice.toFloat(),requireActivity())*/
                             setUPSuccessCart(it.data)
                         }else{
                             setUPErrorOrEmptyCart()
@@ -124,8 +121,9 @@ class CartFragment : Fragment() {
         binding.cartEmpty.visibility = View.GONE
         binding.recyclerCart.visibility = View.VISIBLE
         binding.cartCardAddToPayment.visibility = View.VISIBLE
-        if (cart.lineItems.isNotEmpty())
-            cartAdapter.submitList(cart.lineItems)
+        lifecycleScope.launch(Dispatchers.Main) {
+            cartAdapter.submitList(viewModel.getProducts(cart.lineItems))
+        }
         binding.cartTotalPrice.setPrice(cart.totalPrice.toFloat(),requireActivity())
         binding.proceedToPayBtn.setOnClickListener{
             val action = CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(cart.totalPrice)

@@ -56,9 +56,8 @@ class ProductDetailsFragment : Fragment() {
         }
         productItem?.productType?.let { showReview(it) }
         binding.rateOfProductDetails.rating = 4.7f
-
         if (cartID.toInt() != 0 && cartID.toInt() != -1)
-        viewModel.getCart(cartID.toString())
+            viewModel.getCart(cartID.toString())
         binding.editProductBtn.setOnClickListener{
             if (cartID.toInt() == 0)
             {

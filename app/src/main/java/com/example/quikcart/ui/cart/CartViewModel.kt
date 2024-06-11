@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 private const val IMAGE_NOT_FOUND = "https://i.vimeocdn.com/video/443809727-02de8fe8dfa0df7806ebceb3e9e52991f3ff640b12ddabbb06051f04d1af765f-d_640?f=webp"
 @HiltViewModel
@@ -26,25 +27,19 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
     val cart : StateFlow<ViewState<DraftOrder>> = _cart
     var lineItemsList:MutableList<LineItem> = mutableListOf()
     fun delCartItem(id:String,item:LineItem){
-
-//        for (itemLine in lineItemsList)
-//        {
-//            if(itemLine.id == item.id)
-                lineItemsList.remove(item)
-//        }
-//        lineItemsList.removeIf { it.id == item.id }
-//        if (lineItemsList.isNotEmpty()){
-
-            val data =PutDraftOrderItemModel(PutDraftItem(
-                getLineItemsFormDraftOrderLineItem(lineItemsList)
-            ))
-            editCart(id,data)
-//        }else
-//        {
-//
-//        }
+        lineItemsList.remove(item)
+        val data =PutDraftOrderItemModel(PutDraftItem(
+            getLineItemsFormDraftOrderLineItem(lineItemsList)
+        ))
+        editCart(id,data)
     }
 
+    fun saveCartWhileLeaving(id:String){
+        val data =PutDraftOrderItemModel(PutDraftItem(
+            getLineItemsFormDraftOrderLineItem(lineItemsList)
+        ))
+        editCart(id,data)
+    }
     fun getCart(id: String)
     {
         viewModelScope.launch(Dispatchers.IO) {
@@ -53,8 +48,11 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
                     _cart.value = ViewState.Error(it.message ?: "Error")
                 }
                 .collect{
-                _cart.value = ViewState.Success(it.draft_order)
-                lineItemsList.addAll(it.draft_order.lineItems)
+                    lineItemsList.clear()
+                    lineItemsList.addAll(getProducts(it.draft_order.lineItems))
+                    Log.i("TAG", "getCart: $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ${lineItemsList.size}")
+                    getProducts(it.draft_order.lineItems)
+                    _cart.value = ViewState.Success(it.draft_order)
             }
         }
     }
@@ -84,22 +82,19 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
         }
     }
 
-    fun getProducts()
-    {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.getProducts().collect{
-
-
-                for(lineItem in lineItemsList)
-                {
-                    for (product in it) {
-                        if (lineItem.title == product.title)
-                        {
-                            lineItem.fulfillmentService = product.images?.get(0)?.src?: IMAGE_NOT_FOUND
-                        }
-                    }
-                }
+    suspend fun getProducts(list: List<LineItem>): List<LineItem> {
+        val updatedList = mutableListOf<LineItem>()
+        withContext(Dispatchers.IO) {
+            repo.getProducts().collect { productList ->
+                updatedList.addAll(list.map { lineItem ->
+                    lineItem.copy(
+                        fulfillmentService = productList.firstOrNull { product ->
+                            product.title == lineItem.title
+                        }?.images?.firstOrNull()?.src ?: IMAGE_NOT_FOUND
+                    )
+                })
             }
         }
+        return updatedList
     }
 }
