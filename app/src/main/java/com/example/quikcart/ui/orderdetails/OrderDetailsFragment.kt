@@ -10,9 +10,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentOrderDetailsBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.OrdersItem
+import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.utils.AlertUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -20,8 +23,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class OrderDetailsFragment : Fragment() {
     lateinit var binding: FragmentOrderDetailsBinding
-    val adapter = OrderDetailsAdapter()
-    lateinit var viewModel: OrderDetailsViewModel
+    private var adapter =OrderDetailsAdapter()
+    lateinit var orderItem: OrdersItem
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,40 +37,16 @@ class OrderDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val orderItem = OrderDetailsFragmentArgs.fromBundle(requireArguments()).orderItem
-        initViewModel()
-        viewModel.filterProductByTitle(orderItem)
-        observeOnStateFlow(orderItem)
+        getPassedArgs()
+        initRecyclerView(orderItem)
     }
 
-    private fun observeOnStateFlow(orderItem: OrdersItem) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { product ->
-                    when (product) {
-                        is ViewState.Error -> {
-                            AlertUtil.showToast(requireContext(), product.message)
-                        }
-                        ViewState.Loading -> {
-                        }
-                        is ViewState.Success -> {
-                            initRecyclerView(orderItem)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this)[OrderDetailsViewModel::class]
+    private fun getPassedArgs() {
+        orderItem = OrderDetailsFragmentArgs.fromBundle(requireArguments()).orderItem
     }
 
     private fun initRecyclerView(orderItem: OrdersItem) {
         adapter.submitList(orderItem.lineItems)
         binding.orderDetailsRecycler.adapter = adapter
     }
-
-
 }

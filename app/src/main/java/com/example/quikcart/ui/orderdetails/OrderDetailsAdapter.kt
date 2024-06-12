@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.databinding.OrderItemDetailsBinding
-import com.example.quikcart.models.entities.LineItemsItem
+import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.ui.orderdetails.OrderDetailsAdapter.OrderDetailsViewHolder
 
-class OrderDetailsAdapter:ListAdapter<LineItemsItem,OrderDetailsViewHolder>(DiffUtils()) {
+class OrderDetailsAdapter:ListAdapter<LineItem,OrderDetailsViewHolder>(DiffUtils()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderDetailsViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = OrderItemDetailsBinding.inflate(inflater,parent,false)
@@ -20,16 +20,16 @@ class OrderDetailsAdapter:ListAdapter<LineItemsItem,OrderDetailsViewHolder>(Diff
         holder.bind(getItem(position))
     }
     class OrderDetailsViewHolder(private val itemBinding:OrderItemDetailsBinding):RecyclerView.ViewHolder(itemBinding.root){
-        fun bind(lineItemsItem: LineItemsItem){
+        fun bind(lineItemsItem: LineItem){
             itemBinding.lineItemsItem=lineItemsItem
         }
     }
-    class DiffUtils:DiffUtil.ItemCallback<LineItemsItem>(){
-        override fun areItemsTheSame(oldItem: LineItemsItem, newItem: LineItemsItem): Boolean {
+    class DiffUtils:DiffUtil.ItemCallback<LineItem>(){
+        override fun areItemsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: LineItemsItem, newItem: LineItemsItem): Boolean {
+        override fun areContentsTheSame(oldItem: LineItem, newItem: LineItem): Boolean {
             return oldItem == newItem
         }
 

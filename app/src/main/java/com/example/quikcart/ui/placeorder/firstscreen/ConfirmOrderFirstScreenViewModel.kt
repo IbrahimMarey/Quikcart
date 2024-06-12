@@ -42,6 +42,10 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
         }
     }
 
+    fun navigateToConfirmOrderFragment(){
+        navigator.navigateToConfirmOrderFragment()
+    }
+
     fun navigateToMapFragment(){
         navigator.navigateToMapFragment()
     }
