@@ -149,8 +149,8 @@
             app:destination="@id/mapFragment" />
 
         <argument
-            android:name="totalPrice"
-            app:argType="string" />
+            android:name="draftOrder"
+            app:argType="com.example.quikcart.models.entities.cart.DraftOrder" />
     </fragment>
     <fragment
         android:id="@+id/placeOrderFragment"
@@ -160,5 +160,11 @@
         <argument
             android:name="totalPrice"
             app:argType="string" />
+        <argument
+            android:name="address"
+            app:argType="string" />
+        <argument
+            android:name="draftOrder"
+            app:argType="com.example.quikcart.models.entities.cart.DraftOrder" />
     </fragment>
 </navigation>

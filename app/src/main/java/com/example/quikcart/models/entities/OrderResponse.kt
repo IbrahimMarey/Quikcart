@@ -1,5 +1,6 @@
 package com.example.quikcart.models.entities
 
+import com.example.quikcart.models.entities.cart.LineItem
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -7,6 +8,12 @@ data class OrderResponse(
 
     @field:SerializedName("orders")
     val orders: List<OrdersItem?>? = null
+)
+
+data class Order(
+
+    @field:SerializedName("order")
+    val order: OrdersItem? = null
 )
 
 data class CurrentTotalTaxSet(
@@ -92,7 +99,7 @@ data class CurrentSubtotalPriceSet(
     val presentmentMoney: PresentmentMoney? = null
 )
 
-data class LineItemsItem(
+/*data class LineItemsItem(
 
     @field:SerializedName("variant_title")
     val variantTitle: Any? = null,
@@ -182,7 +189,7 @@ data class LineItemsItem(
     val duties: List<Any?>? = null,
 
     var image: Image? = null
-)
+)*/
 
 data class EmailMarketingConsent(
 
@@ -328,7 +335,7 @@ data class OrdersItem(
     val billingAddress: Any? = null,
 
     @field:SerializedName("line_items")
-    val lineItems: List<LineItemsItem?>? = null,
+    val lineItems: List<LineItem?>? = null,
 
     @field:SerializedName("original_total_duties_set")
     val originalTotalDutiesSet: Any? = null,

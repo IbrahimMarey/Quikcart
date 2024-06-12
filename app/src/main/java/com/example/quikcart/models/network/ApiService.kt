@@ -12,6 +12,7 @@ import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
 import com.example.quikcart.models.entities.ProductsResponse
+import com.example.quikcart.models.entities.Order
 import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
 import com.example.quikcart.models.entities.cart.DraftOrderResponse
 import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
@@ -110,6 +111,9 @@ interface ApiService {
     @Headers("Content-Type:application/json","X-Shopify-Access-Token:"+Constants.PASSWORD)
     @GET("price_rules.json")
     suspend fun getCoupons(): CouponModel
+
+    @POST("orders.json?access_token=${Constants.ACCESS_TOKEN}")
+    suspend fun confirmOrder(@Body orderResponse:Order):Order
 
 
 }

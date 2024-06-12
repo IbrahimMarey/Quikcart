@@ -1,22 +1,19 @@
 package com.example.quikcart.models.repos
 
-import com.example.quikcart.R
-import com.example.quikcart.models.entities.CategoryItem
 import android.util.Log
+import com.example.quikcart.R
 import com.example.quikcart.models.entities.AddressesResponse
+import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.CouponModel
-import com.example.quikcart.models.entities.CurrencyModel
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.CustomerResponse
 import com.example.quikcart.models.entities.Customers
 import com.example.quikcart.models.entities.OrdersItem
-
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.PriceRule
-
 import com.example.quikcart.models.entities.ProductsItem
-
 import com.example.quikcart.models.entities.SmartCollectionsItem
+import com.example.quikcart.models.entities.Order
 import com.example.quikcart.models.entities.cart.AllDraftOrdersResponse
 import com.example.quikcart.models.entities.cart.DraftOrderResponse
 import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
@@ -31,7 +28,10 @@ import retrofit2.Response
 import javax.inject.Inject
 
 
-class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteDataSource, private val localDataSource: LocalDataSourceInterface):Repository{
+class RepositoryImp @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSourceInterface
+) : Repository {
     override fun getBrands(): Flow<List<SmartCollectionsItem>> {
         return remoteDataSource.getBrands()
     }
@@ -51,16 +51,18 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override suspend fun postCustomer(customerRequest: CustomerRequest): Response<CustomerResponse> {
         return remoteDataSource.postCustomer(customerRequest)
     }
-    override suspend fun getAllAddressesShopify(customerID:Long,) : Flow<AddressesResponse> = flow {
-        remoteDataSource.getCustomerAddresses(customerID).body()?.let {
-            emit(it)
-            Log.i("TAG", "getAllAddressesShopify: ${it.addresses}")
-        }
 
-    }.flowOn(Dispatchers.IO)
+    override suspend fun getAllAddressesShopify(customerID: Long): Flow<AddressesResponse> =
+        flow {
+            remoteDataSource.getCustomerAddresses(customerID).body()?.let {
+                emit(it)
+                Log.i("TAG", "getAllAddressesShopify: ${it.addresses}")
+            }
+
+        }.flowOn(Dispatchers.IO)
 
     override fun getProducts(): Flow<List<ProductsItem>> {
-        return  remoteDataSource.getProducts()
+        return remoteDataSource.getProducts()
     }
 
     override fun getCategories(): List<CategoryItem> {
@@ -68,7 +70,8 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
             CategoryItem("women", R.drawable.woman),
             CategoryItem("men", R.drawable.man),
             CategoryItem("kid", R.drawable.kid),
-            CategoryItem("sale", R.drawable.shop_bag))
+            CategoryItem("sale", R.drawable.shop_bag)
+        )
     }
 
     override fun getCustomer(): Flow<List<Customers>> {
@@ -91,6 +94,7 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
     override suspend fun delCartItem(id: String) {
         return remoteDataSource.delCartItem(id)
     }
+
     override suspend fun inertProduct(product: ProductsItem) {
         localDataSource.insertProducts(product)
     }
@@ -112,7 +116,7 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
         id: String,
         draftOrderPutBody: PutDraftOrderItemModel
     ): Flow<DraftOrderResponse> {
-        return remoteDataSource.putDraftOrder(id,draftOrderPutBody)
+        return remoteDataSource.putDraftOrder(id, draftOrderPutBody)
     }
 
     override suspend fun getAllDraftOrders(): Flow<AllDraftOrdersResponse> {
@@ -143,13 +147,18 @@ class RepositoryImp @Inject constructor(private val remoteDataSource: RemoteData
         return localDataSource.getAllCoupons()
     }
 
+    override suspend fun confirmOrder(ordersItem: Order):Flow<Order> {
+        return remoteDataSource.confirmOrder(ordersItem)
+    }
 
-    override suspend fun postAddressShopify(customerID:Long,address: PostAddressModel) {
-        remoteDataSource.postAddress(customerID,address)
+
+    override suspend fun postAddressShopify(customerID: Long, address: PostAddressModel) {
+        remoteDataSource.postAddress(customerID, address)
 
     }
-    override suspend fun delAddressShopify(customerID:Long,id:Long) {
-        remoteDataSource.delCustomerAddress(customerID,id)
+
+    override suspend fun delAddressShopify(customerID: Long, id: Long) {
+        remoteDataSource.delCustomerAddress(customerID, id)
     }
 
 }

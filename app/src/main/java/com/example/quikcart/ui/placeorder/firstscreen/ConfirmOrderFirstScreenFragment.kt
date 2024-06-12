@@ -1,5 +1,6 @@
 package com.example.quikcart.ui.placeorder.firstscreen
 
+import android.app.ProgressDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import com.example.quikcart.databinding.FragmentConfirmOrderFirstScreenBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.PriceRule
+import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragmentArgs
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
@@ -32,12 +34,17 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     lateinit var adapter: OrderCustomerAddressesAdapter
     @Inject lateinit var preferenceManager: PreferencesUtils
     private lateinit var totalPrice : String
+    private lateinit var selectedAddress:String
+    private lateinit var draftOrder: DraftOrder
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentConfirmOrderFirstScreenBinding.inflate(inflater,container,false)
-        totalPrice = ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).totalPrice
+        draftOrder=ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).draftOrder
+        totalPrice = draftOrder.totalPrice
+
         return binding.root
     }
 
@@ -48,12 +55,6 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         viewModel.navigator=this
         viewModel.getCustomerAddresses(preferenceManager.getCustomerId())
         observeOnStateFlow()
-        binding.continueBtn.setOnClickListener {
-            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(totalPrice)
-            Navigation.findNavController(it).navigate(action)
-//            findNavController().navigate(R.id.action_confirmOrderFirstScreenFragment_to_placeOrderFragment)
-        }
-
         binding.validateBtn.setOnClickListener {
             val coupon = binding.couponField.text.toString()
             checkCoupon(coupon)
@@ -81,10 +82,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     }
     private fun initAddressesRecycler(addresses: List<AddressResponse>) {
         adapter= OrderCustomerAddressesAdapter {address->
-            Log.e("TAG", "initAddressesRecycler: ${address.address1}, address2: ${address.address2}," +
-                    "cit: ${address.city}, county: ${address.country}, countyName: ${address.country_name}," +
-                    "province: ${address.province}" +
-                    "name: ${address.name}", )
+            selectedAddress=address.address1
         }
         adapter.submitList(addresses)
         binding.addressRecycler.adapter=adapter
@@ -131,5 +129,10 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
 
     override fun navigateToMapFragment() {
         findNavController().navigate(R.id.action_confirmOrderFirstScreenFragment_to_mapFragment)
+    }
+
+    override fun navigateToConfirmOrderFragment() {
+        val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(totalPrice,selectedAddress,draftOrder)
+        findNavController().navigate(action)
     }
 }
