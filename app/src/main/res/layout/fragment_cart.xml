@@ -6,7 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.cart.CartFragment"
     android:orientation="vertical"
-    android:weightSum="6">
+    android:weightSum="6"
+    >
 
     <LinearLayout
         android:id="@+id/cartEmpty"
@@ -42,7 +43,7 @@
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCart"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:itemCount="10"
         tools:listitem="@layout/cart_item_added"
@@ -50,6 +51,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:paddingVertical="42dp"
         />
 
     <LinearLayout
@@ -60,7 +62,7 @@
             android:weightSum="5"
             android:background="@drawable/cart_total_price_card_bg"
             android:padding="16dp"
-            android:layout_margin="16dp"
+            android:layout_margin="8dp"
             android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

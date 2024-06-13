@@ -1,6 +1,8 @@
 package com.example.quikcart.models.entities.cart
 
+import com.example.quikcart.models.entities.Image
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class AllDraftOrdersResponse (
     @SerializedName("draft_orders")
@@ -82,7 +84,7 @@ data class DraftOrder (
     val adminGraphqlAPIID: String,
 
     val customer: Customer
-)
+):Serializable
 
 data class AppliedDiscount (
     val description: String,
@@ -218,7 +220,7 @@ data class LineItem (
     val variantTitle: Any? = null,
 
     val sku: Any? = null,
-    val vendor: Any? = null,
+    val vendor: String? = null,
     var quantity: Long,
 
     @SerializedName("requires_shipping")
@@ -246,5 +248,6 @@ data class LineItem (
     var price: String,
 
     @SerializedName("admin_graphql_api_id")
-    val adminGraphqlAPIID: String
+    val adminGraphqlAPIID: String,
+    var image: Image? = null
 )
