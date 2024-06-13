@@ -84,4 +84,7 @@ class LoginViewModel @Inject constructor(
         }
 
     }
+    fun logout() {
+        authRepository.logout()
+    }
 }

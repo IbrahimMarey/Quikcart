@@ -1,5 +1,6 @@
 package com.example.quikcart.ui.profile
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -22,6 +23,8 @@ import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.network.CurrencyHelper
 import com.example.quikcart.models.remote.CurrencySource
 import com.example.quikcart.models.repos.CurrencyRepo
+import com.example.quikcart.ui.authentication.AuthenticationActivity
+import com.example.quikcart.ui.authentication.login.LoginViewModel
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +39,7 @@ class ProfileFragment : Fragment(),Navigator {
     private lateinit var materialAboutUsBuilder: MaterialAlertDialogBuilder
     private lateinit var aboutUsDialog:AboutUsDialogBinding
     private lateinit var viewModel: ProfileViewModel
+    private lateinit var logoutModel:LogoutViewModel
     private val preferencesUtils by lazy {
         PreferencesUtils.getInstance(requireActivity().application)
     }
@@ -56,7 +60,7 @@ class ProfileFragment : Fragment(),Navigator {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        logoutModel = ViewModelProvider(this)[LogoutViewModel::class.java]
         initViewModel()
         viewModel.navigator=this
         binding.profileViewModel=viewModel
@@ -74,6 +78,7 @@ class ProfileFragment : Fragment(),Navigator {
             currencyDialog()
         }
         getUSDCurrency()
+        logout()
     }
 
     private fun initViewModel() {
@@ -160,5 +165,17 @@ class ProfileFragment : Fragment(),Navigator {
 
     override fun navigateToOrdersFragment() {
         findNavController().navigate(R.id.action_profileFragment_to_ordersFragment)
+    }
+    private fun logout(){
+        binding.logout.setOnClickListener {
+            logoutModel.logout()
+            logoutModel.deleteAllProducts()
+            preferencesUtils.setCartId(0)
+            preferencesUtils.setCustomerId(0)
+            preferencesUtils.setUserID("0")
+            preferencesUtils.setFavouriteId(0)
+            startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
+            requireActivity().finish()
+        }
     }
 }

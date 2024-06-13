@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.ProductsItem
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +17,8 @@ interface AppDao {
     suspend fun deleteProduct(product: ProductsItem)
     @Query("SELECT * FROM products")
     fun getAllProducts(): Flow<List<ProductsItem>>
-
+    @Query("DELETE FROM products")
+    suspend fun deleteAllProducts()
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCoupon(coupon: PriceRule): Long
     @Query("DELETE FROM coupon")

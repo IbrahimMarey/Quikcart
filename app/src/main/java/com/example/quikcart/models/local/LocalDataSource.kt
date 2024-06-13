@@ -17,6 +17,10 @@ class LocalDataSource @Inject constructor(private val appDao: AppDao) :LocalData
         return appDao.getAllProducts()
     }
 
+    override suspend fun deleteAllProducts() {
+        appDao.deleteAllProducts()
+    }
+
     override suspend fun insertCoupon(coupon: PriceRule): Long {
         return appDao.insertCoupon(coupon)
     }

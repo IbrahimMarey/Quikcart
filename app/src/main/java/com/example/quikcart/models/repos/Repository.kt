@@ -59,5 +59,5 @@ interface Repository {
     suspend fun insertAllCoupons(coupons: List<PriceRule>): LongArray
     suspend fun getAllCoupons(): Flow<List<PriceRule>>
     suspend fun confirmOrder(ordersItem: Order):Flow<Order>
-
+    suspend fun deleteAllProducts()
 }

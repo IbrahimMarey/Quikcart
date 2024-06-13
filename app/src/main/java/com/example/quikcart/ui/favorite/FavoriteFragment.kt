@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentFavoriteBinding
 import com.example.quikcart.models.ViewState
-import com.example.quikcart.models.entities.LineItemsItem
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.utils.PreferencesUtils

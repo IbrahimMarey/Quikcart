@@ -30,4 +30,8 @@ class AuthRepositoryImp @Inject constructor() :AuthenticationRepository {
             Result.failure(e)
         }
     }
+
+    override fun logout() {
+        auth.signOut()
+    }
 }

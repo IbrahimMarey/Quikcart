@@ -14,7 +14,7 @@ interface LocalDataSourceInterface
     suspend fun deleteProducts(products: ProductsItem)
     fun getAllProducts(): Flow<List<ProductsItem>>
 
-
+    suspend fun deleteAllProducts()
     suspend fun insertCoupon(coupon: PriceRule): Long
     suspend fun deleteAllCoupons(): Int
     suspend fun insertAllCoupons(coupons: List<PriceRule>): LongArray
