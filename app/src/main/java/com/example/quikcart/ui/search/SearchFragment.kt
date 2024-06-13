@@ -122,14 +122,21 @@ class SearchFragment : Fragment() {
         findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
     }
 
+
     private fun addToFavorite(productItem: ProductsItem) {
         viewModel.addToFavourites(productItem)
 
-        val price = productItem.price ?: "0.00"
+        val price = "0.00"
         val title = productItem.title ?: ""
-        if (favID.toInt() != 0 && favID.toInt() != -1)
+
+        if (favID.toInt() != 0 && favID.toInt() != -1) {
             viewModel.getFav(favID.toString())
-        if (favID.toInt() == 0) {
+            lifecycleScope.launch {
+                val draftItem = PutDraftItem(viewModel.getItemLineList(title, price))
+                val request = PutDraftOrderItemModel(draftItem)
+                viewModel.putProductInFav(favID.toString(), request)
+            }
+        } else {
             val draftItem = PostDraftOrderItemModel(
                 DraftItem(
                     line_items = listOf(DraftOrderLineItem(title, price, 1)),
@@ -139,12 +146,9 @@ class SearchFragment : Fragment() {
             )
 
             lifecycleScope.launch {
-                preferences.setCartId(viewModel.postProductInFav(draftItem))
+                favID = viewModel.postProductInFav(draftItem)
+                preferences.setFavouriteId(favID)
             }
-        } else {
-            val draftItem = PutDraftItem(viewModel.getItemLineList(title, price))
-            val request = PutDraftOrderItemModel(draftItem)
-            viewModel.putProductInFav(favID.toString(), request)
         }
     }
 }
