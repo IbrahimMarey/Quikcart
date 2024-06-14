@@ -15,37 +15,40 @@
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
         app:strokeWidth="2dp"
-        android:layout_marginHorizontal="8dp"
+        android:layout_margin="8dp"
         app:strokeColor="@color/xd_blue_asset1"
 
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/xd_blue_asset1"
-
+            android:layout_height="100dp"
             >
 
             <ImageView
                 android:id="@+id/brand_img"
-                android:layout_width="150dp"
-                android:layout_height="0dp"
-                app:layout_constraintHeight_percent=".72"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 imageUrl="@{brandItem.image.src}"
+                tools:src="@drawable/product"
                 android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/brand_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/brand_img"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/brand_img"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"
+                android:layout_marginTop="75dp"
                 android:text="@{brandItem.title}"
-                android:textSize="20sp" />
+                tools:text="ADIDAS"
+                android:textSize="20sp"
+                android:background="@color/xd_blue_asset_transparent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
