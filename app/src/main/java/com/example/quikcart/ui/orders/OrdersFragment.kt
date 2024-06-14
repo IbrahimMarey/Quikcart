@@ -57,6 +57,7 @@ class OrdersFragment : Fragment() {
                         }
 
                         is ViewState.Success -> {
+                            binding.noOrderImg.visibility=if(orders.data.isEmpty()) View.VISIBLE else View.GONE
                             binding.progressBar.visibility = View.GONE
                             initRecyclerView(orders.data)
                         }
