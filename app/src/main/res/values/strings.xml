@@ -184,6 +184,7 @@
     <string name="choose_payment_method">Choose payment method:</string>
     <string name="choose_the_address">Choose the address:</string>
     <string name="confirm_order_details">Confirm Order Details</string>
+    <string name="confirm_order">Confirm Order</string>
 
 
 </resources>
