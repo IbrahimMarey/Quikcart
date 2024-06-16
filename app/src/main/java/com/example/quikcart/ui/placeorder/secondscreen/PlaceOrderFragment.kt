@@ -84,6 +84,7 @@ class PlaceOrderFragment : Fragment() {
                         }
 
                         is ViewState.Success -> {
+                            viewModel.deleteCartItemsById(draftOrder.id.toString())
                             AlertUtil.showToast(requireContext(), "Order is placed successfully")
                         }
                         is ViewState.Loading -> {}

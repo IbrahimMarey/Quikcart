@@ -1,5 +1,6 @@
 package com.example.quikcart.ui.placeorder.secondscreen
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -34,8 +35,23 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
                 _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error(it1) }!!
             }.collect { orderItems ->
                 _isLoading.value=false
-                    _uiState.value = ViewState.Success(orderItems)
+                _uiState.value = ViewState.Success(orderItems)
             }
+        }
+    }
+
+
+    fun deleteCartItemsById(id:String){
+        viewModelScope.launch {
+            while (true){
+                try {
+                    repo.delCartItem(id)
+                    break
+                }catch (ex:Exception){
+                    Log.e("TAG", "deleteCartItemsById: ${ex.localizedMessage}", )
+                }
+            }
+
         }
     }
 }
