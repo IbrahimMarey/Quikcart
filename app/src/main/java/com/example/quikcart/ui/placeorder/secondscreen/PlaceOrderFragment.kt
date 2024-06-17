@@ -1,6 +1,5 @@
 package com.example.quikcart.ui.placeorder.secondscreen
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,9 +28,7 @@ class PlaceOrderFragment : Fragment() {
     private lateinit var binding: FragmentPlaceOrderBinding
     private lateinit var address: String
     private lateinit var draftOrder: DraftOrder
-    @Inject
-    lateinit var preferencesUtils: PreferencesUtils
-    private lateinit var progressDialog: ProgressDialog
+    @Inject lateinit var preferencesUtils: PreferencesUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +42,6 @@ class PlaceOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getPassedArgs()
-        progressDialog = ProgressDialog(requireContext())
         viewModel.totalPrice = totalPrice
         viewModel.shippingFees = "0"
         val customer = com.example.quikcart.models.entities.Customer(
@@ -56,8 +52,8 @@ class PlaceOrderFragment : Fragment() {
         val orderItem = OrdersItem(
             lineItems = draftOrder.lineItems,
             customer = customer, totalPrice = totalPrice,
-            totalTax = "20",
-            currency = "EUR",
+            totalTax = "0",
+            currency = preferencesUtils.getCurrencyType(),
             createdAt = "2025-05-20T15:27:23-04:00",
             paymentGatewayNames = mutableListOf("Cash")
         )

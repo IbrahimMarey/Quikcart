@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val FAVORITE_ITEM = R.id.favoriteFragment
     private val CART_ITEM = R.id.cartFragment
     private val PROFILE_ITEM = R.id.profileFragment
+    private val SEARCH_ITEM = R.id.searchFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     private fun ActivityMainBinding.setUpBottomNavigation() {
         val bottomNavigationItems = mutableListOf(
             CurvedBottomNavigation.Model(HOME_ITEM, getString(R.string.home), R.drawable.ic_home),
+            CurvedBottomNavigation.Model(SEARCH_ITEM, getString(R.string.search), R.drawable.ic_search),
             CurvedBottomNavigation.Model(FAVORITE_ITEM, getString(R.string.wish_list), R.drawable.ic_favorite),
             CurvedBottomNavigation.Model(CART_ITEM, getString(R.string.cart), R.drawable.ic_cart),
             CurvedBottomNavigation.Model(PROFILE_ITEM, getString(R.string.profile), R.drawable.ic_person),

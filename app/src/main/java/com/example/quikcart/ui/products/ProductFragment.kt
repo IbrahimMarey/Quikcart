@@ -103,6 +103,7 @@ class ProductFragment : Fragment() {
                             AlertUtil.showToast(requireContext(), it.message)
                         }
                         is ViewState.Success -> {
+                            binding.noProductImg.visibility= if(it.data.isEmpty()) View.VISIBLE else View.GONE
                             initRecyclerView(it.data)
                            binding.progressBar.visibility = View.GONE
                         }
