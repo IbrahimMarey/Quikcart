@@ -166,7 +166,7 @@
     <string name="phone_miss_match">Phone Miss Match</string>
 
     <string name="images_of_products">Images of Products</string>
-    <string name="select_colors">"Select color "</string>
+    <string name="select_colors">"Select size "</string>
     <string name="select_size">"Select Size "</string>
     <string name="product_title">Product Title</string>
     <string name="type_shoes">Type : SHOES</string>

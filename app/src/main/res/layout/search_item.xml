@@ -12,7 +12,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_product"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:backgroundTint="@color/cardview_light_background"
@@ -26,75 +26,67 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="4dp"
-            >
+            android:padding="4dp">
 
             <ImageView
                 android:id="@+id/image_of_product"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                imageUrl="@{product.images.get(0).src}"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:contentDescription="@string/search_product"
                 android:src="@drawable/logo2"
-                imageUrl="@{product.images.get(0).src}"
                 app:layout_constraintCircleRadius="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <RatingBar
-                android:id="@+id/rate_of_product"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginTop="@dimen/margin_small"
-                android:isIndicator="true"
-                app:layout_constraintStart_toStartOf="@+id/image_of_product"
-                app:layout_constraintTop_toBottomOf="@+id/image_of_product" />
-
             <TextView
                 android:id="@+id/type_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                tools:text="Brand : SHOES"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
                 android:text="@{product.productType}"
-                app:layout_constraintStart_toStartOf="@+id/rate_of_product"
-                app:layout_constraintTop_toBottomOf="@+id/rate_of_product" />
-
-            <TextView
-                android:id="@+id/product_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                tools:text="220 $"
-                android:text='@{String.valueOf(product.variants.get(0).price)+"USD"}'
-                android:textColor="@color/xd_blue"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/type_name"
-                app:layout_constraintTop_toBottomOf="@+id/type_name" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_of_product"
+                tools:text="Brand : SHOES" />
 
             <TextView
                 android:id="@+id/vendor_of_product"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
-                tools:text="ADIDAS"
                 android:text="@{product.vendor}"
+                android:textColor="@color/xd_orange"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/type_name"
+                tools:text="ADIDAS" />
+
+            <TextView
+                android:id="@+id/product_price"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:text='@{String.valueOf(product.variants.get(0).price)+"USD"}'
                 android:textColor="@color/xd_btn_nav_item"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/product_price"
-                app:layout_constraintTop_toBottomOf="@+id/product_price" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vendor_of_product"
+                tools:text="220 $" />
+
             <ImageView
                 android:id="@+id/add_to_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/delete"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@string/add_favourite"
+                android:padding="4dp"
+                android:src="@drawable/ic_empty_heart"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:src="@drawable/ic_favorite"
-                android:layout_margin="8dp"
-                android:padding="4dp" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
