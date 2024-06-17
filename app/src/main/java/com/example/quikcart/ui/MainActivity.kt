@@ -68,12 +68,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-            else if (destination.id == R.id.searchFragment)
-            {
-                binding.bottomNavigation.visibility = View.GONE
-                binding.appToolBar.visibility = View.GONE
-
-            }
             else if (destination.id == R.id.productDetailsFragment)
             {
                 binding.bottomNavigation.visibility = View.GONE

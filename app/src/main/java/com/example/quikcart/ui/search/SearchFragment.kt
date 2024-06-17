@@ -125,7 +125,6 @@ class SearchFragment : Fragment() {
 
     private fun addToFavorite(productItem: ProductsItem) {
         viewModel.addToFavourites(productItem)
-
         val price = "0.00"
         val title = productItem.title ?: ""
 
