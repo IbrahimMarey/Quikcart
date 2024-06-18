@@ -1,3 +1,4 @@
+import com.android.build.api.dsl.Packaging
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -55,6 +56,11 @@ android {
     }
     kapt {
         correctErrorTypes = true
+    }
+    android {
+        packaging {
+            resources.excludes += "**/*"
+        }
     }
 }
 
@@ -122,5 +128,7 @@ dependencies {
 
     //Lottie
     implementation ("com.airbnb.android:lottie:5.2.0")
+    implementation ("com.sun.mail:android-mail:1.6.6")
+    implementation ("com.sun.mail:android-activation:1.6.7")
 
 }

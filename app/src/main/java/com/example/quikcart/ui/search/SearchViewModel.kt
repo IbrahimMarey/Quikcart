@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.search
 
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
@@ -10,6 +11,7 @@ import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
 import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.models.repos.Repository
+import com.google.android.material.slider.Slider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +26,9 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
     private val _uiState = MutableStateFlow<ViewState<List<ProductsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
     private var lineItemsList:MutableList<LineItem> = mutableListOf()
+    var originalProducts: List<ProductsItem> = emptyList()
+    var minPrice= ObservableField(0)
+    var maxPrice= ObservableField(1)
 
     fun getProducts() {
          viewModelScope.launch {
@@ -33,11 +38,16 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
                  _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
              }
                  .collect {productsItem->
+                     originalProducts=productsItem
+                     getPriceForEachProduct(productsItem)
+                     getMaxPrice(productsItem)
+                     getMinPrice(productsItem)
                      _uiState.value = ViewState.Success(productsItem)
                      Log.e("TAG", "getProduct: ${productsItem[0].title}", )
                  }
          }
      }
+
 
     fun addToFavourites(productsItem: ProductsItem) {
         viewModelScope.launch {
@@ -80,6 +90,43 @@ class SearchViewModel @Inject constructor(private val repo: Repository) :ViewMod
             draftOrderLineList.add(draftOrderLineItem)
         }
         return draftOrderLineList
+    }
+
+    fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+        var filteredProducts: List<ProductsItem>
+        viewModelScope.launch {
+            filteredProducts = originalProducts.filter {
+                it.price!=null && it.price?.toFloatOrNull()!! <= value
+            }
+            _uiState.value=ViewState.Success(filteredProducts)
+        }
+    }
+
+    private fun getMinPrice(products: List<ProductsItem>) {
+        if(products.size<=1){
+            minPrice.set(0)
+            return
+        }
+        minPrice.set(products.minByOrNull { product->
+            product.price?.toDouble() ?: Double.MAX_VALUE
+        }?.price?.toDouble()?.toInt() ?: 0)
+    }
+
+    private fun getMaxPrice(products: List<ProductsItem>) {
+        if(products.isEmpty()){
+            maxPrice.set(1)
+            return
+        }
+        maxPrice.set(products.maxByOrNull { product->
+            product.price?.toDouble() ?: Double.MAX_VALUE
+        }?.price?.toDouble()?.toInt() ?: 1)
+    }
+    private fun getPriceForEachProduct(products: List<ProductsItem>) {
+        products.forEach { item ->
+            item.variants?.forEach {
+                item.price = it.price
+            }
+        }
     }
 
 }
