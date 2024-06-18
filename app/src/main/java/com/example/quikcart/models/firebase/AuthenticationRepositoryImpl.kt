@@ -30,4 +30,16 @@ class AuthRepositoryImp @Inject constructor() :AuthenticationRepository {
             Result.failure(e)
         }
     }
+
+    override fun logout() {
+        auth.signOut()
+    }
+    override suspend fun resetPassword(email: String): Result<Unit> {
+        return try {
+            auth.sendPasswordResetEmail(email).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

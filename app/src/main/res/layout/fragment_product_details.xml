@@ -8,8 +8,7 @@
         <variable
             name="product"
             type="com.example.quikcart.models.entities.ProductsItem" />
-
-    </data>
+         </data>
 
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -114,8 +113,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/background_price_details"
                     android:padding="16dp"
-                    tools:text="@string/price"
-                    android:text='@{String.valueOf(product.variants.get(0).price)+"USD"}'
+                    android:text="@string/price"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -232,8 +230,27 @@
                     app:layout_constraintHorizontal_bias="0.136"
                     app:layout_constraintStart_toStartOf="@+id/rate_of_product_details"
                     app:layout_constraintTop_toBottomOf="@+id/rate_of_product_details" />
+
+                <ImageView
+                    android:id="@+id/add_to_favorite"
+                    android:layout_width="34dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_empty_heart" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/networkImageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:srcCompat="@drawable/networksignal"
+            tools:layout_editor_absoluteX="289dp" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

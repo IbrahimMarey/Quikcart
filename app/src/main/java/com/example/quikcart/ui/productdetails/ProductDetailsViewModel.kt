@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.cart.DraftOrderLineItem
 import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
@@ -59,4 +60,35 @@ class ProductDetailsViewModel @Inject constructor(private val repo: Repository) 
         }
         return draftOrderLineList
     }
+    fun insertToFavourites(product:ProductsItem) {
+        viewModelScope.launch {
+            repo.inertProduct(product)
+        }
+    }
+    fun putProductInFav(id:String, cartItem: PutDraftOrderItemModel)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.putDraftOrder(id ,cartItem).collect{
+            }
+        }
+    }
+
+    suspend fun postProductInFav(cartItem: PostDraftOrderItemModel): Long {
+        return withContext(Dispatchers.IO) {
+            var draftOrderId: Long = 0
+            repo.postDraftOrder(cartItem).collect { result ->
+                draftOrderId = result.draft_order.id
+            }
+            draftOrderId
+        }
+    }
+    fun getFav(id: String)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getDraftOrderById(id).collect{
+                lineItemsList.addAll(it.draft_order.lineItems)
+            }
+        }
+    }
+
 }

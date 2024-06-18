@@ -1,7 +1,6 @@
 package com.example.quikcart.ui.productdetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import com.example.quikcart.databinding.FragmentProductDetailsBinding
 import com.example.quikcart.models.entities.ImagesItem
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.VariantsItem
-import com.example.quikcart.models.entities.cart.CartAppliedDiscount
 import com.example.quikcart.models.entities.cart.CartCustomer
 import com.example.quikcart.models.entities.cart.DraftItem
 import com.example.quikcart.models.entities.cart.DraftOrderLineItem
@@ -25,6 +23,8 @@ import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import com.example.quikcart.utils.setPrice
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
@@ -35,6 +35,8 @@ class ProductDetailsFragment : Fragment() {
     private lateinit var imageAdapter: ImagesAdapter
     private lateinit var variantAdapter: VariantsAdapter
     private lateinit var pref : PreferencesUtils
+    private var favID by Delegates.notNull<Long>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -47,37 +49,53 @@ class ProductDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         pref = PreferencesUtils.getInstance(requireActivity())
         val cartID = pref.getCartId()
+        favID = pref.getFavouriteId()
+
         viewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
         productItem = arguments?.getSerializable("details") as? ProductsItem
+/*
+        if (NetworkUtil.isNetworkAvailable(requireContext())) {
+            binding.networkImageView.visibility=View.GONE
+            binding.scrollView.visibility=View.VISIBLE
+
+        } else {
+            setPlaceholderImage()
+        }*/
         productItem?.let {
             binding.product = it
             setImages(it.images)
             setVariants(it.variants)
+            binding.price.setPrice (it.variants?.get(0)?.price?.toFloat() ?: 0.0f, requireContext())
+            insertToFavorite(it)
         }
         productItem?.productType?.let { showReview(it) }
         binding.rateOfProductDetails.rating = 4.7f
-        if (cartID.toInt() != 0 && cartID.toInt() != -1)
+        if (cartID.toInt() != 0 && cartID.toInt() != -1) {
             viewModel.getCart(cartID.toString())
-        binding.editProductBtn.setOnClickListener{
-            if (cartID.toInt() == 0)
-            {
-                val item =PostDraftOrderItemModel(
+        }
+        binding.editProductBtn.setOnClickListener {
+            if (cartID.toInt() == 0) {
+                val item = PostDraftOrderItemModel(
                     DraftItem(
-                        line_items = listOf(DraftOrderLineItem(productItem?.title?: "",productItem?.price?:"",1)),
+                        line_items = listOf(DraftOrderLineItem(productItem?.title ?: "", productItem?.price ?: "", 1)),
                         applied_discount = null,
                         customer = CartCustomer(pref.getCustomerId()),
-                    ))
+                    )
+                )
 
-                lifecycleScope.launch{
+                lifecycleScope.launch {
                     pref.setCartId(viewModel.postProductInCart(item))
                 }
-            }else{
-                var data =PutDraftItem(viewModel.getItemLineList(productItem?.title?: "",productItem?.price?:""))
-                var request = PutDraftOrderItemModel(data)
-                viewModel.putProductInCart(cartID.toString(),request)
+            } else {
+                val data = PutDraftItem(viewModel.getItemLineList(productItem?.title ?: "", productItem?.price ?: ""))
+                val request = PutDraftOrderItemModel(data)
+                viewModel.putProductInCart(cartID.toString(), request)
             }
-
         }
+    }
+    private fun setPlaceholderImage() {
+        binding.networkImageView.visibility=View.VISIBLE
+        binding.scrollView.visibility=View.GONE
     }
    private fun showReview(type: String) {
        binding.reviews.setOnClickListener {
@@ -110,5 +128,28 @@ class ProductDetailsFragment : Fragment() {
             putSerializable("productType", type)
         }
         findNavController().navigate(R.id.action_productDetailsFragment_to_reviewFragment, bundle)
+    }
+    private fun insertToFavorite(productsItem: ProductsItem){
+        viewModel.insertToFavourites(productsItem)
+        val price = productItem?.price ?: "0.00"
+        val title = productItem?.title ?: ""
+        if (favID.toInt() != 0 && favID.toInt() != -1)
+            viewModel.getFav(favID.toString())
+        if (favID.toInt() == 0) {
+            val draftItem = PostDraftOrderItemModel(
+                DraftItem(
+                    line_items = listOf(DraftOrderLineItem(title, price, 1)),
+                    applied_discount = null,
+                    customer = CartCustomer(pref.getCustomerId())
+                )
+            )
+            lifecycleScope.launch {
+                pref.setCartId(viewModel.postProductInFav(draftItem))
+            }
+        } else {
+            val draftItem = PutDraftItem(viewModel.getItemLineList(title, price))
+            val request = PutDraftOrderItemModel(draftItem)
+            viewModel.putProductInFav(favID.toString(), request)
+        }
     }
 }

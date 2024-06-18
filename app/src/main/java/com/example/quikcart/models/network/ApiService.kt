@@ -78,37 +78,37 @@ interface ApiService {
     @GET("customers/{customer_id}/orders.json?access_token=${Constants.ACCESS_TOKEN}")
     suspend fun getCustomerOrders(@Path("customer_id") customerID: Long):OrderResponse
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @POST("draft_orders.json")
     suspend fun postCartItem(
         @Body cartItem: PostDraftOrderItemModel
     ): Response<PostDraftOrderItemModel>
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @GET("draft_orders.json")
     suspend fun getCartItems(): Response<AllDraftOrdersResponse>
 
-    @Headers("X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @DELETE("draft_orders/{id}.json")
     suspend fun delCartItem(@Path("id") id : String)
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @POST("draft_orders.json")
     suspend fun postDraftOrder(@Body draftOrderPostBody: PostDraftOrderItemModel) : DraftOrderResponse //Response<DraftOrderResponse>
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @PUT("draft_orders/{id}.json")
     suspend fun putDraftOrder(@Path("id") id : String, @Body draftOrderPutBody: PutDraftOrderItemModel) : DraftOrderResponse
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @GET("draft_orders.json")
     suspend fun getAllDraftOrders() : AllDraftOrdersResponse
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.PASSWORD}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @GET("draft_orders/{id}.json")
     suspend fun getDraftOrderById(@Path("id") id : String) : DraftOrderResponse
 
-    @Headers("Content-Type:application/json","X-Shopify-Access-Token:"+Constants.PASSWORD)
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:"+Constants.ACCESS_TOKEN)
     @GET("price_rules.json")
     suspend fun getCoupons(): CouponModel
 

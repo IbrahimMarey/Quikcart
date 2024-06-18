@@ -167,4 +167,5 @@
             android:name="draftOrder"
             app:argType="com.example.quikcart.models.entities.cart.DraftOrder" />
     </fragment>
+
 </navigation>

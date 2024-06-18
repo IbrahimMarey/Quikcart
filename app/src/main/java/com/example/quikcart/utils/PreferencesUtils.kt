@@ -35,7 +35,7 @@ class PreferencesUtils internal constructor(context: Context)
 
     fun getUserId(): String?
     {
-        return sharedPreferences.getString(USER_ID_PREFERENCE,"7406457553131")
+        return sharedPreferences.getString(USER_ID_PREFERENCE,"0")
     }
     fun setCartId(id:Long){
         editor.putLong(CART_ID_PREFERENCE,id).apply()
@@ -76,7 +76,7 @@ class PreferencesUtils internal constructor(context: Context)
         private var instance  : PreferencesUtils? = null
         fun getInstance(context:Context):PreferencesUtils{
             return instance?: synchronized(this){
-                var pref = PreferencesUtils(context)
+                val pref = PreferencesUtils(context)
                 instance=pref
                 pref
             }

@@ -161,4 +161,7 @@ class RepositoryImp @Inject constructor(
         remoteDataSource.delCustomerAddress(customerID, id)
     }
 
+    override suspend fun deleteAllProducts() {
+        localDataSource.deleteAllProducts()
+    }
 }

@@ -66,7 +66,8 @@ data class ProductsItem(
 
     @field:SerializedName("status")
     val status: String?,
-    var price:String? = null
+    var price:String? = null,
+    var isFavorited: Boolean = false
 ) : Serializable
 
 data class OptionsItem(
