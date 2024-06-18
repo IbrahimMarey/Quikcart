@@ -32,6 +32,7 @@ class SearchFragment : Fragment() {
     private var filteredList = mutableListOf<ProductsItem>()
     private lateinit var preferences: PreferencesUtils
     private var favID by Delegates.notNull<Long>()
+    private var counter=0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,9 +47,16 @@ class SearchFragment : Fragment() {
         viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
         preferences = PreferencesUtils.getInstance(requireActivity())
         favID = preferences.getFavouriteId()
-
+        binding.vm = viewModel
         setupUI()
         observeViewModel()
+        binding.filterTv.setOnClickListener {
+            counter++
+            Log.e("TAG", "onViewCreated1: ${counter}", )
+            binding.sliderLinear.visibility = if (counter % 2 == 0) View.GONE else View.VISIBLE
+        }
+
+
     }
 
     private fun setupUI() {
@@ -101,6 +109,7 @@ class SearchFragment : Fragment() {
                 it.title!!.contains(query, ignoreCase = true) || it.productType!!.contains(query, ignoreCase = true)
             })
             adapter.submitList(filteredList.toList())
+            viewModel.originalProducts=filteredList
 
             binding.emptyImageView.visibility = if (filteredList.isEmpty()) View.VISIBLE else View.GONE
             binding.productRecyclerView.visibility = if (filteredList.isEmpty()) View.GONE else View.VISIBLE

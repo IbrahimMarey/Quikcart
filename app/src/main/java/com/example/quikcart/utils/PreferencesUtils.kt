@@ -8,6 +8,7 @@ private const val CURRENCY_PREFERENCE = "SETTING_CURRENCY"
 private const val USER_ID_PREFERENCE = "USER_ID"
 private const val CART_ID_PREFERENCE = "CART_ID"
 private const val CUSTOMER_ID = "CUSTOMER_ID"
+private const val CUSTOMER_EMAIL = "CUSTOMER_EMAIL"
 private const val USD_RATE = "USD_RATE"
 private const val FAVOURITE_ID = "FAVOURITE_LIST"
 class PreferencesUtils internal constructor(context: Context)
@@ -60,6 +61,13 @@ class PreferencesUtils internal constructor(context: Context)
     }
     fun getUSDRate():Float{
         return sharedPreferences.getFloat(USD_RATE, 0.0F)
+    }
+
+    fun saveCustomerEmail(email:String){
+        editor.putString(CUSTOMER_EMAIL,email).apply()
+    }
+    fun getCustomerEmail(): String? {
+        return sharedPreferences.getString(CUSTOMER_EMAIL,"")
     }
     companion object{
         const val CURRENCY_USD = "USD"

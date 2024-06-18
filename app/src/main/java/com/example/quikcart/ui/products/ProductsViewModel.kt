@@ -26,9 +26,12 @@ import kotlin.math.max
 class ProductsViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewState<List<ProductsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
-    private var originalProducts: List<ProductsItem> = emptyList()
-    var minPrice=ObservableField(0)
-    var maxPrice=ObservableField(1)
+
+   // private var originalProducts: List<ProductsItem> = emptyList()
+    private var lineItemsList:MutableList<LineItem> = mutableListOf()
+   // var minPrice=ObservableField(0)
+    //var maxPrice=ObservableField(1)
+
 
     private val _favOperationState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading)
     val favOperationState: StateFlow<ViewState<Unit>> = _favOperationState
@@ -42,18 +45,18 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
                 Log.e("TAG", "error: ${error.localizedMessage}", )
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
             }.collect { products ->
-                originalProducts=products
+              //  originalProducts=products
                 getPriceForEachProduct(products)
-                getMaxPrice(products)
-                getMinPrice(products)
-                Log.e("TAG", "MAX: ${maxPrice.get()}", )
-                Log.e("TAG", "MIN: ${minPrice.get()}", )
+              //  getMaxPrice(products)
+                //getMinPrice(products)
+                //Log.e("TAG", "MAX: ${maxPrice.get()}", )
+                //Log.e("TAG", "MIN: ${minPrice.get()}", )
                 _uiState.value = ViewState.Success(products)
             }
         }
     }
 
-    private fun getMinPrice(products: List<ProductsItem>) {
+   /* private fun getMinPrice(products: List<ProductsItem>) {
         if(products.size<=1){
             minPrice.set(0)
             return
@@ -71,7 +74,7 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
         maxPrice.set(products.maxByOrNull { product->
             product.price?.toDouble() ?: Double.MAX_VALUE
         }?.price?.toDouble()?.toInt() ?: 1)
-    }
+    }*/
 
     fun getProductsBySubCategory(mainCategory: String,subCategory: String){
          val productsOfCategory : MutableList<ProductsItem> = mutableListOf()
@@ -80,15 +83,13 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
             repo.getProductsBySubCategory(subCategory).catch {error->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
             }.collect{products->
-                originalProducts=products
+                //originalProducts=products
               products.forEach {product->
                   filterProductByMainCategory(product,mainCategory,productsOfCategory)
               }
                 getPriceForEachProduct(productsOfCategory)
-                getMaxPrice(productsOfCategory)
-                getMinPrice(productsOfCategory)
-                Log.e("TAG", "MAX2: ${maxPrice.get()}", )
-                Log.e("TAG", "MIN2: ${minPrice.get()}", )
+                //getMaxPrice(productsOfCategory)
+                //getMinPrice(productsOfCategory)
                 _uiState.value = ViewState.Success(productsOfCategory)
             }
         }
@@ -114,7 +115,7 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
         }
     }
 
-     fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+   /*  fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
          var filteredProducts: List<ProductsItem>
          viewModelScope.launch {
               filteredProducts = originalProducts.filter {
@@ -122,7 +123,7 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
              }
              _uiState.value=ViewState.Success(filteredProducts)
          }
-    }
+    }*/
 
     fun addToFavourites(product: ProductsItem) {
         viewModelScope.launch {

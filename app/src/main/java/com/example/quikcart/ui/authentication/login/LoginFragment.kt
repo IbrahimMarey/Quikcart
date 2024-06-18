@@ -23,12 +23,14 @@ import com.example.quikcart.ui.MainActivity
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
+    @Inject lateinit var preferencesUtils: PreferencesUtils
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

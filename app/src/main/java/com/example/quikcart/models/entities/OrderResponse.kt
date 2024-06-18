@@ -536,7 +536,7 @@ data class OrdersItem(
     val currency: String? = null,
 
     @field:SerializedName("shipping_address")
-    val shippingAddress: Any? = null,
+    val shippingAddress: ShippingAddress? = null,
 
     @field:SerializedName("browser_ip")
     val browserIp: Any? = null,

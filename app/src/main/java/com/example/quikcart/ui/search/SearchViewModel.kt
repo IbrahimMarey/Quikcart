@@ -1,12 +1,14 @@
 package com.example.quikcart.ui.search
 
 import android.util.Log
+import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.cart.*
 import com.example.quikcart.models.repos.Repository
+import com.google.android.material.slider.Slider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewState<List<ProductsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
+
 
     private val _favOperationState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading)
 
@@ -50,7 +53,6 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
             }
         }
     }
-
     fun addToFavourites(productsItem: ProductsItem) {
         viewModelScope.launch {
             repo.inertProduct(productsItem)
@@ -101,4 +103,42 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
         }
         return draftOrderLineList
     }
+    
+    fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+        var filteredProducts: List<ProductsItem>
+        viewModelScope.launch {
+            filteredProducts = originalProducts.filter {
+                it.price!=null && it.price?.toFloatOrNull()!! <= value
+            }
+            _uiState.value=ViewState.Success(filteredProducts)
+        }
+    }
+
+    private fun getMinPrice(products: List<ProductsItem>) {
+        if(products.size<=1){
+            minPrice.set(0)
+            return
+        }
+        minPrice.set(products.minByOrNull { product->
+            product.price?.toDouble() ?: Double.MAX_VALUE
+        }?.price?.toDouble()?.toInt() ?: 0)
+    }
+
+    private fun getMaxPrice(products: List<ProductsItem>) {
+        if(products.isEmpty()){
+            maxPrice.set(1)
+            return
+        }
+        maxPrice.set(products.maxByOrNull { product->
+            product.price?.toDouble() ?: Double.MAX_VALUE
+        }?.price?.toDouble()?.toInt() ?: 1)
+    }
+    private fun getPriceForEachProduct(products: List<ProductsItem>) {
+        products.forEach { item ->
+            item.variants?.forEach {
+                item.price = it.price
+            }
+        }
+    }
+
 }
