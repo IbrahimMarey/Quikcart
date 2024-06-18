@@ -35,6 +35,8 @@ class LoginViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ViewState<List<ProductsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
 
+    private val _resetPasswordState = MutableStateFlow<ViewState<String?>>(ViewState.Loading)
+    val resetPasswordState = _resetPasswordState
     fun login(user: User) {
         viewModelScope.launch {
             _loginState.value = ViewState.Loading
@@ -84,7 +86,15 @@ class LoginViewModel @Inject constructor(
         }
 
     }
-    fun logout() {
-        authRepository.logout()
+    fun resetPassword(email: String) {
+        viewModelScope.launch {
+            _resetPasswordState.value = ViewState.Loading
+            val success = authRepository.resetPassword(email)
+            if (success.isSuccess) {
+                _resetPasswordState.value = ViewState.Success("Password reset email sent")
+            } else {
+                _resetPasswordState.value = ViewState.Error(success.exceptionOrNull()?.message ?: "Unknown error")
+            }
+        }
     }
 }

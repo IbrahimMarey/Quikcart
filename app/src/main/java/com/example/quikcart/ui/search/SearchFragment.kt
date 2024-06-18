@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -109,11 +110,12 @@ class SearchFragment : Fragment() {
     private fun initRecyclerView(products: List<ProductsItem>) {
         adapter = SearchAdapter(
             { productItem -> navigateToProductDetails(productItem) },
-            { productItem -> addToFavorite(productItem) }
+            { productItem, position -> addToFavorite(productItem, position) }
         )
         binding.productRecyclerView.adapter = adapter
         adapter.submitList(products)
     }
+
 
     private fun navigateToProductDetails(productItem: ProductsItem) {
         val bundle = Bundle().apply {
@@ -122,8 +124,7 @@ class SearchFragment : Fragment() {
         findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
     }
 
-
-    private fun addToFavorite(productItem: ProductsItem) {
+    private fun addToFavorite(productItem: ProductsItem, position: Int) {
         viewModel.addToFavourites(productItem)
         val price = "0.00"
         val title = productItem.title ?: ""
@@ -134,6 +135,7 @@ class SearchFragment : Fragment() {
                 val draftItem = PutDraftItem(viewModel.getItemLineList(title, price))
                 val request = PutDraftOrderItemModel(draftItem)
                 viewModel.putProductInFav(favID.toString(), request)
+                handleSuccess(productItem, position)
             }
         } else {
             val draftItem = PostDraftOrderItemModel(
@@ -147,7 +149,16 @@ class SearchFragment : Fragment() {
             lifecycleScope.launch {
                 favID = viewModel.postProductInFav(draftItem)
                 preferences.setFavouriteId(favID)
+                handleSuccess(productItem, position)
             }
         }
     }
+
+    private fun handleSuccess(productItem: ProductsItem, position: Int) {
+        productItem.isFavorited = true
+        adapter.notifyItemChanged(position)
+        Toast.makeText(requireContext(), "Product added to favorites successfully!", Toast.LENGTH_SHORT).show()
+    }
+
+
 }

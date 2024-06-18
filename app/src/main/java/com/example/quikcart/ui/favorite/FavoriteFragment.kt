@@ -31,7 +31,7 @@ class FavoriteFragment : Fragment() {
     private lateinit var draftOrderViewModel: DraftOrderViewModel
     private lateinit var preferences: PreferencesUtils
     private var favID by Delegates.notNull<Long>()
-
+    private lateinit var lineItem: MutableList<LineItem>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,6 +48,7 @@ class FavoriteFragment : Fragment() {
         viewModel.getProducts()
         preferences = PreferencesUtils.getInstance(requireActivity())
         favID = preferences.getFavouriteId()
+        lineItem= draftOrderViewModel.lineItemsList
       //  draftOrderViewModel.getFav(favID.toString())
         observeViewModel()
     }
@@ -97,27 +98,37 @@ class FavoriteFragment : Fragment() {
 
     private fun deleteProduct(productItem: ProductsItem) {
         viewModel.deleteProduct(productItem)
-
+        deleteProductFromFavorites(productItem)
     }
-    private fun deleteProductFromFavorites(productItem: ProductsItem , lineItemsItem: LineItem) {
+    private fun deleteProductFromFavorites(productItem: ProductsItem ) {
         val favId = preferences.getFavouriteId().toString()
-        lifecycleScope.launch {
-            try {
-                val matchingLineItem = draftOrderViewModel.lineItemsList.find { it.title == productItem.title }
-                if (matchingLineItem != null) {
-                    if (draftOrderViewModel.lineItemsList.size >= 2) {
-                        draftOrderViewModel.delFavItem(favId, lineItemsItem)
-                    } else {
-                        draftOrderViewModel.delFav(favId)
-                        preferences.setFavouriteId(0)
+        Snackbar.make(
+            requireView(),
+            getString(R.string.are_you_sure_you_want_to_delete_this_address),
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(getString(R.string.delete)) {
+                lifecycleScope.launch {
+                    try {
+                        val matchingLineItem = draftOrderViewModel.lineItemsList.find { it.title == productItem.title }
+                        if (matchingLineItem != null) {
+                            if (draftOrderViewModel.lineItemsList.size >= 2) {
+                                draftOrderViewModel.delFavItem(favId, matchingLineItem)
+                                deleteProduct(productItem)
+                            } else {
+                                draftOrderViewModel.delFav(favId)
+                                preferences.setFavouriteId(0)
+                                deleteProduct(productItem)
+                            }
+                        } else {
+                            Log.i("TAG", "No matching line item found for product: ${productItem.title}")
+                        }
+                    } catch (e: Exception) {
+                        Log.i("TAG", "deleteProductFromFavorites: $e")
                     }
-                } else {
-                    Log.i("TAG", "No matching line item found for product: ${productItem.title}")
                 }
-            } catch (e: Exception) {
-                Log.i("TAG", "deleteProductFromFavorites: $e")
-            }
-        }
+            }.show()
+
     }
 
 

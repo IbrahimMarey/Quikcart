@@ -22,9 +22,7 @@ import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.ui.MainActivity
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -59,17 +57,23 @@ class LoginFragment : Fragment() {
 
     private fun setupListeners() {
         binding.signinText.setOnClickListener {
-            navigateToSignUp(it)
+            navigateToSignUp()
         }
         binding.SignInButton.setOnClickListener {
             handleLogin()
         }
+        binding.forgetTextView.setOnClickListener {
+            navigateToForgotPassword()
+        }
     }
 
-    private fun navigateToSignUp(view: View) {
-        Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signupFragment)
+    private fun navigateToSignUp() {
+        Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_signupFragment)
     }
 
+    private fun navigateToForgotPassword() {
+        Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+    }
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
@@ -240,7 +244,6 @@ class LoginFragment : Fragment() {
                                 }
                             }
 
-                            // Do something with the matching products list, e.g., save them or log them
                             for (product in matchingProducts) {
                                 viewModel.inertProducts(product)
                             }
@@ -259,6 +262,5 @@ class LoginFragment : Fragment() {
             }
         }
     }
-
 }
 

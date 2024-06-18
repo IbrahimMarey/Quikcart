@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -23,18 +24,29 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
 
     private val _favOperationState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading)
-    val favOperationState: StateFlow<ViewState<Unit>> = _favOperationState
 
     private var lineItemsList: MutableList<LineItem> = mutableListOf()
+
+    init {
+        getProducts()
+    }
 
     fun getProducts() {
         viewModelScope.launch {
             _uiState.value = ViewState.Loading
+            val favoriteProducts = repo.getAllProducts().firstOrNull() ?: emptyList()
             repo.getProducts().catch { error ->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
             }.collect { productsItem ->
-                _uiState.value = ViewState.Success(productsItem)
-                Log.e("TAG", "getProduct: ${productsItem[0].title}")
+                val productsWithFavorites = productsItem.map { product ->
+                    if (favoriteProducts.any { it.id == product.id }) {
+                        product.copy(isFavorited = true)
+                    } else {
+                        product
+                    }
+                }
+                _uiState.value = ViewState.Success(productsWithFavorites)
+                Log.e("TAG", "getProduct: ${productsWithFavorites[0].title}")
             }
         }
     }
