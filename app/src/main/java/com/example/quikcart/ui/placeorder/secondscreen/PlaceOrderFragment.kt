@@ -1,9 +1,15 @@
 package com.example.quikcart.ui.placeorder.secondscreen
 
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -11,10 +17,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.quikcart.databinding.FragmentPlaceOrderBinding
 import com.example.quikcart.models.ViewState
+import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.models.entities.Customer
 import com.example.quikcart.models.entities.Order
 import com.example.quikcart.models.entities.OrdersItem
+import com.example.quikcart.models.entities.ShippingAddress
 import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.utils.AlertUtil
+import com.example.quikcart.utils.DateUtil
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,7 +36,7 @@ class PlaceOrderFragment : Fragment() {
     private lateinit var totalPrice: String
     private lateinit var viewModel: PlaceOrderViewModel
     private lateinit var binding: FragmentPlaceOrderBinding
-    private lateinit var address: String
+    private lateinit var address: AddressResponse
     private lateinit var draftOrder: DraftOrder
     @Inject lateinit var preferencesUtils: PreferencesUtils
 
@@ -38,29 +48,53 @@ class PlaceOrderFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getPassedArgs()
-        viewModel.totalPrice = totalPrice
-        viewModel.shippingFees = "0"
-        val customer = com.example.quikcart.models.entities.Customer(
-            email = "sama@gmail.com",
-            id = preferencesUtils.getCustomerId(),
-
-            )
-        val orderItem = OrdersItem(
-            lineItems = draftOrder.lineItems,
-            customer = customer, totalPrice = totalPrice,
-            totalTax = "0",
-            currency = preferencesUtils.getCurrencyType(),
-            createdAt = "2025-05-20T15:27:23-04:00",
-            paymentGatewayNames = mutableListOf("Cash")
-        )
-        viewModel.orderResponse = Order(orderItem)
+        Log.e("TAG", "onViewCreated: ${preferencesUtils.getCustomerEmail()}", )
+        initializeViewModelVariables()
         binding.vm = viewModel
         observeOnLiveData()
         observeOnStateFlow()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeViewModelVariables() {
+        viewModel.totalPrice = totalPrice
+        viewModel.shippingFees = "0"
+        viewModel.orderResponse = Order(getOrderItem())
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getOrderItem():OrdersItem {
+        return OrdersItem(
+            lineItems = draftOrder.lineItems,
+            customer = getCustomerData(), totalPrice = totalPrice,
+            totalTax = "0",
+            currency = preferencesUtils.getCurrencyType(),
+            createdAt = DateUtil.getCurrentDateAndTime(),
+            paymentGatewayNames = mutableListOf("Cash"),
+            shippingAddress = getShippingAddress()
+
+        )
+    }
+
+    private fun getCustomerData():Customer {
+        return Customer(
+            email = preferencesUtils.getCustomerEmail(),
+            id = preferencesUtils.getCustomerId(),
+        )
+    }
+
+    private fun getShippingAddress():ShippingAddress {
+        return ShippingAddress(
+            country = address.country,
+            address1 = address.address1,
+            address2 = address.address2,
+            city = address.city
+        )
     }
 
     private fun observeOnLiveData() {
@@ -84,7 +118,10 @@ class PlaceOrderFragment : Fragment() {
                         }
 
                         is ViewState.Success -> {
+                            viewModel.deleteCartItemsById(draftOrder.id.toString())
+
                             AlertUtil.showToast(requireContext(), "Order is placed successfully")
+                            viewModel.sendEmail("Hello")
                         }
                         is ViewState.Loading -> {}
 
@@ -93,6 +130,9 @@ class PlaceOrderFragment : Fragment() {
             }
         }
     }
+
+
+
 
     private fun getPassedArgs() {
         draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder

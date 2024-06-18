@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.products.ProductFragment">
-        <TextView
+ <!--       <TextView
             android:id="@+id/price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,12 +38,12 @@
             app:valueFrom="@{vm.minPrice}"
             app:valueTo="@{vm.maxPrice}"
             app:sliderValue="@{vm.maxPrice}"
-            app:onChangeListener="@{(slider, value, fromUser) -> vm.onValueChange(slider, value, fromUser)}"/>
+            app:onChangeListener="@{(slider, value, fromUser) -> vm.onValueChange(slider, value, fromUser)}"/>-->
         <HorizontalScrollView
             android:id="@+id/chip_horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/slider"
+            app:layout_constraintTop_toTopOf="parent"
 
             >
             <com.google.android.material.chip.ChipGroup

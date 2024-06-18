@@ -34,7 +34,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     lateinit var adapter: OrderCustomerAddressesAdapter
     @Inject lateinit var preferenceManager: PreferencesUtils
     private lateinit var totalPrice : String
-    private lateinit var selectedAddress:String
+    private lateinit var selectedAddress:AddressResponse
     private lateinit var draftOrder: DraftOrder
 
     override fun onCreateView(
@@ -82,7 +82,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     }
     private fun initAddressesRecycler(addresses: List<AddressResponse>) {
         adapter= OrderCustomerAddressesAdapter {address->
-            selectedAddress=address.address1
+            selectedAddress=address
         }
         adapter.submitList(addresses)
         binding.addressRecycler.adapter=adapter

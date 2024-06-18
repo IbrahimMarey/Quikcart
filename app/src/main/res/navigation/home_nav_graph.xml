@@ -162,7 +162,7 @@
             app:argType="string" />
         <argument
             android:name="address"
-            app:argType="string" />
+            app:argType="com.example.quikcart.models.entities.AddressResponse" />
         <argument
             android:name="draftOrder"
             app:argType="com.example.quikcart.models.entities.cart.DraftOrder" />

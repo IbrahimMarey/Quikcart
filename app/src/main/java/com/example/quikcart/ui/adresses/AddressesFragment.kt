@@ -102,7 +102,11 @@ class AddressesFragment : Fragment() {
         Snackbar.make(requireView(), getString(R.string.are_you_sure_you_want_to_delete_this_address), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.delete)) {
                 if (addressesViewModel.addressesList.size >=2)
-                    addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getCustomerId(),addressesModel.id)
+                    addressesModel.id?.let { it1 ->
+                        addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getCustomerId(),
+                            it1
+                        )
+                    }
                 else
                     Toast.makeText(requireActivity(), getString(R.string.cannot_delete_the_customer_s_default_address), Toast.LENGTH_SHORT).show()
             }.show()
