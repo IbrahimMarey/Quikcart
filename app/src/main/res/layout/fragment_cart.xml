@@ -103,7 +103,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="3"
                 android:text="@string/proceed_to_buy"
-                android:backgroundTint="@color/xd_blue_asset"
+                android:backgroundTint="@color/xd_burgundy"
                 />
         </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

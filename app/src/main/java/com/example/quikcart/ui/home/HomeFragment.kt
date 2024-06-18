@@ -25,6 +25,7 @@ import com.example.quikcart.models.entities.CategoryItem
 import com.example.quikcart.models.entities.SmartCollectionsItem
 import com.example.quikcart.utils.AlertUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -39,14 +40,15 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater,container,false)
+        initViewModel()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
         observeOnStateFlow()
         initCategoryRecyclerView()
+        initImageSlider()
         binding.searchBar.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
         }
@@ -73,7 +75,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeOnStateFlow() {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.Main) {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {

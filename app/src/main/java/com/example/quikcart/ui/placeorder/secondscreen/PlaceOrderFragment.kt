@@ -26,6 +26,17 @@ import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.DateUtil
 import com.example.quikcart.utils.PreferencesUtils
+import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.cancel.OnCancel
+import com.paypal.checkout.createorder.CreateOrder
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.OrderIntent
+import com.paypal.checkout.createorder.UserAction
+import com.paypal.checkout.error.OnError
+import com.paypal.checkout.order.Amount
+import com.paypal.checkout.order.AppContext
+import com.paypal.checkout.order.OrderRequest
+import com.paypal.checkout.order.PurchaseUnit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,6 +45,7 @@ import javax.inject.Inject
 class PlaceOrderFragment : Fragment() {
 
     private lateinit var totalPrice: String
+    private lateinit var discountPrice: String
     private lateinit var viewModel: PlaceOrderViewModel
     private lateinit var binding: FragmentPlaceOrderBinding
     private lateinit var address: AddressResponse
@@ -53,6 +65,7 @@ class PlaceOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getPassedArgs()
+        setUPPayPal(totalPrice)
         Log.e("TAG", "onViewCreated: ${preferencesUtils.getCustomerEmail()}", )
         initializeViewModelVariables()
         binding.vm = viewModel
@@ -132,11 +145,10 @@ class PlaceOrderFragment : Fragment() {
     }
 
 
-
-
     private fun getPassedArgs() {
         draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
-        totalPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).totalPrice
+        totalPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total
+        discountPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.discount
         address = PlaceOrderFragmentArgs.fromBundle(requireArguments()).address
     }
 
@@ -144,4 +156,41 @@ class PlaceOrderFragment : Fragment() {
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class]
     }
 
+    private fun setUPPayPal(amount : String)
+    {
+        binding.paymentButtonContainer.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    OrderRequest(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD
+                                    , value = "10.0")
+                            )
+                        )
+                    )
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                Log.i("TAG", "OrderId: ${approval.data.orderId}")
+                Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
+            },
+            onCancel = OnCancel{
+                Log.i("TAG", "onViewCreated: ==================== payment canceld")
+                Toast.makeText(requireActivity(), "Payment Cancel", Toast.LENGTH_SHORT).show()
+
+            },
+            onError = OnError{
+                Log.i("TAG", "onViewCreated: ${it}")
+                Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
+
+            }
+        )
+    }
 }
