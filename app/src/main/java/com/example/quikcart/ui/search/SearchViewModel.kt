@@ -25,10 +25,13 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
     private val _uiState = MutableStateFlow<ViewState<List<ProductsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
 
+    private var lineItemsList:MutableList<LineItem> = mutableListOf()
+    var originalProducts: List<ProductsItem> = emptyList()
+    var minPrice= ObservableField(0)
+    var maxPrice= ObservableField(1)
 
     private val _favOperationState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading)
 
-    private var lineItemsList: MutableList<LineItem> = mutableListOf()
 
     init {
         getProducts()

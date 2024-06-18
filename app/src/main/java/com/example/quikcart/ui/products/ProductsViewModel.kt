@@ -32,11 +32,8 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
    // var minPrice=ObservableField(0)
     //var maxPrice=ObservableField(1)
 
-
     private val _favOperationState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading)
     val favOperationState: StateFlow<ViewState<Unit>> = _favOperationState
-
-    private var lineItemsList: MutableList<LineItem> = mutableListOf()
 
     fun getProductsByBrandId(id: Long) {
         viewModelScope.launch {

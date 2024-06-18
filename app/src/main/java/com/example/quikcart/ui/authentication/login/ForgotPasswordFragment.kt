@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -18,14 +19,16 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ForgotPasswordFragment : Fragment() {
 
-    private lateinit var binding: FragmentForgotPasswordBinding
-    private lateinit var viewModel: LoginViewModel
+    private var _binding: FragmentForgotPasswordBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var  viewModel: LoginViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
+        _binding = FragmentForgotPasswordBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -42,7 +45,6 @@ class ForgotPasswordFragment : Fragment() {
         lifecycleScope.launch {
             if (email.isNotEmpty()) {
                 viewModel.resetPassword(email)
-                lifecycleScope.launch {  }
                 viewModel.resetPasswordState.collect { state ->
                     when (state) {
                         is ViewState.Loading -> showLoading(true)
@@ -61,15 +63,18 @@ class ForgotPasswordFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please enter your email", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
-    private fun navigateToLogin(){
+    private fun navigateToLogin() {
         Navigation.findNavController(requireView()).navigate(R.id.action_forgotPasswordFragment_to_loginFragment)
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
