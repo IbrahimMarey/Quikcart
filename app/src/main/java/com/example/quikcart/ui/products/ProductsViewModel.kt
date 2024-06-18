@@ -106,8 +106,8 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
 
     private fun getPriceForEachProduct(products: List<ProductsItem>) {
         products.forEach { item ->
-            item.variants?.forEach {
-                item.price = it.price
+            if(item.variants?.isNotEmpty() == true){
+                item.price=item.variants[0].price
             }
         }
     }

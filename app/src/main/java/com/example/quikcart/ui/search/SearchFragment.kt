@@ -50,13 +50,17 @@ class SearchFragment : Fragment() {
         binding.vm = viewModel
         setupUI()
         observeViewModel()
+        checkPriceSliderVisibility()
+
+
+    }
+
+    private fun checkPriceSliderVisibility() {
         binding.filterTv.setOnClickListener {
             counter++
             Log.e("TAG", "onViewCreated1: ${counter}", )
             binding.sliderLinear.visibility = if (counter % 2 == 0) View.GONE else View.VISIBLE
         }
-
-
     }
 
     private fun setupUI() {
