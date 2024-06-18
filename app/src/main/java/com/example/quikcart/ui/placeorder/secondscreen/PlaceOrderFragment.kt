@@ -2,10 +2,13 @@ package com.example.quikcart.ui.placeorder.secondscreen
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -50,7 +53,7 @@ class PlaceOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getPassedArgs()
-        Log.e("TAG", "onViewCreated: ${DateUtil.getCurrentDateAndTime()}", )
+        Log.e("TAG", "onViewCreated: ${preferencesUtils.getCustomerEmail()}", )
         initializeViewModelVariables()
         binding.vm = viewModel
         observeOnLiveData()
@@ -80,7 +83,7 @@ class PlaceOrderFragment : Fragment() {
 
     private fun getCustomerData():Customer {
         return Customer(
-            email = "sama@gmail.com",
+            email = preferencesUtils.getCustomerEmail(),
             id = preferencesUtils.getCustomerId(),
         )
     }
@@ -116,7 +119,9 @@ class PlaceOrderFragment : Fragment() {
 
                         is ViewState.Success -> {
                             viewModel.deleteCartItemsById(draftOrder.id.toString())
+
                             AlertUtil.showToast(requireContext(), "Order is placed successfully")
+                            viewModel.sendEmail("Hello")
                         }
                         is ViewState.Loading -> {}
 
@@ -127,63 +132,7 @@ class PlaceOrderFragment : Fragment() {
     }
 
 
-  /*  private fun sendEmail(message:String) {
-        try {
 
-            val senderEmail = "noreply@quikcart-20eb5.firebaseapp.com"
-            val password = ""
-
-
-            val receiverEmail = "naremanashraf389@gmail.com"
-
-            val stringHost = "smtp.gmail.com"
-
-            val properties = System.getProperties()
-            properties["mail.smtp.host"] = stringHost
-            properties["mail.smtp.port"] = "465"
-            properties["mail.smtp.ssl.enable"] = "true"
-            properties["mail.smtp.auth"] = "true"
-
-            // Creating a session with authentication
-            val session = Session.getInstance(properties, object : Authenticator() {
-                override fun getPasswordAuthentication(): PasswordAuthentication {
-                    return PasswordAuthentication(senderEmail, password)
-                }
-            })
-
-            // Creating a MimeMessage
-            val mimeMessage = MimeMessage(session)
-
-            // Adding the recipient's email address
-            mimeMessage.addRecipient(Message.RecipientType.TO, InternetAddress(receiverEmail))
-
-            // Seting the subject and message content
-            // You can Specify yours
-            mimeMessage.subject = "TEST#01"
-            mimeMessage.setText(message)
-
-            // Creating a separate thread to send the email
-            val t = Thread {
-                try {
-                    Transport.send(mimeMessage)
-                } catch (e: MessagingException) {
-                    // Handling messaging exception
-                    Toast.makeText(requireContext(),"Error Occured",Toast.LENGTH_SHORT).show()
-                    e.printStackTrace()
-                }
-            }
-            t.start()
-        } catch (e: AddressException) {
-            // Handling address exception
-            Toast.makeText(requireContext(),"Error Occured $e",Toast.LENGTH_SHORT).show()
-        } catch (e: MessagingException) {
-            // Handling messaging exception (e.g. network error)
-            Toast.makeText(requireContext(),"Error Occured $e",Toast.LENGTH_SHORT).show()
-        }
-
-        // Displaying a toast message indicating that the email was sent successfully
-        Toast.makeText(requireContext(),"Sent Succesfully ",Toast.LENGTH_SHORT).show()
-    }*/
 
     private fun getPassedArgs() {
         draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
