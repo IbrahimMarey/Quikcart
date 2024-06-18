@@ -158,14 +158,14 @@
         android:label="fragment_place_order"
         tools:layout="@layout/fragment_place_order" >
         <argument
-            android:name="totalPrice"
-            app:argType="string" />
-        <argument
             android:name="address"
             app:argType="com.example.quikcart.models.entities.AddressResponse" />
         <argument
             android:name="draftOrder"
             app:argType="com.example.quikcart.models.entities.cart.DraftOrder" />
+        <argument
+            android:name="priceData"
+            app:argType="com.example.quikcart.models.entities.cart.TotalAndDiscountModel" />
     </fragment>
 
 </navigation>

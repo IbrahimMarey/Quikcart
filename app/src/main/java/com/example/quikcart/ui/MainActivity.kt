@@ -55,7 +55,14 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         navController.addOnDestinationChangedListener{ controller , destination , argument ->
-            if (destination.id  == R.id.paymentFragment || destination.id  == R.id.addressesFragment || destination.id  == R.id.mapFragment)
+            if (destination.id  == R.id.paymentFragment
+                || destination.id  == R.id.addressesFragment
+                || destination.id  == R.id.mapFragment
+                || destination.id  == R.id.ordersFragment
+                || destination.id  == R.id.confirmOrderFirstScreenFragment
+                || destination.id  == R.id.placeOrderFragment
+                || destination.id  == R.id.productFragment
+                )
             {
                 binding.bottomNavigation.visibility = View.GONE
                 if (destination.id  == R.id.mapFragment)
@@ -78,14 +85,9 @@ class MainActivity : AppCompatActivity() {
                 binding.bottomNavigation.visibility = View.GONE
                 binding.appToolBar.visibility = View.GONE
             }
-            else if (destination.id == R.id.productFragment)
-            {
-                binding.bottomNavigation.visibility = View.GONE
-                binding.appToolBar.visibility = View.GONE
-            }
             else{
+                binding.appToolBar.visibility = View.VISIBLE
                 binding.bottomNavigation.visibility = View.VISIBLE
-
             }
         }
 

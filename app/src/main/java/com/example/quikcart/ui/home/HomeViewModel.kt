@@ -75,13 +75,13 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
     private fun delCoupons()
     {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.deleteAllCoupons()
         }
     }
     private fun saveCouponsLocally(coupons:List<PriceRule>)
     {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.insertAllCoupons(coupons)
         }
     }

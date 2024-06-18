@@ -30,7 +30,6 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit) : ListAdapter<LineIt
         holder.binding.cartItemPrice.setPrice(model.price.toFloat(),ctx)
         holder.binding.cartItemQuntity.text = model.quantity.toString()
         ImageUtils.loadImage(holder.binding.cartItemImage,model.fulfillmentService)
-        Log.i("TAG", "onBindViewHolder: image = = = = = = = = = =  ${model.fulfillmentService}")
         holder.binding.btnRemoveItem.setOnClickListener {
             delCartItem(model)
         }

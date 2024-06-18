@@ -17,6 +17,7 @@ import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.TotalAndDiscountModel
 import com.example.quikcart.ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragmentArgs
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
@@ -31,8 +32,10 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     lateinit var adapter: OrderCustomerAddressesAdapter
     @Inject lateinit var preferenceManager: PreferencesUtils
     private lateinit var totalPrice : String
+    private lateinit var discountPrice : String
     private lateinit var selectedAddress:AddressResponse
     private lateinit var draftOrder: DraftOrder
+    private lateinit var totalAndDiscountModel: TotalAndDiscountModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +44,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         binding=FragmentConfirmOrderFirstScreenBinding.inflate(inflater,container,false)
         draftOrder=ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).draftOrder
         totalPrice = draftOrder.totalPrice
-
+        discountPrice = "0"
         return binding.root
     }
 
@@ -106,11 +109,13 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         {
             var percentageAmount = (price/100)*priceRule.value.toFloat()
             price += percentageAmount
+            discountPrice = (totalPrice.toFloat() - price).toString()
             totalPrice = price.toString()
             Toast.makeText(requireActivity(), getString(R.string.coupon_confirmed), Toast.LENGTH_SHORT).show()
         }else
         {
             totalPrice = (totalPrice.toFloat() + priceRule.value.toFloat()).toString()
+            discountPrice = priceRule.value
             Toast.makeText(requireActivity(), getString(R.string.coupon_confirmed), Toast.LENGTH_SHORT).show()
         }
         lockCouponsViews()
@@ -128,8 +133,9 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     }
 
     override fun navigateToConfirmOrderFragment() {
+        val totalAndDiscountModel = TotalAndDiscountModel(totalPrice,discountPrice)
         if(::selectedAddress.isInitialized){
-            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(totalPrice,selectedAddress,draftOrder)
+            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,draftOrder,totalAndDiscountModel)
             findNavController().navigate(action)
 
         }else{
