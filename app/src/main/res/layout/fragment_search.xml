@@ -39,7 +39,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/filter"
-            android:drawableTop="@drawable/ic_person"
+            android:drawableTop="@drawable/ic_filter"
             android:layout_margin="8dp"
             />
 
@@ -71,7 +71,7 @@
               app:valueFrom="@{vm.minPrice}"
               app:valueTo="@{vm.maxPrice}"
               app:sliderValue="@{vm.maxPrice}"
-              app:onChangeListener="@{(slider, value, fromUser) -> vm.onValueChange(slider, value, fromUser)}" />
+              app:onChangeListener="@{(slider, value, fromUser) -> vm.onValueChange(value)}" />
 
       </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView

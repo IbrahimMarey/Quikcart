@@ -31,11 +31,10 @@ class ProductDetailsFragment : Fragment() {
 
     private lateinit var viewModel: ProductDetailsViewModel
     private lateinit var binding: FragmentProductDetailsBinding
-    private var productItem: ProductsItem? = null
+    private lateinit var productItem: ProductsItem
     private lateinit var imageAdapter: ImagesAdapter
     private lateinit var variantAdapter: VariantsAdapter
     private lateinit var pref : PreferencesUtils
-    private var favID by Delegates.notNull<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,10 +48,10 @@ class ProductDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         pref = PreferencesUtils.getInstance(requireActivity())
         val cartID = pref.getCartId()
-        favID = pref.getFavouriteId()
+        val favID = pref.getFavouriteId()
 
         viewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
-        productItem = arguments?.getSerializable("details") as? ProductsItem
+        productItem = arguments?.getSerializable("details") as ProductsItem
 /*
         if (NetworkUtil.isNetworkAvailable(requireContext())) {
             binding.networkImageView.visibility=View.GONE
@@ -66,9 +65,11 @@ class ProductDetailsFragment : Fragment() {
             setImages(it.images)
             setVariants(it.variants)
             binding.price.setPrice (it.variants?.get(0)?.price?.toFloat() ?: 0.0f, requireContext())
-            insertToFavorite(it)
         }
-        productItem?.productType?.let { showReview(it) }
+        binding.addToFavorite.setOnClickListener {
+            insertToFavorite(productItem , favID)
+        }
+        productItem.productType?.let { showReview(it) }
         binding.rateOfProductDetails.rating = 4.7f
         if (cartID.toInt() != 0 && cartID.toInt() != -1) {
             viewModel.getCart(cartID.toString())
@@ -129,7 +130,7 @@ class ProductDetailsFragment : Fragment() {
         }
         findNavController().navigate(R.id.action_productDetailsFragment_to_reviewFragment, bundle)
     }
-    private fun insertToFavorite(productsItem: ProductsItem){
+    private fun insertToFavorite(productsItem: ProductsItem , favID:Long){
         viewModel.insertToFavourites(productsItem)
         val price = productItem?.price ?: "0.00"
         val title = productItem?.title ?: ""

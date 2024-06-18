@@ -1,8 +1,6 @@
 package com.example.quikcart.ui.placeorder.firstscreen
 
-import android.app.ProgressDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentConfirmOrderFirstScreenBinding
@@ -77,7 +74,6 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
                             binding.progressBar.visibility = View.GONE
                         }
                         is ViewState.Loading -> binding.progressBar.visibility = View.VISIBLE
-
                     }
                 }
             }
@@ -138,7 +134,13 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
 
     override fun navigateToConfirmOrderFragment() {
         val totalAndDiscountModel = TotalAndDiscountModel(totalPrice,discountPrice)
-        val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,draftOrder,totalAndDiscountModel)
-        findNavController().navigate(action)
+        if(::selectedAddress.isInitialized){
+            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,draftOrder,totalAndDiscountModel)
+            findNavController().navigate(action)
+
+        }else{
+            AlertUtil.showCustomAlertDialog(requireContext(),
+                "Please add your Address","Ok")
+        }
     }
 }
