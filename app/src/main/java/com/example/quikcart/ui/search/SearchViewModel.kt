@@ -44,6 +44,13 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
             repo.getProducts().catch { error ->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
             }.collect { productsItem ->
+                Log.e("TAG", "getProducts: ID: ${productsItem[0].id}", )
+                Log.e("TAG", "getProducts: ID: ${productsItem[0].title}", )
+
+                originalProducts=productsItem
+                getPriceForEachProduct(productsItem)
+                getMinPrice(productsItem)
+                getMaxPrice(productsItem)
                 val productsWithFavorites = productsItem.map { product ->
                     if (favoriteProducts.any { it.id == product.id }) {
                         product.copy(isFavorited = true)
@@ -78,7 +85,7 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
             repo.postDraftOrder(cartItem).catch { error ->
                 _favOperationState.value = ViewState.Error(error.localizedMessage ?: "Unknown Error")
             }.collect { result ->
-                draftOrderId = result.draft_order.id
+                draftOrderId = result.draft_order.id!!
                 _favOperationState.value = ViewState.Success(Unit)
             }
             draftOrderId
@@ -90,7 +97,7 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
             repo.getDraftOrderById(id).catch { error ->
                 _favOperationState.value = ViewState.Error(error.localizedMessage ?: "Unknown Error")
             }.collect {
-                lineItemsList.addAll(it.draft_order.lineItems)
+                it.draft_order.lineItems?.let { it1 -> lineItemsList.addAll(it1) }
                 _favOperationState.value = ViewState.Success(Unit)
             }
         }
@@ -107,7 +114,7 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
         return draftOrderLineList
     }
     
-    fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
+    fun onValueChange(value: Float) {
         var filteredProducts: List<ProductsItem>
         viewModelScope.launch {
             filteredProducts = originalProducts.filter {
@@ -138,9 +145,9 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
     }
     private fun getPriceForEachProduct(products: List<ProductsItem>) {
         products.forEach { item ->
-            item.variants?.forEach {
-                item.price = it.price
-            }
+           if(item.variants?.isNotEmpty() == true){
+               item.price=item.variants[0].price
+           }
         }
     }
 

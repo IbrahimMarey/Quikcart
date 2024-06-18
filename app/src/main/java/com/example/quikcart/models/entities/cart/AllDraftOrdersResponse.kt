@@ -1,6 +1,10 @@
 package com.example.quikcart.models.entities.cart
 
+import com.example.quikcart.models.entities.BillingAddress
+import com.example.quikcart.models.entities.Customer
 import com.example.quikcart.models.entities.Image
+import com.example.quikcart.models.entities.ShippingAddress
+
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -43,10 +47,10 @@ data class DraftOrder (
     val lineItems: List<LineItem>,
 
     @SerializedName("shipping_address")
-    val shippingAddress: Address,
+    val shippingAddress: ShippingAddress?=null,
 
     @SerializedName("billing_address")
-    val billingAddress: Address,
+    val billingAddress: BillingAddress?=null,
 
     @SerializedName("invoice_url")
     val invoiceURL: String,
@@ -96,7 +100,7 @@ data class AppliedDiscount (
     val valueType: String
 )
 
-data class Address (
+/*data class Address (
     @SerializedName("first_name")
     val firstName: String,
 
@@ -131,9 +135,9 @@ data class Address (
     val countryName: String? = null,
 
     val default: Boolean? = null
-)
+)*/
 
-data class Customer (
+/*data class Customer (
     val id: Long,
     val email: String,
 
@@ -193,7 +197,7 @@ data class Customer (
 
     @SerializedName("default_address")
     val defaultAddress: Address
-)
+)*/
 
 data class EmailMarketingConsent (
     val state: String,
