@@ -70,7 +70,7 @@ class ProductDetailsFragment : Fragment() {
         }
         checkProduct(productItem)
         binding.addToFavorite.setOnClickListener {
-            if(pref.getUserId()!="0"||pref.getUserId()!="-1"){
+            if(pref.getUserId()!="0"&&pref.getUserId()!="-1"){
                 insertToFavorite(productItem , favID)
                 binding.addToFavorite.setImageResource(R.drawable.ic_heart)
             }
@@ -84,7 +84,7 @@ class ProductDetailsFragment : Fragment() {
             viewModel.getCart(cartID.toString())
         }
         binding.editProductBtn.setOnClickListener {
-            if(pref.getUserId()!="0"||pref.getUserId()!="-1"){
+            if(pref.getUserId()!="0"&&pref.getUserId()!="-1"){
 
             if (cartID.toInt() == 0) {
                 val item = PostDraftOrderItemModel(
