@@ -77,7 +77,9 @@
                             android:layout_weight="1"
                             tools:text="20.0"
                             android:textStyle="bold"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            app:price="@{vm.subTotal}"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -102,6 +104,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="20.0"
+                            android:text="@{vm.discount}"
                             android:layout_weight="1"
                             android:textStyle="bold"
                             android:textSize="20sp" />

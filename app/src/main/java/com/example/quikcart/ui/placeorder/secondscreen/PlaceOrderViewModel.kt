@@ -32,7 +32,12 @@ import javax.mail.internet.MimeMessage
 class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     lateinit var totalPrice: String
     lateinit var shippingFees: String
+    lateinit var subTotal: String
+    lateinit var discount: String
+    lateinit var  maximumCashAmount:String
     lateinit var orderResponse: Order
+     var isPayPalChoose=false
+     var isPaymentApproved=false
     private val _uiState = MutableStateFlow<ViewState<Order>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<Order>> = _uiState
 
@@ -43,12 +48,14 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
         viewModelScope.launch {
             _isLoading.value=true
             _uiState.value = ViewState.Loading
-            repo.confirmOrder(orderResponse).catch {
-                _isLoading.value=false
-                _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error(it1) }!!
-            }.collect { orderItems ->
-                _isLoading.value=false
-                _uiState.value = ViewState.Success(orderItems)
+            if((isPaymentApproved && isPayPalChoose) || !isPayPalChoose) {
+                repo.confirmOrder(orderResponse).catch {
+                    _isLoading.value = false
+                    _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error(it1) }!!
+                }.collect { orderItems ->
+                    _isLoading.value = false
+                    _uiState.value = ViewState.Success(orderItems)
+                }
             }
         }
     }

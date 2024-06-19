@@ -18,12 +18,12 @@ data class DraftOrderResponse(
 data class DraftOrder (
     val id: Long,
     val note: Any? = null,
-    val email: String,
+    val email: String?=null,
 
     @SerializedName("taxes_included")
     val taxesIncluded: Boolean,
 
-    val currency: String,
+    val currency: String?=null,
 
     @SerializedName("invoice_sent_at")
     val invoiceSentAt: Any? = null,

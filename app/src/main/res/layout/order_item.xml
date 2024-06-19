@@ -51,37 +51,15 @@
             android:textSize="15sp"
             android:layout_marginStart="4dp"
             />
-        <TextView
-            android:id="@+id/date_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/order_id_tv"
-            app:layout_constraintStart_toEndOf="@id/img"
-            android:text="@string/createdAt"
-            android:layout_marginStart="16dp"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            tools:text="Feb "
 
-            />
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/order_id_tv"
-            app:layout_constraintStart_toEndOf="@id/date_tv"
-            android:text="@{orderItem.createdAt}"
-            android:textSize="15sp"
-            tools:text="Feb "
-
-            />
         <TextView
             android:id="@+id/price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/date_tv"
-            app:layout_constraintStart_toStartOf="@id/date_tv"
+            app:layout_constraintTop_toBottomOf="@id/order_id_tv"
+            app:layout_constraintStart_toEndOf="@id/img"
+            android:layout_marginStart="8dp"
             android:text="@string/price"
             android:textSize="15sp"
             android:textStyle="bold"
@@ -91,7 +69,7 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/date"
+            app:layout_constraintTop_toBottomOf="@id/order_id"
             app:layout_constraintStart_toEndOf="@id/price_tv"
             android:text="@{orderItem.totalPrice}"
             tools:text="42$"
