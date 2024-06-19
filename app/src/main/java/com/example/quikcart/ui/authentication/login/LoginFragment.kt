@@ -23,6 +23,7 @@ import com.example.quikcart.ui.MainActivity
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -76,6 +77,7 @@ class LoginFragment : Fragment() {
     private fun navigateToForgotPassword() {
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
     }
+
     private fun isValidEmail(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
@@ -97,8 +99,10 @@ class LoginFragment : Fragment() {
             fetchDraftOrdersForCustomer(email)
         } else {
             showMessage("Invalid email or password. Please check your input.")
+            showLoading(false)
         }
     }
+
 
     private fun validateInputs(email: String, password: String): Boolean {
         var isValid = true
@@ -111,7 +115,7 @@ class LoginFragment : Fragment() {
         }
 
         if (!isValidPassword(password)) {
-            binding.PasswordTextField.error = "Password must be at least 8 characters"
+            binding.PasswordTextField.error = " Invalid Password "
             isValid = false
         } else {
             binding.PasswordTextField.error = null
@@ -121,15 +125,20 @@ class LoginFragment : Fragment() {
     }
 
     private fun performLogin(user: User) {
+        showLoading(true)
         lifecycleScope.launch {
             viewModel.login(user)
             viewModel.loginState.collect { state ->
                 when (state) {
                     ViewState.Loading -> showLoading(true)
                     is ViewState.Success -> {
+                        showLoading(false)
                         handleLoginSuccess(state.data)
                     }
-                    is ViewState.Error -> handleLoginError(state.message)
+                    is ViewState.Error -> {
+                        showLoading(false)
+                        handleLoginError(state.message)
+                    }
                 }
             }
         }
@@ -147,22 +156,29 @@ class LoginFragment : Fragment() {
                 getCurrentCustomerID(userId)
                 Log.i("TAG", "handleLoginSuccess: $userId")
                 showMessage("Sign in successful")
-                Log.i("TAG", "handleLoginSuccess: $userId")
-               startActivity(Intent(requireContext(), MainActivity::class.java))
-               requireActivity().finish()
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
             } else {
                 showMessage("Sign in failed. Please try again.")
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("TAG", "handleLoginSuccess: $e")
         }
     }
 
     private fun handleLoginError(message: String) {
         showLoading(false)
-        showMessage("Error: $message")
+        val errorMessage = try {
+            val errorJson = JSONObject(message)
+            val errors = errorJson.optJSONObject("errors")
+            errors?.toString(2) ?: message
+        } catch (e: Exception) {
+            message
+        }
+        showMessage("Error: $errorMessage")
+        Log.e("LoginError", errorMessage)
     }
+
 
     private fun getCurrentCustomerID(id: String) {
         lifecycleScope.launch {
@@ -180,10 +196,10 @@ class LoginFragment : Fragment() {
                         }
                     }
                     is ViewState.Error -> {
+                        binding.progressBar.visibility = View.GONE
                         showMessage("Error: ${state.message}")
                     }
-
-                    else -> { }
+                    else -> {}
                 }
             }
         }
@@ -198,16 +214,15 @@ class LoginFragment : Fragment() {
                         val draftOrders = state.data.filter { it.email == email }
                         if (draftOrders.isNotEmpty()) {
                             Log.i("LoginFragment", "Draft Orders: ${draftOrders.count()}")
-                            when(draftOrders[0].lineItems[0].price=="0.00")
-                            {
+                            when (draftOrders[0].lineItems[0].price == "0.00") {
                                 true -> {
                                     PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[0].id)
                                     PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[1].id)
                                     fetchProducts(draftOrders[0])
                                 }
                                 false -> {
-                                     PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[0].id)
-                                     PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[1].id)
+                                    PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[0].id)
+                                    PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[1].id)
                                     fetchProducts(draftOrders[1])
                                 }
                             }
@@ -219,13 +234,14 @@ class LoginFragment : Fragment() {
                     is ViewState.Error -> {
                         showMessage("Error: ${state.message}")
                     }
-                    else -> { }
+                    else -> {}
                 }
                 Log.i("TAG", "fetchDraftOrdersForCustomer:${PreferencesUtils.getInstance(requireContext()).getFavouriteId()} ")
                 Log.i("TAG", "fetchDraftOrdersForCustomer:${PreferencesUtils.getInstance(requireContext()).getCartId()} ")
             }
         }
     }
+
     private fun fetchProducts(draftOrder: DraftOrder) {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -234,7 +250,6 @@ class LoginFragment : Fragment() {
                         is ViewState.Success -> {
                             val products = state.data
                             Log.i("TAG", "fetchProducts: ${products.count()}")
-
                             val matchingProducts = mutableListOf<ProductsItem>()
                             draftOrder.lineItems.forEach { lineItem ->
                                 val matchingProduct = products.find { it.title == lineItem.title }
@@ -248,11 +263,9 @@ class LoginFragment : Fragment() {
                             }
                             Log.i("LoginFragment", "Matching Products: $matchingProducts")
                         }
-
                         is ViewState.Error -> {
                             Log.i("TAG", "fetchProducts: ${state.message}")
                         }
-
                         is ViewState.Loading -> {
                             Log.i("TAG", "fetchProducts:+++++++++++++++++++++")
                         }
@@ -262,4 +275,3 @@ class LoginFragment : Fragment() {
         }
     }
 }
-
