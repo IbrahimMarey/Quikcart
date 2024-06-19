@@ -1,5 +1,7 @@
 package com.example.quikcart.ui.products
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,7 @@ import com.example.quikcart.models.entities.cart.DraftOrderLineItem
 import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
 import com.example.quikcart.models.entities.cart.PutDraftItem
 import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
+import com.example.quikcart.ui.authentication.AuthenticationActivity
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -142,36 +145,54 @@ class ProductFragment : Fragment() {
     }
 
     private fun addToFavorite(productItem: ProductsItem ,position: Int) {
-        productsViewModel.addToFavourites(productItem)
+        if(preferences.getUserId()!="0"&&preferences.getUserId()!="-1") {
+            productsViewModel.addToFavourites(productItem)
+            val price = "0.00"
+            val title = productItem.title ?: ""
 
-        val price = "0.00"
-        val title = productItem.title ?: ""
+            if (favID.toInt() != 0 && favID.toInt() != -1) {
+                productsViewModel.getFav(favID.toString())
+                lifecycleScope.launch {
+                    val draftItem = PutDraftItem(productsViewModel.getItemLineList(title, price))
+                    val request = PutDraftOrderItemModel(draftItem)
+                    productsViewModel.putProductInFav(favID.toString(), request)
+                    handleSuccess(productItem, position)
+                }
+            } else {
+                val draftItem = PostDraftOrderItemModel(
+                    DraftItem(
+                        line_items = listOf(DraftOrderLineItem(title, price, 1)),
+                        applied_discount = null,
+                        customer = CartCustomer(preferences.getCustomerId())
 
-        if (favID.toInt() != 0 && favID.toInt() != -1) {
-            productsViewModel.getFav(favID.toString())
-            lifecycleScope.launch {
-                val draftItem = PutDraftItem(productsViewModel.getItemLineList(title, price))
-                val request = PutDraftOrderItemModel(draftItem)
-                productsViewModel.putProductInFav(favID.toString(), request)
-               handleSuccess(productItem,position)
-            }
-        } else {
-            val draftItem = PostDraftOrderItemModel(
-                DraftItem(
-                    line_items = listOf(DraftOrderLineItem(title, price, 1)),
-                    applied_discount = null,
-                    customer = CartCustomer(preferences.getCustomerId())
+                    )
 
                 )
 
-            )
+                lifecycleScope.launch {
+                    favID = productsViewModel.postProductInFav(draftItem)
+                    preferences.setFavouriteId(favID)
+                    handleSuccess(productItem, position)
 
-            lifecycleScope.launch {
-                favID = productsViewModel.postProductInFav(draftItem)
-                preferences.setFavouriteId(favID)
-                handleSuccess(productItem,position)
-
+                }
             }
         }
+        else {
+            showSignInAlert()
+        }
+    }
+    private fun showSignInAlert() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Please Sign In")
+            .setMessage("You need to sign in to add items to your favorites.")
+            .setPositiveButton("Sign In") { dialog, _ ->
+                startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
+                requireActivity().finish()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

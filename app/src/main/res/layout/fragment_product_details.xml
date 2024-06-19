@@ -58,7 +58,7 @@
                 <TextView
                     android:id="@+id/product_title_details"
                     android:layout_width="170dp"
-                    android:layout_height="70dp"
+                    android:layout_height="80dp"
                     tools:text="@string/product_title"
                     android:text="@{product.title}"
                     android:textColor="@color/white"
@@ -148,8 +148,7 @@
                         android:text="@{product.bodyHtml}"
                         android:padding="8dp"
                         android:layout_margin="16dp"
-                        android:textAlignment="center"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textAlignment="viewStart"                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@id/text_description"
                         app:layout_constraintTop_toBottomOf="@id/text_description" />
 

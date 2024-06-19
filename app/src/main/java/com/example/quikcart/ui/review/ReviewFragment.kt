@@ -39,30 +39,40 @@ class ReviewFragment : Fragment() {
                 reviewList = accessoriesReview()
             }
         }
-        adapter.submitList(reviewList)}
-    private fun shoesReview() :List<Review> {
-        return listOf(
-            Review("Great product!", 4.5f),
-            Review("Good value for money.", 4.0f),
-            Review("Good quality.", 5.0f)
-        ).also { reviewList = it }
-
+        val randomReviews = reviewList.shuffled().take(3)
+        adapter.submitList(randomReviews)
     }
-    private fun shirtReview():List<Review> {
+    private fun shoesReview(): List<Review> {
         return listOf(
-            Review("Good product!", 4.5f),
-            Review("Good value for money.", 4.0f),
-            Review("Average quality.", 3.0f)
+            Review("Super comfortable and stylish!", 4.5f),
+            Review("Excellent value, very durable.", 4.0f),
+            Review("Top-notch quality, exceeded expectations.", 5.0f),
+            Review("Decent for the price, but not the best.", 3.5f),
+            Review("A bit tight, but overall good shoes.", 3.0f),
+            Review("Not impressed, expected better support.", 2.5f)
         ).also { reviewList = it }
-
-
     }
-    private fun accessoriesReview():List<Review> {
-      return listOf(
-          Review("Great product!", 4.5f),
-          Review("Good value for money.", 3.0f),
-          Review("Average quality.", 3.5f)
-      ).also { reviewList = it }
+
+    private fun shirtReview(): List<Review> {
+        return listOf(
+            Review("Fantastic fit and feel!", 4.5f),
+            Review("Good value for the price, would buy again.", 4.0f),
+            Review("Quality is okay, not the best but decent.", 3.5f),
+            Review("Material feels a bit cheap, but still wearable.", 3.0f),
+            Review("Not very satisfied, expected better quality.", 2.5f),
+            Review("Poor quality, fabric is uncomfortable.", 1.5f)
+        ).also { reviewList = it }
+    }
+
+    private fun accessoriesReview(): List<Review> {
+        return listOf(
+            Review("Excellent build quality and design!", 4.5f),
+            Review("Worth the price, highly recommend.", 4.0f),
+            Review("Satisfactory performance for daily use.", 3.5f),
+            Review("Not as expected, could be better.", 2.5f),
+            Review("Poor quality, very disappointed.", 1.5f),
+            Review("Terrible experience, do not buy.", 1.0f)
+        ).also { reviewList = it }
     }
 
 }

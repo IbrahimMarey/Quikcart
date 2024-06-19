@@ -95,16 +95,18 @@ class SignupFragment : Fragment() {
     private fun handleSignUp() {
         val email = binding.EmailTextField.editText?.text.toString()
         val password = binding.PasswordTextField.editText?.text.toString()
+        val confirmPassword = binding.ConfirmPasswordTextField.editText?.text.toString()
         val username = binding.UserNameTextField.editText?.text.toString()
 
-        if (validateInputs(email, password, username)) {
+        if (validateInputs(email, password, confirmPassword, username)) {
             performSignUp(User(email, password), email, username)
         } else {
             showErrorMessage("Please fix the errors in the form")
         }
     }
 
-    private fun validateInputs(email: String, password: String, username: String): Boolean {
+
+    private fun validateInputs(email: String, password: String, confirmPassword: String, username: String): Boolean {
         var isValid = true
 
         if (!isValidEmail(email)) {
@@ -119,6 +121,13 @@ class SignupFragment : Fragment() {
             isValid = false
         } else {
             binding.PasswordTextField.error = null
+        }
+
+        if (confirmPassword != password) {
+            binding.ConfirmPasswordTextField.error = "Passwords do not match"
+            isValid = false
+        } else {
+            binding.ConfirmPasswordTextField.error = null
         }
 
         if (username.isBlank()) {
@@ -144,6 +153,7 @@ class SignupFragment : Fragment() {
             }
         }
     }
+
 
     private fun handleSignUpSuccess(userId: String?, email: String, username: String) {
         binding.progressBar.visibility = View.GONE
