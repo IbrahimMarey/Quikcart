@@ -17,10 +17,10 @@
             android:id="@+id/card_view_of_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:elevation="10dp"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/item_constrian_deatils"
@@ -29,11 +29,11 @@
 
                 <ImageView
                     android:id="@+id/image_of_product_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:elevation="2dp"
                     imageUrl="@{image.src}"
-                    android:src="@drawable/ic_launcher_foreground"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:elevation="2dp"
+                    android:src="@drawable/product"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
