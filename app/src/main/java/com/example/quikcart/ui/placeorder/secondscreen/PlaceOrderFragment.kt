@@ -1,5 +1,7 @@
 package com.example.quikcart.ui.placeorder.secondscreen
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentPlaceOrderBinding
@@ -28,7 +31,6 @@ import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.DateUtil
 import com.example.quikcart.utils.PaymentMethod
 import com.example.quikcart.utils.PreferencesUtils
-import com.example.quikcart.utils.setPrice
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.createorder.CreateOrder
@@ -47,6 +49,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 const val MAXIMUM_CASH_AMOUNT=10000f
+// paypal
+/*private const val PAYPAL_CLIENT_ID = "AfR2ylX7Lxzx92G30PzuibgSS0tIPLGNlFy0ove_c7tEzoxGjOfGkL0MhMoPHimdP7n-rqPaHGtDGirp"
+private const val PAYPAL_REQUEST_CODE = 7171
+private val paypalConfig = PayPalConfiguration()
+    .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
+    .clientId(PAYPAL_CLIENT_ID)*/
 @AndroidEntryPoint
 class PlaceOrderFragment : Fragment() {
 
@@ -67,6 +75,47 @@ class PlaceOrderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaceOrderBinding.inflate(inflater, container, false)
+        binding.paymentButtonContainer.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    OrderRequest(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD
+                                    , value = "10.0")
+                            )
+                        )
+                    )
+
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                isPayPalChoose=true
+                isPaymentApproved=true
+                Log.d("TAG", "OrderId: ${approval.data.orderId}")
+                Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
+            },
+            onCancel = OnCancel{
+                isPayPalChoose=true
+                isPaymentApproved=false
+                Log.i("TAG", "onViewCreated: ==================== payment canceld")
+                Toast.makeText(requireActivity(), "Payment Cancel", Toast.LENGTH_SHORT).show()
+
+            },
+            onError = OnError{
+                isPayPalChoose=true
+                isPaymentApproved=false
+                Log.i("TAG", "setUPPayPal: ${it}")
+                Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
+
+            }
+        )
         return binding.root
     }
 
@@ -213,46 +262,51 @@ class PlaceOrderFragment : Fragment() {
 
     private fun setUPPayPal(amount : String)
     {
-        binding.paymentButtonContainer.setup(
-            createOrder =
-            CreateOrder { createOrderActions ->
-                val order =
-                    OrderRequest(
-                        intent = OrderIntent.CAPTURE,
-                        appContext = AppContext(userAction = UserAction.PAY_NOW),
-                        purchaseUnitList =
-                        listOf(
-                            PurchaseUnit(
-                                amount =
-                                Amount(currencyCode = CurrencyCode.USD
-                                    , value = "10.0")
-                            )
-                        )
-                    )
 
-                createOrderActions.create(order)
-            },
-            onApprove =
-            OnApprove { approval ->
-                 isPayPalChoose=true
-                isPaymentApproved=true
-                Log.i("TAG", "OrderId: ${approval.data.orderId}")
-                Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
-            },
-            onCancel = OnCancel{
-                 isPayPalChoose=true
-                isPaymentApproved=false
-                Log.i("TAG", "onViewCreated: ==================== payment canceld")
-                Toast.makeText(requireActivity(), "Payment Cancel", Toast.LENGTH_SHORT).show()
-
-            },
-            onError = OnError{
-                 isPayPalChoose=true
-                isPaymentApproved=false
-                Log.i("TAG", "onViewCreated: ${it}")
-                Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
-
-            }
-        )
     }
+/*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        paypalActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun paypalActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
+    {
+        if (requestCode == PAYPAL_REQUEST_CODE){
+            if (requestCode == Activity.RESULT_OK)
+            {
+                var confirmation = data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
+                if (confirmation != null)
+                {
+                    var d = confirmation.toJSONObject().toString(4)
+                    Log.i("TAG", "onActivityResult: ${d}")
+                }
+            }else if (requestCode == Activity.RESULT_CANCELED){
+                Toast.makeText(requireActivity(), getString(R.string.cancel), Toast.LENGTH_SHORT).show()
+            }
+        }else if(requestCode == PaymentActivity.RESULT_EXTRAS_INVALID)
+        {
+            Toast.makeText(requireActivity(), getString(R.string.delete), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        startPayPalService()
+    }
+    private fun startPayPalService()
+    {
+        val intent = Intent(requireActivity(), PayPalService::class.java)
+        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
+        requireActivity().startService(intent)
+    }
+    private fun stopPayPalService()
+    {
+        requireActivity().stopService(Intent(requireActivity(),PayPalService::class.java))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        stopPayPalService()
+    }*/
 }
