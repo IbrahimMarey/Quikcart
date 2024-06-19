@@ -73,7 +73,7 @@ data class DraftOrder (
     val noteAttributes: List<Any?>,
 
     @SerializedName("total_price")
-    val totalPrice: String,
+    var totalPrice: String,
 
     @SerializedName("subtotal_price")
     val subtotalPrice: String,

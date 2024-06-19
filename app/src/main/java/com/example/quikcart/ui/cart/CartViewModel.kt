@@ -1,6 +1,5 @@
 package com.example.quikcart.ui.cart
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
@@ -50,7 +49,6 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
                 .collect{
                     lineItemsList.clear()
                     lineItemsList.addAll(getProducts(it.draft_order.lineItems))
-                    Log.i("TAG", "getCart: $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ${lineItemsList.size}")
                     getProducts(it.draft_order.lineItems)
                     _cart.value = ViewState.Success(it.draft_order)
             }
@@ -60,7 +58,6 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
     {
         viewModelScope.launch(Dispatchers.IO) {
             repo.putDraftOrder(id ,cartItem).collect{
-
             }
             getCart(id)
         }

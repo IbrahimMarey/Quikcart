@@ -13,7 +13,7 @@ import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.utils.ImageUtils
 import com.example.quikcart.utils.setPrice
 
-class CartAdapter(private val delCartItem:(LineItem)->Unit) : ListAdapter<LineItem, CartAdapter.ViewHolder>(DiffUtils) {
+class CartAdapter(private val delCartItem:(LineItem)->Unit, private val editItem :(LineItem, Int,Float) -> Unit) : ListAdapter<LineItem, CartAdapter.ViewHolder>(DiffUtils) {
 
     private lateinit var ctx : Context
     class ViewHolder(val binding: CartItemAddedBinding): RecyclerView.ViewHolder(binding.root)
@@ -34,20 +34,24 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit) : ListAdapter<LineIt
             delCartItem(model)
         }
         holder.binding.btnIncrease.setOnClickListener {
-            model.quantity++
-            var newPrice = model.price.toFloat()*model.quantity
-            holder.binding.cartItemPrice.setPrice(newPrice,ctx)
-            holder.binding.cartItemQuntity.text = model.quantity.toString()
-
+            if(model.quantity<=5)
+            {
+                ++model.quantity
+                var newPrice = model.price.toFloat()*model.quantity
+                holder.binding.cartItemPrice.setPrice(newPrice,ctx)
+                holder.binding.cartItemQuntity.text = model.quantity.toString()
+                editItem(model,position,model.price.toFloat())
+            }
         }
         holder.binding.btnDecrease.setOnClickListener {
             if (model.quantity>1)
             {
                 val price = model.price.toFloat() / model.quantity.toFloat()
-                model.quantity--
+                --model.quantity
                 var newPrice = model.price.toFloat()*model.quantity
                 holder.binding.cartItemPrice.setPrice(newPrice,ctx)
                 holder.binding.cartItemQuntity.text = model.quantity.toString()
+                editItem(model,position,-model.price.toFloat())
             }
         }
 
