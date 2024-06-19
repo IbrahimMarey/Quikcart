@@ -9,6 +9,7 @@ import android.widget.Toast
 
 object AlertUtil {
     private var progressDialog:ProgressDialog?=null
+    private var alertDialog: AlertDialog? = null
     fun showToast(ctx:Context,msg:String){
         Toast.makeText(ctx,msg,Toast.LENGTH_LONG).show()
     }
@@ -30,15 +31,20 @@ object AlertUtil {
 
     fun showCustomAlertDialog(
         context: Context,
+        title:String?=null,
         message: String?=null,
         positiveText: String?=null,
         positiveClickListener: DialogInterface.OnClickListener?=null
     ) {
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-        builder.setTitle("")
+        alertDialog = AlertDialog.Builder(context)
+        .setTitle(title)
             .setMessage(message)
             .setPositiveButton(positiveText, positiveClickListener)
             .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
             .show()
+    }
+
+    fun dismissAlertDialog(){
+        alertDialog?.dismiss()
     }
 }
