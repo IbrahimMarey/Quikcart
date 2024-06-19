@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.R
 import com.example.quikcart.databinding.SearchItemBinding
 import com.example.quikcart.models.entities.ProductsItem
+import com.example.quikcart.utils.setPrice
 
 class SearchAdapter(
     private val itemClickListener: (ProductsItem) -> Unit,
@@ -40,6 +41,7 @@ class SearchAdapter(
             binding.addToFavorite.setOnClickListener {
                 addToFavoriteClickListener(item, position)
             }
+            binding.productPrice.setPrice(item.variants?.get(0)?.price?.toFloat() ?: 0.0f, itemView.context)
 
             if (item.isFavorited) {
                 binding.addToFavorite.setImageResource(R.drawable.ic_heart)

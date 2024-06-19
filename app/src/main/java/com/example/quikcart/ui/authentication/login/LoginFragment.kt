@@ -179,7 +179,6 @@ class LoginFragment : Fragment() {
                             showMessage("Customer not found")
                         }
                     }
-
                     is ViewState.Error -> {
                         showMessage("Error: ${state.message}")
                     }
@@ -205,13 +204,11 @@ class LoginFragment : Fragment() {
                                     PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[0].id)
                                     PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[1].id)
                                     fetchProducts(draftOrders[0])
-
                                 }
                                 false -> {
                                      PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[0].id)
                                      PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[1].id)
                                     fetchProducts(draftOrders[1])
-
                                 }
                             }
                         } else {

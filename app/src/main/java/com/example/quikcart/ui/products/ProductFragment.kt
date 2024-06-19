@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -118,11 +119,18 @@ class ProductFragment : Fragment() {
     private fun initRecyclerView(products: List<ProductsItem>) {
         adapter = ProductAdapter(
             { productItem -> navigateToProductDetails(productItem) },
-            { productItem -> addToFavorite(productItem) }
+            { productItem , position -> addToFavorite(productItem ,position) }
         )
         binding.recyclerProducts.adapter = adapter
         adapter.submitList(products)
     }
+
+    private fun handleSuccess(productItem: ProductsItem, position: Int) {
+        productItem.isFavorited = true
+        adapter.notifyItemChanged(position)
+        Toast.makeText(requireContext(), "Product added to favorites successfully!", Toast.LENGTH_SHORT).show()
+    }
+
     private fun initViewModel() {
         productsViewModel = ViewModelProvider(this)[ProductsViewModel::class.java]
     }
@@ -133,7 +141,7 @@ class ProductFragment : Fragment() {
         findNavController().navigate(R.id.action_productFragment_to_productDetailsFragment, bundle)
     }
 
-    private fun addToFavorite(productItem: ProductsItem) {
+    private fun addToFavorite(productItem: ProductsItem ,position: Int) {
         productsViewModel.addToFavourites(productItem)
 
         val price = "0.00"
@@ -145,6 +153,7 @@ class ProductFragment : Fragment() {
                 val draftItem = PutDraftItem(productsViewModel.getItemLineList(title, price))
                 val request = PutDraftOrderItemModel(draftItem)
                 productsViewModel.putProductInFav(favID.toString(), request)
+               handleSuccess(productItem,position)
             }
         } else {
             val draftItem = PostDraftOrderItemModel(
@@ -152,12 +161,16 @@ class ProductFragment : Fragment() {
                     line_items = listOf(DraftOrderLineItem(title, price, 1)),
                     applied_discount = null,
                     customer = CartCustomer(preferences.getCustomerId())
+
                 )
+
             )
 
             lifecycleScope.launch {
                 favID = productsViewModel.postProductInFav(draftItem)
                 preferences.setFavouriteId(favID)
+                handleSuccess(productItem,position)
+
             }
         }
     }

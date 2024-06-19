@@ -44,9 +44,6 @@ class SearchViewModel @Inject constructor(private val repo: Repository) : ViewMo
             repo.getProducts().catch { error ->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
             }.collect { productsItem ->
-                Log.e("TAG", "getProducts: ID: ${productsItem[0].id}", )
-                Log.e("TAG", "getProducts: ID: ${productsItem[0].title}", )
-
                 originalProducts=productsItem
                 getPriceForEachProduct(productsItem)
                 getMinPrice(productsItem)

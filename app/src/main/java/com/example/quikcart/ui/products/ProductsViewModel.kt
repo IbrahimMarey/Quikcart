@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -27,17 +28,14 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
     private val _uiState = MutableStateFlow<ViewState<List<ProductsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<ProductsItem>>> = _uiState
 
-   // private var originalProducts: List<ProductsItem> = emptyList()
     private var lineItemsList:MutableList<LineItem> = mutableListOf()
-   // var minPrice=ObservableField(0)
-    //var maxPrice=ObservableField(1)
-
     private val _favOperationState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading)
-    val favOperationState: StateFlow<ViewState<Unit>> = _favOperationState
+    var originalProducts: List<ProductsItem> = emptyList()
 
     fun getProductsByBrandId(id: Long) {
         viewModelScope.launch {
             _uiState.value = ViewState.Loading
+            val favoriteProducts = repo.getAllProducts().firstOrNull() ?: emptyList()
             repo.getProductsByBrandId(id).catch { error ->
                 Log.e("TAG", "error: ${error.localizedMessage}", )
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
@@ -48,7 +46,14 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
                 //getMinPrice(products)
                 //Log.e("TAG", "MAX: ${maxPrice.get()}", )
                 //Log.e("TAG", "MIN: ${minPrice.get()}", )
-                _uiState.value = ViewState.Success(products)
+                val productsWithFavorites = products.map { product ->
+                    if (favoriteProducts.any { it.id == product.id }) {
+                        product.copy(isFavorited = true)
+                    } else {
+                        product
+                    }
+                }
+                _uiState.value = ViewState.Success(productsWithFavorites)
             }
         }
     }
@@ -73,25 +78,32 @@ class ProductsViewModel @Inject constructor(private val repo: Repository) : View
         }?.price?.toDouble()?.toInt() ?: 1)
     }*/
 
-    fun getProductsBySubCategory(mainCategory: String,subCategory: String){
-         val productsOfCategory : MutableList<ProductsItem> = mutableListOf()
+    fun getProductsBySubCategory(mainCategory: String, subCategory: String) {
+        val productsOfCategory: MutableList<ProductsItem> = mutableListOf()
         viewModelScope.launch {
             _uiState.value = ViewState.Loading
-            repo.getProductsBySubCategory(subCategory).catch {error->
+            val favoriteProducts = repo.getAllProducts().firstOrNull() ?: emptyList()
+
+            repo.getProductsBySubCategory(subCategory).catch { error ->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!
-            }.collect{products->
-                //originalProducts=products
-              products.forEach {product->
-                  filterProductByMainCategory(product,mainCategory,productsOfCategory)
-              }
+            }.collect { products ->
+                products.forEach { product ->
+                    filterProductByMainCategory(product, mainCategory, productsOfCategory)
+                }
                 getPriceForEachProduct(productsOfCategory)
-                //getMaxPrice(productsOfCategory)
-                //getMinPrice(productsOfCategory)
-                _uiState.value = ViewState.Success(productsOfCategory)
+                val productsWithFavorites = productsOfCategory.map { product ->
+                    if (favoriteProducts.any { it.id == product.id }) {
+                        product.copy(isFavorited = true)
+                    } else {
+                        product
+                    }
+                }
+
+                _uiState.value = ViewState.Success(productsWithFavorites)
             }
         }
-
     }
+
 
     private fun filterProductByMainCategory(
         product: ProductsItem,

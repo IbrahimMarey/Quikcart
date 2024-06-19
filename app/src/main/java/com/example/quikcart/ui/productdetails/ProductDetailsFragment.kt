@@ -1,5 +1,7 @@
 package com.example.quikcart.ui.productdetails
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,11 +22,11 @@ import com.example.quikcart.models.entities.cart.DraftOrderLineItem
 import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
 import com.example.quikcart.models.entities.cart.PutDraftItem
 import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
+import com.example.quikcart.ui.authentication.AuthenticationActivity
 import com.example.quikcart.utils.PreferencesUtils
+import com.example.quikcart.utils.setPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import com.example.quikcart.utils.setPrice
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
@@ -66,8 +68,15 @@ class ProductDetailsFragment : Fragment() {
             setVariants(it.variants)
             binding.price.setPrice (it.variants?.get(0)?.price?.toFloat() ?: 0.0f, requireContext())
         }
+        checkProduct(productItem)
         binding.addToFavorite.setOnClickListener {
-            insertToFavorite(productItem , favID)
+            if(pref.getUserId()!="0"||pref.getUserId()!="-1"){
+                insertToFavorite(productItem , favID)
+                binding.addToFavorite.setImageResource(R.drawable.ic_heart)
+            }
+            else {
+                showSignInAlert("favourites")
+            }
         }
         productItem.productType?.let { showReview(it) }
         binding.rateOfProductDetails.rating = 4.7f
@@ -75,6 +84,8 @@ class ProductDetailsFragment : Fragment() {
             viewModel.getCart(cartID.toString())
         }
         binding.editProductBtn.setOnClickListener {
+            if(pref.getUserId()!="0"||pref.getUserId()!="-1"){
+
             if (cartID.toInt() == 0) {
                 val item = PostDraftOrderItemModel(
                     DraftItem(
@@ -92,6 +103,19 @@ class ProductDetailsFragment : Fragment() {
                 val request = PutDraftOrderItemModel(data)
                 viewModel.putProductInCart(cartID.toString(), request)
             }
+            }
+            else {
+                showSignInAlert("cart")
+            }
+
+        }
+    }
+
+    private fun checkProduct(productItem: ProductsItem){
+        if(productItem.isFavorited){
+            binding.addToFavorite.setImageResource(R.drawable.ic_heart)
+        } else {
+            binding.addToFavorite.setImageResource(R.drawable.ic_empty_heart)
         }
     }
     private fun setPlaceholderImage() {
@@ -131,7 +155,9 @@ class ProductDetailsFragment : Fragment() {
         findNavController().navigate(R.id.action_productDetailsFragment_to_reviewFragment, bundle)
     }
     private fun insertToFavorite(productsItem: ProductsItem , favID:Long){
-        viewModel.insertToFavourites(productsItem)
+        var product:ProductsItem =productsItem
+        product.isFavorited=true
+        viewModel.insertToFavourites(product)
         val price = productItem?.price ?: "0.00"
         val title = productItem?.title ?: ""
         if (favID.toInt() != 0 && favID.toInt() != -1)
@@ -152,5 +178,19 @@ class ProductDetailsFragment : Fragment() {
             val request = PutDraftOrderItemModel(draftItem)
             viewModel.putProductInFav(favID.toString(), request)
         }
+    }
+    private fun showSignInAlert(message: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Please Sign In")
+            .setMessage("You need to sign in to add items to your $message.")
+            .setPositiveButton("Sign In") { dialog, _ ->
+                startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
+                requireActivity().finish()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

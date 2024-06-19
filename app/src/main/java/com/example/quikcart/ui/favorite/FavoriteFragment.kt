@@ -51,7 +51,6 @@ class FavoriteFragment : Fragment() {
         lineItem= draftOrderViewModel.lineItemsList
         observeViewModel()
     }
-
     private fun observeViewModel() {
         lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
