@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
     }
 
     private fun getBrands() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = ViewState.Loading
             repo.getBrands().catch { error ->
                 _uiState.value = error.localizedMessage?.let { ViewState.Error(it) }!!

@@ -24,8 +24,7 @@ class App: Application()
             currencyCode = CurrencyCode.USD,
             userAction = UserAction.PAY_NOW,
             settingsConfig = SettingsConfig(
-                loggingEnabled = true,
-                showWebCheckout = false
+                loggingEnabled = true
             )
         )
         PayPalCheckout.setConfig(config)

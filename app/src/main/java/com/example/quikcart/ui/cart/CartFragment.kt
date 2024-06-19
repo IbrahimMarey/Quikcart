@@ -18,6 +18,15 @@ import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.utils.PreferencesUtils
 import com.example.quikcart.utils.setPrice
 import com.google.android.material.snackbar.Snackbar
+import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.createorder.CreateOrder
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.OrderIntent
+import com.paypal.checkout.createorder.UserAction
+import com.paypal.checkout.order.Amount
+import com.paypal.checkout.order.AppContext
+import com.paypal.checkout.order.OrderRequest
+import com.paypal.checkout.order.PurchaseUnit
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -40,6 +49,30 @@ class CartFragment : Fragment() {
     ): View {
         binding = FragmentCartBinding.inflate(inflater, container, false)
         setInitialUI()
+        /*binding.paymentButtonContainer.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    OrderRequest(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD, value = "10.00")
+                            )
+                        )
+                    )
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                Log.i("TAG", "OrderId: = = = = = = ${approval.data.orderId}")
+                Log.i("TAG", "OrderId: ${approval.data.orderId}")
+                Log.i("TAG", "OrderId: ${approval.data.orderId}")
+            }
+        )*/
         return binding.root
     }
 
