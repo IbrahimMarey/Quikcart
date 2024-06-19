@@ -1,6 +1,10 @@
 package com.example.quikcart.ui
 
+import android.content.DialogInterface
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +14,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.quikcart.R
 import com.example.quikcart.databinding.ActivityMainBinding
+import com.example.quikcart.utils.AlertUtil
+import com.example.quikcart.utils.NetworkChangeReceiver
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,7 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
     private lateinit var navController: NavController
-
+    private lateinit var networkChangeReceiver: NetworkChangeReceiver
 
     private val HOME_ITEM = R.id.homeFragment
     private val FAVORITE_ITEM = R.id.favoriteFragment
@@ -32,7 +38,36 @@ class MainActivity : AppCompatActivity() {
             initNavHost()
             setUpBottomNavigation()
         }
+        networkChangeReceiver=NetworkChangeReceiver{isConnected->
+            handleNetworkChange(isConnected)
+        }
+
     }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("TAG", "onResume: ", )
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(networkChangeReceiver, filter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(networkChangeReceiver)
+    }
+
+    private fun handleNetworkChange(connected: Boolean) {
+        if(!connected){
+            AlertUtil.showCustomAlertDialog(this,
+                title = "No Internet Connection",
+                "Please check your internet connection and try again.",
+                positiveText = "Exit"
+            ) { dialog, _ -> dialog.dismiss();finish() }
+        }else {
+            AlertUtil.dismissAlertDialog()
+        }
+    }
+
     private fun ActivityMainBinding.setUpBottomNavigation() {
         val bottomNavigationItems = mutableListOf(
             CurvedBottomNavigation.Model(HOME_ITEM, getString(R.string.home), R.drawable.ic_home),
