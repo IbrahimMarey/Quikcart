@@ -34,13 +34,15 @@ object AlertUtil {
         title:String?=null,
         message: String?=null,
         positiveText: String?=null,
-        positiveClickListener: DialogInterface.OnClickListener?=null
+        positiveClickListener: DialogInterface.OnClickListener?=null,
+        negText:String?=null,
+        negClickListener: DialogInterface.OnClickListener?=null,
     ) {
         alertDialog = AlertDialog.Builder(context)
         .setTitle(title)
             .setMessage(message)
             .setPositiveButton(positiveText, positiveClickListener)
-            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .setNegativeButton(negText,negClickListener)
             .show()
     }
 
