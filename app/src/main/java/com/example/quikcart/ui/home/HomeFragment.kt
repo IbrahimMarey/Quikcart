@@ -102,7 +102,7 @@ class HomeFragment : Fragment() {
     private fun initImageSlider()
     {
         binding.imageSlider.setImageList(viewModel.couponsList,ScaleTypes.FIT)
-        binding.imageSlider.startSliding(1500)
+        binding.imageSlider.startSliding(2000)
         binding.imageSlider.setItemClickListener(object : ItemClickListener{
             override fun doubleClick(position: Int) {
 

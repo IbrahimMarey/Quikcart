@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.cart
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,9 @@ class CartFragment : Fragment() {
     private lateinit var viewModel: CartViewModel
     private lateinit var gridLayoutManager: GridLayoutManager
     private lateinit var cartAdapter: CartAdapter
-    lateinit var pref: PreferencesUtils
+    private lateinit var pref: PreferencesUtils
+    private var cartTotalPrice:Float = 0.0f
+    private lateinit var cartDraftOrder: DraftOrder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +51,14 @@ class CartFragment : Fragment() {
         val delAction: (LineItem) -> Unit = {
             delCartItem(it)
         }
-        cartAdapter = CartAdapter(delAction)
+        val editItemQuantity: (LineItem, Int,Float) -> Unit = { lineItem, index,newPrice ->
+            viewModel.lineItemsList[index] = lineItem
+            cartTotalPrice+=newPrice
+            cartDraftOrder.totalPrice = cartTotalPrice.toString()
+            navigateToConfirmOrderFirstScreen(cartDraftOrder)
+            binding.cartTotalPrice.setPrice(cartTotalPrice,requireActivity())
+        }
+        cartAdapter = CartAdapter(delAction,editItemQuantity)
         gridLayoutManager = GridLayoutManager(requireActivity(), 2)
         binding.recyclerCart.apply {
             adapter = cartAdapter
@@ -59,7 +69,8 @@ class CartFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.saveCartWhileLeaving(pref.getCartId().toString())
+        if (pref.getCartId().toString() != "0" && pref.getCartId().toString() != "-1")
+            viewModel.saveCartWhileLeaving(pref.getCartId().toString())
     }
 
     private fun setInitialUI() {
@@ -134,10 +145,8 @@ class CartFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             cartAdapter.submitList(viewModel.getProducts(cart.lineItems))
         }
-        binding.cartTotalPrice.setPrice(cart.totalPrice.toFloat(), requireActivity())
-        /*binding.proceedToPayBtn.setOnClickListener{
-            val action = CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(cart.totalPrice)
-            Navigation.findNavController(it).navigate(action)
-        }*/
+        cartTotalPrice = cart.totalPrice.toFloat()
+        binding.cartTotalPrice.setPrice(cartTotalPrice, requireActivity())
+        cartDraftOrder = cart
     }
 }
