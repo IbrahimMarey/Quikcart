@@ -2,12 +2,11 @@ package com.example.quikcart.ui.placeorder.secondscreen
 
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -29,7 +28,7 @@ import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.DateUtil
 import com.example.quikcart.utils.PaymentMethod
 import com.example.quikcart.utils.PreferencesUtils
-
+import com.example.quikcart.utils.setPrice
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.createorder.CreateOrder
@@ -42,13 +41,12 @@ import com.paypal.checkout.order.AppContext
 import com.paypal.checkout.order.OrderRequest
 import com.paypal.checkout.order.PurchaseUnit
 
-import com.paypal.pyplcheckout.data.model.pojo.Extensions
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-const val MAXIMUM_CASH_AMOUNT=10000
+const val MAXIMUM_CASH_AMOUNT=10000f
 @AndroidEntryPoint
 class PlaceOrderFragment : Fragment() {
 
@@ -60,6 +58,9 @@ class PlaceOrderFragment : Fragment() {
     private lateinit var draftOrder: DraftOrder
     @Inject lateinit var preferencesUtils: PreferencesUtils
     private var paymentMethod=PaymentMethod.CASH
+    private var counter=0
+    private var isPaymentApproved=false
+    private var isPayPalChoose=false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +75,6 @@ class PlaceOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getPassedArgs()
-
         setUPPayPal(totalPrice)
 
         Log.e("TAG", "onViewCreated email: ${preferencesUtils.getCustomerEmail()}", )
@@ -84,13 +84,40 @@ class PlaceOrderFragment : Fragment() {
         binding.vm = viewModel
         observeOnLiveData()
         observeOnStateFlow()
+        Log.e("TAG", "onViewCreated: ${totalPrice}", )
+        checkTotalPrice(totalPrice.toFloat())
+        changePaymentBackground()
         Log.e("TAG", "getShippingAddress: ${address.phone}", )
-        //checkTotalPrice()
+    }
+    private fun changePaymentBackground() {
+        binding.paymentLinear.setOnClickListener {
+            isPayPalChoose=true
+            counter++
+            Log.e("TAG", "onViewCreated1: ${counter}",)
+            if (counter % 2 == 0) {
+                binding.paymentLinear.setBackgroundResource(R.drawable.rounded_green_bg)
+                binding.cashPayment.setBackgroundResource(R.drawable.rounded_bg)
+            }
+            else {
+                 isPayPalChoose=false
+                binding.cashPayment.setBackgroundResource(R.drawable.rounded_green_bg)
+                binding.paymentLinear.setBackgroundResource(R.drawable.rounded_bg)
+            }
+        }
     }
 
-    private fun checkTotalPrice() {
-        Log.e("TAG", "checkTotalPrice: ${totalPrice}", )
-        binding.cashPayment.visibility=if(totalPrice.toFloat() >= MAXIMUM_CASH_AMOUNT) View.GONE else View.VISIBLE
+
+    private fun checkTotalPrice(totalPrice:Float) {
+        val checkPrice= MAXIMUM_CASH_AMOUNT
+        Log.e("TAG", "checkTotalPrice: $checkPrice", )
+        Log.e("TAG", "checkTotalPrice: $", )
+
+        binding.cashPayment.visibility=if(totalPrice >= checkPrice.toFloat()) {
+            AlertUtil.showCustomAlertDialog(requireContext(),
+                "Note: Cash Not Allowed",
+                "When the value of your purchases exceeds ${checkPrice}, you cannot pay using cash","Ok")
+            View.GONE
+        } else View.VISIBLE
     }
 
 
@@ -98,7 +125,13 @@ class PlaceOrderFragment : Fragment() {
     private fun initializeViewModelVariables() {
         viewModel.totalPrice = totalPrice
         viewModel.shippingFees = "0"
+        viewModel.discount=discountPrice
+        viewModel.maximumCashAmount= MAXIMUM_CASH_AMOUNT.toString()
+        viewModel.subTotal=(totalPrice.toFloat() + discountPrice.toFloat()).toString()
+        viewModel.isPayPalChoose=isPayPalChoose
+        viewModel.isPaymentApproved=isPaymentApproved
         viewModel.orderResponse = Order(getOrderItem())
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -108,7 +141,6 @@ class PlaceOrderFragment : Fragment() {
             customer = getCustomerData(), totalPrice = totalPrice,
             totalTax = "0",
             currency = preferencesUtils.getCurrencyType(),
-            createdAt = DateUtil.getCurrentDateAndTime(),
             paymentGatewayNames = mutableListOf(paymentMethod.name),
             shippingAddress = getShippingAddress()
 
@@ -149,15 +181,14 @@ class PlaceOrderFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is ViewState.Error -> {
-                            AlertUtil.showToast(requireContext(), it.message)
-                        }
+                            AlertUtil.showToast(requireContext(), it.message) }
 
                         is ViewState.Success -> {
                             viewModel.deleteCartItemsById(draftOrder.id.toString())
-
                             AlertUtil.showToast(requireContext(), "Order is placed successfully")
+                            preferencesUtils.setCartId(0)
+                            findNavController().popBackStack(R.id.homeFragment, false)
                            // viewModel.sendEmail("Hello")
-
 
                         }
                         is ViewState.Loading -> {}
@@ -198,19 +229,26 @@ class PlaceOrderFragment : Fragment() {
                             )
                         )
                     )
+
                 createOrderActions.create(order)
             },
             onApprove =
             OnApprove { approval ->
+                 isPayPalChoose=true
+                isPaymentApproved=true
                 Log.i("TAG", "OrderId: ${approval.data.orderId}")
                 Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
             },
             onCancel = OnCancel{
+                 isPayPalChoose=true
+                isPaymentApproved=false
                 Log.i("TAG", "onViewCreated: ==================== payment canceld")
                 Toast.makeText(requireActivity(), "Payment Cancel", Toast.LENGTH_SHORT).show()
 
             },
             onError = OnError{
+                 isPayPalChoose=true
+                isPaymentApproved=false
                 Log.i("TAG", "onViewCreated: ${it}")
                 Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
 
