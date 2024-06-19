@@ -17,11 +17,6 @@ import com.example.quikcart.BuildConfig
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentAddressesBinding
 import com.example.quikcart.databinding.FragmentPaymentBinding
-import com.paypal.android.sdk.payments.PayPalConfiguration
-import com.paypal.android.sdk.payments.PayPalPayment
-import com.paypal.android.sdk.payments.PayPalService
-import com.paypal.android.sdk.payments.PaymentActivity
-import com.paypal.android.sdk.payments.PaymentConfirmation
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.createorder.CreateOrder
@@ -35,34 +30,34 @@ import com.paypal.checkout.order.OrderRequest
 import com.paypal.checkout.order.PurchaseUnit
 import java.math.BigDecimal
 
-private const val GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user"/*"com.google.android.apps.nbu.paisa.user"*//*BuildConfig.APPLICATION_ID*/
-private const val GOOGLE_PAY_REQUEST_CODE = 123
+/*private const val GOOGLE_PAY_PACKAGE_NAME = "com.google.android.apps.nbu.paisa.user"*//*"com.google.android.apps.nbu.paisa.user"*//**//*BuildConfig.APPLICATION_ID*//*
+private const val GOOGLE_PAY_REQUEST_CODE = 123*/
 //paypal
-private const val PAYPAL_CLIENT_ID = "AfR2ylX7Lxzx92G30PzuibgSS0tIPLGNlFy0ove_c7tEzoxGjOfGkL0MhMoPHimdP7n-rqPaHGtDGirp"
+/*private const val PAYPAL_CLIENT_ID = "AfR2ylX7Lxzx92G30PzuibgSS0tIPLGNlFy0ove_c7tEzoxGjOfGkL0MhMoPHimdP7n-rqPaHGtDGirp"
 private const val PAYPAL_REQUEST_CODE = 7171
 private val paypalConfig = PayPalConfiguration()
     .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
-    .clientId(PAYPAL_CLIENT_ID)
+    .clientId(PAYPAL_CLIENT_ID)*/
 class PaymentFragment : Fragment() {
     lateinit var binding : FragmentPaymentBinding
     lateinit var uri :Uri
     lateinit var status:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startPayPalService()
+//        startPayPalService()
      }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        paypalActivityResult(requestCode, resultCode, data)
-        gPayResult(requestCode, resultCode, data)
+//        paypalActivityResult(requestCode, resultCode, data)
+//        gPayResult(requestCode, resultCode, data)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPaymentBinding.inflate(inflater,container,false)
-        binding.paymentButtonContainer.setup(
+        /*binding.paymentButtonContainer.setup(
             createOrder =
             CreateOrder { createOrderActions ->
                 val order =
@@ -94,7 +89,7 @@ class PaymentFragment : Fragment() {
                 Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
 
             }
-        )
+        )*/
         return binding.root
     }
 
@@ -102,21 +97,21 @@ class PaymentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        binding.paymentButtonContainer.visibility = View.GONE
 
-        binding.paypalPayCard.setOnClickListener{
+        /*binding.paypalPayCard.setOnClickListener{
             payWithPayPal()
-        }
-        binding.googlePayCard.setOnClickListener {
-            var name = "MRUDUL K M" /*"MUHAMMED HASHIM"*/
-            var upiID ="mr18yt@okaxis"/*"hashimasd123@oksbi"*/
+        }*/
+        /*binding.googlePayCard.setOnClickListener {
+            var name = "MRUDUL K M" *//*"MUHAMMED HASHIM"*//*
+            var upiID ="mr18yt@okaxis"*//*"hashimasd123@oksbi"*//*
             var transaction ="pay test"
             uri = getUpiPaymentUri(name,upiID,transaction,"0.1")
             payWithGPay()
-        }
+        }*/
     }
 
 
     // Google Pay Functions Start
-    private fun gPayResult(requestCode: Int, resultCode: Int, data: Intent?)
+   /* private fun gPayResult(requestCode: Int, resultCode: Int, data: Intent?)
     {
         if (requestCode == GOOGLE_PAY_REQUEST_CODE)
         {
@@ -171,12 +166,12 @@ class PaymentFragment : Fragment() {
             .appendQueryParameter("am",amount)
             .appendQueryParameter("cu","USD")
             .build()
-    }
+    }*/
     // Google Pay End Functions End
 
 
     // PayPal SDK Functions Start
-    private fun payWithPayPal()
+   /* private fun payWithPayPal()
     {
         var payment = PayPalPayment(BigDecimal("10.0"),"USD","Donate for EDMTDev",PayPalPayment.PAYMENT_INTENT_SALE)
         var intent = Intent(requireActivity(),PaymentActivity::class.java)
@@ -213,14 +208,14 @@ class PaymentFragment : Fragment() {
             Toast.makeText(requireActivity(), getString(R.string.delete), Toast.LENGTH_SHORT).show()
         }
     }
-
+*/
     // PayPal SDK Functions End
 
     // PayPal checkout Functions Start
 
     // PayPal checkout Functions End
-    override fun onDestroyView() {
-        super.onDestroyView()
-        stopPayPalService()
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+////        stopPayPalService()
+//    }
 }

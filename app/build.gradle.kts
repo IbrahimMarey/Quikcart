@@ -123,7 +123,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.0.1")
 
     //PayPal SDK
-    implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
+//    implementation ("com.paypal.sdk:paypal-android-sdk:2.16.0")
     implementation("com.paypal.checkout:android-sdk:1.3.2")
 
     //Lottie
