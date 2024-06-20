@@ -18,6 +18,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentHomeBinding
 import com.example.quikcart.models.ViewState
@@ -40,19 +41,24 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater,container,false)
-        initViewModel()
+
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewModel()
         observeOnStateFlow()
         initCategoryRecyclerView()
-        initImageSlider()
+
+       // initImageSlider()
         binding.searchBar.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
         }
     }
+
+
 
     private fun initCategoryRecyclerView() {
         categoryAdapter = CategoryAdapter{
@@ -85,12 +91,17 @@ class HomeFragment : Fragment() {
                         is ViewState.Success -> {
                             initBrandsRecyclerView(it.data)
                             binding.brandsProgressbar.visibility = View.GONE
-                            initImageSlider()
+                            initImageSlider(viewModel.couponsList.value ?: emptyList())
+
+                            // initImageSlider()
                         }
                         is ViewState.Loading -> binding.brandsProgressbar.visibility = View.VISIBLE
 
                     }
                 }
+            }
+            viewModel.couponsList.observe(viewLifecycleOwner) { coupons ->
+                initImageSlider(coupons)
             }
         }
     }
@@ -99,7 +110,7 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
     }
 
-    private fun initImageSlider()
+    /*private fun initImageSlider()
     {
         binding.imageSlider.setImageList(viewModel.couponsList,ScaleTypes.FIT)
         binding.imageSlider.startSliding(2000)
@@ -111,18 +122,29 @@ class HomeFragment : Fragment() {
                 copyCoupon(position)
             }
         })
+    }*/
+
+
+
+    private fun initImageSlider(couponsList: List<SlideModel>) {
+        binding.imageSlider.setImageList(couponsList, ScaleTypes.FIT)
+        binding.imageSlider.startSliding(2000)
+        binding.imageSlider.setItemClickListener(object : ItemClickListener {
+            override fun doubleClick(position: Int) {}
+
+            override fun onItemSelected(position: Int) {
+                copyCoupon(position)
+            }
+        })
     }
 
-    private fun copyCoupon(index:Int)
-    {
+    private fun copyCoupon(index: Int) {
         val sdk = Build.VERSION.SDK_INT
         if (sdk < Build.VERSION_CODES.HONEYCOMB) {
-            val clipboard =
-                requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             clipboard.text = viewModel.couponsIDs[index]
         } else {
-            val clipboard =
-                requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+            val clipboard = requireActivity().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
             val clip = ClipData.newPlainText("text", viewModel.couponsIDs[index])
             clipboard.setPrimaryClip(clip)
         }
