@@ -55,7 +55,11 @@
         android:id="@+id/paymentFragment"
         android:name="com.example.quikcart.ui.payment.PaymentFragment"
         android:label="fragment_payment"
-        tools:layout="@layout/fragment_payment" />
+        tools:layout="@layout/fragment_payment" >
+        <argument
+            android:name="amount"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/addressesFragment"
         android:name="com.example.quikcart.ui.adresses.AddressesFragment"
@@ -166,6 +170,9 @@
         <argument
             android:name="priceData"
             app:argType="com.example.quikcart.models.entities.cart.TotalAndDiscountModel" />
+        <action
+            android:id="@+id/action_placeOrderFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
     </fragment>
 
 </navigation>
