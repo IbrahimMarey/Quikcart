@@ -96,6 +96,7 @@ class PlaceOrderFragment : Fragment() {
             },
             onApprove =
             OnApprove { approval ->
+                paymentMethod=PaymentMethod.PAYPAL
                 isPayPalChoose=true
                 isPaymentApproved=true
                 Log.d("TAG", "OrderId: ${approval.data.orderId}")

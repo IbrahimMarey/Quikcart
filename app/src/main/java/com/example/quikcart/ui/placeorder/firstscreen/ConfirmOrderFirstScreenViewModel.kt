@@ -1,13 +1,22 @@
 package com.example.quikcart.ui.placeorder.firstscreen
 
 import android.util.Log
+import android.widget.EditText
+import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.denzcoskun.imageslider.models.SlideModel
+import com.example.quikcart.R
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.models.repos.Repository
+import com.example.quikcart.utils.getMarkerAddress
+import com.example.quikcart.utils.isEgyptianPhoneNumberValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +35,11 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
         ViewState.Loading)
     val couponsState : StateFlow<ViewState<List<PriceRule>>> = _couponsState
     var couponsList:List<PriceRule> = listOf()
+    var phone:String?=null
+
+    private val _phoneState = MutableLiveData<String>()
+    val phoneState: LiveData<String> = _phoneState
+
 
     init {
         getAllCoupons()
@@ -42,8 +56,26 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
         }
     }
 
+    private fun isValidatePhone():Boolean{
+        val isValidate: Boolean
+        if(phone?.isNotEmpty() == true || phone?.isNotBlank() == true){
+            if (phone?.let { isEgyptianPhoneNumberValid(it) } == true)
+            {
+                isValidate=true
+            }else
+            { _phoneState.postValue("Phone miss match")
+                isValidate=false
+            }
+        } else{
+            _phoneState.postValue("Please enter your phone")
+            isValidate=false
+        }
+        return isValidate
+    }
     fun navigateToConfirmOrderFragment(){
-        navigator.navigateToConfirmOrderFragment()
+        if(isValidatePhone()){
+            navigator.navigateToConfirmOrderFragment()
+        }
     }
 
     fun navigateToMapFragment(){
