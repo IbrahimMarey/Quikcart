@@ -193,4 +193,6 @@ dependencies {
     androidTestImplementation ("androidx.arch.core:core-testing:$archTestingVersion")
     testImplementation ("org.mockito:mockito-core:4.0.0")
     testImplementation ("org.mockito:mockito-inline:4.0.0")
+
+    testImplementation (libs.kotlin.test)
 }

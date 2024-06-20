@@ -39,7 +39,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
         return repo.getCategories()
     }
 
-    private fun getBrands() {
+     fun getBrands() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = ViewState.Loading
             repo.getBrands().catch { error ->
@@ -66,7 +66,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
 
 
-    private fun getCouponImages(coupons: List<PriceRule>, newCouponsList: MutableList<SlideModel>) {
+    fun getCouponImages(coupons: List<PriceRule>, newCouponsList: MutableList<SlideModel>) {
         for (item in coupons) {
             couponsIDs.add(item.id.toString())
             if (item.valueType == "percentage") {
@@ -76,6 +76,8 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
             }
         }
     }
+
+
 
    /* private fun getCouponImages(coupons:List<PriceRule>)
     {
@@ -114,14 +116,14 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
         }
     }
 
-    private fun saveCouponsLocally(coupons:List<PriceRule>)
+    fun saveCouponsLocally(coupons:List<PriceRule>)
     {
         viewModelScope.launch(Dispatchers.IO) {
             repo.insertAllCoupons(coupons)
         }
     }
 
-    private fun addImgPercentage(coupon: PriceRule):SlideModel {
+    fun addImgPercentage(coupon: PriceRule):SlideModel {
         var img = when(coupon.value)
         {
             "-20.0"-> "https://t3.ftcdn.net/jpg/03/36/91/14/360_F_336911489_vQzdGPLdY0aNYXdu5rK7UIwwiEksYJgK.jpg"
@@ -135,7 +137,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
 
 
-    private fun addImgFixedAmount(coupon: PriceRule):SlideModel
+    fun addImgFixedAmount(coupon: PriceRule):SlideModel
     {
         var img = "https://cdn.shopify.com/s/files/1/0817/7988/4088/articles/4XOfcVjU6L9Z0yxkgW0WeI_9a7fdb9d-4173-4023-816b-8918cc91229f.jpg?v=1712946016"
         return SlideModel(img, "Click To Apply ${coupon.value}")

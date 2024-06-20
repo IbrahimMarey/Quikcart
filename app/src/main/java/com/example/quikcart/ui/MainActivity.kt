@@ -61,8 +61,10 @@ class MainActivity : AppCompatActivity() {
             AlertUtil.showCustomAlertDialog(this,
                 title = "No Internet Connection",
                 "Please check your internet connection and try again.",
-                positiveText = "Exit"
-            ) { dialog, _ -> dialog.dismiss();finish() }
+                positiveText = "Exit", positiveClickListener = { dialog, _ ->
+                    finish()
+                    dialog.dismiss() }
+            )
         }else {
             AlertUtil.dismissAlertDialog()
         }
