@@ -48,7 +48,7 @@ data class Customer(
     val updatedAt: String? = null,
 
     @field:SerializedName("phone")
-    val phone: String? = null,
+    var phone: String? = null,
 
     @field:SerializedName("admin_graphql_api_id")
     val adminGraphqlApiId: String? = null,
