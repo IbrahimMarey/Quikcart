@@ -173,9 +173,10 @@ class ProfileFragment : Fragment(),Navigator {
             preferencesUtils.setCartId(0)
             preferencesUtils.setCustomerId(0)
             preferencesUtils.setUserID("0")
+            preferencesUtils.saveCustomerEmail("")
             preferencesUtils.setFavouriteId(0)
             startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
-            requireActivity().finish()
+            //requireActivity().finish()
         }
     }
 }
