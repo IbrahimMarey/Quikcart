@@ -74,7 +74,7 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
     }
     fun navigateToConfirmOrderFragment(){
         if(isValidatePhone()){
-            navigator.navigateToConfirmOrderFragment()
+            phone?.let { navigator.navigateToConfirmOrderFragment(it) }
         }
     }
 

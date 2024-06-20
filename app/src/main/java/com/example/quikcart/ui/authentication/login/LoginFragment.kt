@@ -154,6 +154,7 @@ class LoginFragment : Fragment() {
             if (userId != null) {
                 PreferencesUtils.getInstance(requireContext()).setUserID(userId)
                 getCurrentCustomerID(userId)
+                preferencesUtils.saveCustomerEmail(binding.UserNameTextField.editText?.text.toString())
                 Log.i("TAG", "handleLoginSuccess: $userId")
                 showMessage("Sign in successful")
                 startActivity(Intent(requireContext(), MainActivity::class.java))

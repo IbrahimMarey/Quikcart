@@ -138,6 +138,7 @@ class PlaceOrderFragment : Fragment() {
         clickOnCash()
         Log.e("TAG", "onViewCreated email: ${preferencesUtils.getCustomerEmail()}", )
         Log.e("TAG", "onViewCreated: ${paymentMethod.name}", )
+        Log.e("TAG", "onViewCreated: ${draftOrder.customer.phone}", )
 
         initializeViewModelVariables()
         binding.vm = viewModel
