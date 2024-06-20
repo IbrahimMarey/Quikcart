@@ -55,9 +55,16 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         viewModel.navigator=this
         viewModel.getCustomerAddresses(preferenceManager.getCustomerId())
         observeOnStateFlow()
+        observeOnLiveData()
         binding.validateBtn.setOnClickListener {
             val coupon = binding.couponField.text.toString()
             checkCoupon(coupon)
+        }
+    }
+
+    private fun observeOnLiveData() {
+        viewModel.phoneState.observe(viewLifecycleOwner) { msg ->
+            AlertUtil.showToast(requireContext(),msg)
         }
     }
 
@@ -75,8 +82,11 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
                         }
                         is ViewState.Loading -> binding.progressBar.visibility = View.VISIBLE
                     }
+
                 }
+
             }
+
         }
     }
     private fun initAddressesRecycler(addresses: List<AddressResponse>) {

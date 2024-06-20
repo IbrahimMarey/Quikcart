@@ -1,6 +1,8 @@
 package com.example.quikcart.ui.home
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.denzcoskun.imageslider.models.SlideModel
@@ -22,7 +24,10 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewState<List<SmartCollectionsItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<SmartCollectionsItem>>> = _uiState
-    val couponsList = ArrayList<SlideModel>()
+    /*val couponsList = ArrayList<SlideModel>()
+    val couponsIDs = ArrayList<String>()*/
+    private val _couponsList = MutableLiveData<List<SlideModel>>()
+    val couponsList: LiveData<List<SlideModel>> get() = _couponsList
     val couponsIDs = ArrayList<String>()
 
     init {
@@ -44,8 +49,35 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
            }
         }
     }
+    fun getCoupon() {
+        delCoupons()
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getCoupons().collect { coupons ->
+                val newCouponsList = mutableListOf<SlideModel>()
+                couponsIDs.clear()
+                getCouponImages(coupons.priceRules, newCouponsList)
+                saveCouponsLocally(coupons.priceRules)
+                _couponsList.postValue(newCouponsList)
+            }
+        }
+    }
 
-    private fun getCouponImages(coupons:List<PriceRule>)
+
+
+
+
+    private fun getCouponImages(coupons: List<PriceRule>, newCouponsList: MutableList<SlideModel>) {
+        for (item in coupons) {
+            couponsIDs.add(item.id.toString())
+            if (item.valueType == "percentage") {
+                newCouponsList.add(addImgPercentage(item))
+            } else {
+                newCouponsList.add(addImgFixedAmount(item))
+            }
+        }
+    }
+
+   /* private fun getCouponImages(coupons:List<PriceRule>)
     {
         for (item in coupons)
         {
@@ -60,7 +92,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
         }
     }
 
-    private fun getCoupon()
+    *//*private fun getCoupon()
     {
         delCoupons()
         couponsList.clear()
@@ -71,7 +103,9 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
                 saveCouponsLocally(it.priceRules)
             }
         }
-    }
+    }*/
+
+
 
     private fun delCoupons()
     {
@@ -79,6 +113,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
             repo.deleteAllCoupons()
         }
     }
+
     private fun saveCouponsLocally(coupons:List<PriceRule>)
     {
         viewModelScope.launch(Dispatchers.IO) {
@@ -96,6 +131,10 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
         }
         return SlideModel(img, "Click To Apply ${coupon.value} %")
     }
+
+
+
+
     private fun addImgFixedAmount(coupon: PriceRule):SlideModel
     {
         var img = "https://cdn.shopify.com/s/files/1/0817/7988/4088/articles/4XOfcVjU6L9Z0yxkgW0WeI_9a7fdb9d-4173-4023-816b-8918cc91229f.jpg?v=1712946016"
