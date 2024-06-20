@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.placeorder.secondscreen
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -75,7 +76,7 @@ class PlaceOrderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaceOrderBinding.inflate(inflater, container, false)
-        binding.paymentButtonContainer.setup(
+        /*binding.paymentButtonContainer.setup(
             createOrder =
             CreateOrder { createOrderActions ->
                 val order =
@@ -87,7 +88,7 @@ class PlaceOrderFragment : Fragment() {
                             PurchaseUnit(
                                 amount =
                                 Amount(currencyCode = CurrencyCode.USD
-                                    , value = "10.0")
+                                    , value = totalPrice)
                             )
                         )
                     )
@@ -99,6 +100,7 @@ class PlaceOrderFragment : Fragment() {
                 paymentMethod=PaymentMethod.PAYPAL
                 isPayPalChoose=true
                 isPaymentApproved=true
+                viewModel.confirmOrder()
                 Log.d("TAG", "OrderId: ${approval.data.orderId}")
                 Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
             },
@@ -116,17 +118,24 @@ class PlaceOrderFragment : Fragment() {
                 Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
 
             }
-        )
+        )*/
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(PreferencesUtils.isPayWithPayPal)
+        {
+            PreferencesUtils.isPayWithPayPal = false
+            viewModel.confirmOrder()
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         getPassedArgs()
-        setUPPayPal(totalPrice)
-
+        clickOnCash()
         Log.e("TAG", "onViewCreated email: ${preferencesUtils.getCustomerEmail()}", )
         Log.e("TAG", "onViewCreated: ${paymentMethod.name}", )
 
@@ -138,6 +147,7 @@ class PlaceOrderFragment : Fragment() {
         checkTotalPrice(totalPrice.toFloat())
         changePaymentBackground()
         Log.e("TAG", "getShippingAddress: ${address.phone}", )
+        navigateToPayPalPayment()
     }
     private fun changePaymentBackground() {
         binding.paymentLinear.setOnClickListener {
@@ -156,13 +166,41 @@ class PlaceOrderFragment : Fragment() {
         }
     }
 
+    private fun navigateToPayPalPayment()
+    {
+        binding.paypalPayCard.setOnClickListener {
+            val amount = "%.2f".format(totalPrice.toFloat() * preferencesUtils.getUSDRate())
+            val action = PlaceOrderFragmentDirections.actionPlaceOrderFragmentToPaymentFragment(amount)
+            Navigation.findNavController(it).navigate(action)
+        }
+    }
+    private fun clickOnCash()
+    {
+        binding.placeOredrBtn.setOnClickListener {
+            AlertUtil.showCustomAlertDialog(
+                requireActivity(),
+                "Are You Sure You want To Pay with Cash",
+                positiveText = "Confirm",
+                positiveClickListener = { _, _ ->
+                    viewModel.confirmOrder()
+                },
+                negText = "Cancel",
+                negClickListener = {_,_->
+                    AlertUtil.dismissAlertDialog()
+                }
+                )
+        }
+    }
+
 
     private fun checkTotalPrice(totalPrice:Float) {
-        val checkPrice= MAXIMUM_CASH_AMOUNT
+        var checkPrice= MAXIMUM_CASH_AMOUNT
         Log.e("TAG", "checkTotalPrice: $checkPrice", )
         Log.e("TAG", "checkTotalPrice: $", )
 
         binding.cashPayment.visibility=if(totalPrice >= checkPrice.toFloat()) {
+            if(preferencesUtils.getCurrencyType() == PreferencesUtils.CURRENCY_USD)
+                checkPrice *=preferencesUtils.getUSDRate()
             AlertUtil.showCustomAlertDialog(requireContext(),
                 "Note: Cash Not Allowed",
                 "When the value of your purchases exceeds ${checkPrice}, you cannot pay using cash","Ok")
@@ -261,10 +299,7 @@ class PlaceOrderFragment : Fragment() {
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class]
     }
 
-    private fun setUPPayPal(amount : String)
-    {
 
-    }
 /*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

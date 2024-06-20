@@ -72,7 +72,7 @@ class PreferencesUtils internal constructor(context: Context)
     companion object{
         const val CURRENCY_USD = "USD"
         const val CURRENCY_EGP = "EGP"
-
+        var isPayWithPayPal = false
         private var instance  : PreferencesUtils? = null
         fun getInstance(context:Context):PreferencesUtils{
             return instance?: synchronized(this){

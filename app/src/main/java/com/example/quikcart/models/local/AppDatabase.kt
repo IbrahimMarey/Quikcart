@@ -10,7 +10,7 @@ import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.utils.Constants
 import com.example.quikcart.utils.Converters
 
-@Database(entities = [ProductsItem::class, PriceRule::class], version = 1, exportSchema = false)
+@Database(entities = [ProductsItem::class, PriceRule::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao():AppDao
