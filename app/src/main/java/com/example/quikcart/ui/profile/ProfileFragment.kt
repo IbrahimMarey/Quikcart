@@ -55,6 +55,13 @@ class ProfileFragment : Fragment(),Navigator {
         binding = FragmentProfileBinding.inflate(inflater,container,false)
         aboutUsDialog = AboutUsDialogBinding.inflate(LayoutInflater.from(container?.context), null, false)
         materialAboutUsBuilder = MaterialAlertDialogBuilder(requireActivity())
+        if (preferencesUtils.getCustomerId() <= 0.toLong())
+        {
+            binding.addressSittings.visibility = View.GONE
+            binding.currency.visibility = View.GONE
+            binding.order.visibility = View.GONE
+            binding.logout.text = getString(R.string.sign_in)
+        }
         return binding.root
     }
 

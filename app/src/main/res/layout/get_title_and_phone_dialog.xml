@@ -41,7 +41,6 @@
                 android:layout_weight="4"
                 android:text="@string/app_name"
                 android:textSize="16sp"
-                android:textColor="@color/white"
                 />
         </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -53,7 +52,6 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
             app:boxCornerRadiusBottomStart="16dp"
-            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/textView13"
             app:layout_constraintStart_toStartOf="@+id/textView13"
             app:layout_constraintTop_toBottomOf="@+id/textView13"
@@ -63,8 +61,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/give_title_to_location"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
                 android:drawableStart="@drawable/ic_address_title"
                 android:inputType="text"
                 />
@@ -75,7 +71,6 @@
             android:text="@string/phone"
             android:layout_margin="16dp"
             android:textSize="16sp"
-            android:textColor="@color/white"
             />
         <RadioGroup
             android:id="@+id/choosePhoneGroup"
@@ -89,14 +84,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/default_phone"
-                android:textColor="@color/white"
                 />
             <RadioButton
                 android:id="@+id/chooseNewPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/new_phone"
-                android:textColor="@color/white"
                 android:layout_marginHorizontal="16dp"
 
                 />
@@ -110,7 +103,6 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
             app:boxCornerRadiusBottomStart="16dp"
-            app:hintTextColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/locationTitleFieldLayOut"
             app:layout_constraintStart_toStartOf="@+id/locationTitleFieldLayOut"
             app:layout_constraintTop_toBottomOf="@+id/locationTitleFieldLayOut"
@@ -120,8 +112,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/phone"
-                android:textColorHint="@color/white"
-                android:textColor="@color/white"
                 android:drawableStart="@drawable/ic_phone"
                 android:inputType="number"
                 />

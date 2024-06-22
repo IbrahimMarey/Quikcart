@@ -83,7 +83,7 @@
         app:cbn_selected_icon_size="48dp"
         app:cbn_selectedIconColor="@color/white"
         app:cbn_titleColor="@color/xd_btn_nav_item"
-        app:cbn_titleFont="@font/caveat"
+        app:cbn_titleFont="@font/barlow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
