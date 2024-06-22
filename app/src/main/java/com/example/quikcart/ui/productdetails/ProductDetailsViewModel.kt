@@ -41,7 +41,6 @@ class ProductDetailsViewModel @Inject constructor(private val repo: Repository) 
     }
     fun getCart(id: String)
     {
-        Log.d("Cart", "getCart============================================ $id")
         viewModelScope.launch(Dispatchers.IO) {
             repo.getDraftOrderById(id).collect{
                 lineItemsList.addAll(it.draft_order.lineItems)
@@ -91,4 +90,7 @@ class ProductDetailsViewModel @Inject constructor(private val repo: Repository) 
         }
     }
 
+    fun isProductFoundInCartExists(title: String): Boolean {
+        return lineItemsList.any { it.title == title && it.price.toFloat()>0.0 }
+    }
 }
