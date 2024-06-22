@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.Navigation
 import com.example.quikcart.databinding.FragmentPaymentBinding
+import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
 import com.paypal.checkout.approve.OnApprove
 import com.paypal.checkout.cancel.OnCancel
@@ -55,18 +56,13 @@ class PaymentFragment : Fragment() {
             OnApprove { approval ->
                 PreferencesUtils.isPayWithPayPal = true
                 Navigation.findNavController(requireView()).navigateUp()
-                Log.i("TAG", "OrderId: ${approval.data.orderId}")
-                Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
+                showMSG("Payment Approved")
             },
             onCancel = OnCancel{
-                Log.i("TAG", "onViewCreated: ==================== payment canceld")
-                Toast.makeText(requireActivity(), "Payment Cancel", Toast.LENGTH_SHORT).show()
-
+                showMSG("Payment Cancel")
             },
             onError = OnError{
-                Log.i("TAG", "onViewCreated: ${it}")
-                Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
-
+                showMSG("Payment Error")
             }
         )
         return binding.root
@@ -77,5 +73,7 @@ class PaymentFragment : Fragment() {
         amount = PaymentFragmentArgs.fromBundle(requireArguments()).amount
 
     }
-
+    private fun showMSG(msg:String){
+        AlertUtil.showSnackbar(requireView(),msg)
+    }
 }

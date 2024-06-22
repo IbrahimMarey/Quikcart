@@ -1,12 +1,10 @@
 package com.example.quikcart.ui.adresses
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -14,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentAddressesBinding
 import com.example.quikcart.models.ViewState
-import com.example.quikcart.models.entities.AddressModel
 import com.example.quikcart.models.entities.AddressResponse
+import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,7 +106,7 @@ class AddressesFragment : Fragment() {
                         )
                     }
                 else
-                    Toast.makeText(requireActivity(), getString(R.string.cannot_delete_the_customer_s_default_address), Toast.LENGTH_SHORT).show()
+                    AlertUtil.showSnackbar(requireView(),getString(R.string.cannot_delete_the_customer_s_default_address))
             }.show()
     }
 }

@@ -49,30 +49,6 @@ class CartFragment : Fragment() {
     ): View {
         binding = FragmentCartBinding.inflate(inflater, container, false)
         setInitialUI()
-        /*binding.paymentButtonContainer.setup(
-            createOrder =
-            CreateOrder { createOrderActions ->
-                val order =
-                    OrderRequest(
-                        intent = OrderIntent.CAPTURE,
-                        appContext = AppContext(userAction = UserAction.PAY_NOW),
-                        purchaseUnitList =
-                        listOf(
-                            PurchaseUnit(
-                                amount =
-                                Amount(currencyCode = CurrencyCode.USD, value = "10.00")
-                            )
-                        )
-                    )
-                createOrderActions.create(order)
-            },
-            onApprove =
-            OnApprove { approval ->
-                Log.i("TAG", "OrderId: = = = = = = ${approval.data.orderId}")
-                Log.i("TAG", "OrderId: ${approval.data.orderId}")
-                Log.i("TAG", "OrderId: ${approval.data.orderId}")
-            }
-        )*/
         return binding.root
     }
 

@@ -17,6 +17,7 @@ import com.example.quikcart.models.entities.Address
 import com.example.quikcart.models.entities.Customer
 import com.example.quikcart.models.entities.CustomerRequest
 import com.example.quikcart.models.entities.User
+import com.example.quikcart.utils.AlertUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -56,7 +57,7 @@ class SignupFragment : Fragment() {
         return password.length >= 8
     }
     private fun showErrorMessage(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        AlertUtil.showSnackbar(requireView(),message)
     }
     private fun createCustomerOnShopify(email: String, username: String, userId: String) {
         val address = Address(
