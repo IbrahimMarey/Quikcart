@@ -54,17 +54,20 @@
                     android:layout_marginVertical="16dp"
                     android:background="@drawable/rounded_transparent_bg"
                     >
-                    <LinearLayout
-                        android:id="@+id/sub_total_linear"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
+                        android:id="@+id/total_linear"
+
+                        >
+
 
                         <TextView
                             android:id="@+id/sub_total_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             android:layout_weight="1"
                             android:text="@string/subtotal"
                             android:textStyle="bold"
@@ -74,25 +77,21 @@
                             android:id="@+id/sub_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/sub_total_tv"
+                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_weight="1"
                             tools:text="20.0"
                             android:textStyle="bold"
                             android:textSize="20sp"
                             app:price="@{vm.subTotal}"
                             />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/discount_linear"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
 
                         <TextView
                             android:id="@+id/discount_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/sub_total_tv"
+                            app:layout_constraintStart_toStartOf="@id/sub_total_tv"
                             android:layout_weight="1"
                             android:text="@string/discount_applied"
                             android:textStyle="bold"
@@ -103,18 +102,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             tools:text="20.0"
+                            app:layout_constraintTop_toTopOf="@id/discount_tv"
+                            app:layout_constraintEnd_toEndOf="parent"
                             android:text="@{vm.discount}"
                             android:layout_weight="1"
                             android:textStyle="bold"
                             android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/fees_linear"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
 
 
                         <TextView
@@ -122,6 +115,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/shipping_fees"
+                            app:layout_constraintTop_toBottomOf="@id/discount_tv"
+                            app:layout_constraintStart_toStartOf="@id/sub_total_tv"
                             android:layout_weight="1"
                             android:textStyle="bold"
                             android:textSize="20sp" />
@@ -130,26 +125,20 @@
                             android:id="@+id/fees"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/fees_tv"
+                            app:layout_constraintEnd_toEndOf="parent"
                             tools:text="20.0"
                             android:layout_weight="1"
                             android:textStyle="bold"
                             android:textSize="20sp"
                             app:price="@{vm.shippingFees}" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/total_linear"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toBottomOf="@id/fees_linear"
-                        android:orientation="horizontal"
-                        android:weightSum="2">
-
                         <TextView
                             android:id="@+id/total_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/total_price"
+                            app:layout_constraintTop_toBottomOf="@id/fees_tv"
+                            app:layout_constraintStart_toStartOf="@id/sub_total_tv"
                             android:layout_weight="1"
                             android:textStyle="bold"
                             android:textSize="20sp"/>
@@ -158,12 +147,14 @@
                             android:id="@+id/total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="@id/total_tv"
+                            app:layout_constraintEnd_toEndOf="parent"
                             tools:text="20.0"
                             android:textStyle="bold"
                             android:textSize="20sp"
                             app:price="@{vm.totalPrice}"
                             android:layout_weight="1" />
-                    </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <LinearLayout
                         android:id="@+id/payment_linear"
