@@ -16,6 +16,7 @@ import com.example.quikcart.R
 import com.example.quikcart.databinding.ActivityMainBinding
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.NetworkChangeReceiver
+import com.example.quikcart.utils.PreferencesUtils
 import com.qamar.curvedbottomnaviagtion.CurvedBottomNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
     private val CART_ITEM = R.id.cartFragment
     private val PROFILE_ITEM = R.id.profileFragment
     private val SEARCH_ITEM = R.id.searchFragment
+    private lateinit var bottomNavigationItems : MutableList<CurvedBottomNavigation.Model>
+    private val preferencesUtils by lazy {
+        PreferencesUtils.getInstance(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,7 +51,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.e("TAG", "onResume: ", )
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(networkChangeReceiver, filter)
     }
@@ -71,13 +75,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ActivityMainBinding.setUpBottomNavigation() {
-        val bottomNavigationItems = mutableListOf(
-            CurvedBottomNavigation.Model(HOME_ITEM, getString(R.string.home), R.drawable.ic_home),
-            CurvedBottomNavigation.Model(SEARCH_ITEM, getString(R.string.search), R.drawable.ic_search),
-            CurvedBottomNavigation.Model(FAVORITE_ITEM, getString(R.string.wish_list), R.drawable.ic_favorite),
-            CurvedBottomNavigation.Model(CART_ITEM, getString(R.string.cart), R.drawable.ic_cart),
-            CurvedBottomNavigation.Model(PROFILE_ITEM, getString(R.string.profile), R.drawable.ic_person),
+        Log.i("TAG", "setUpBottomNavigation: ${preferencesUtils.getCustomerId()}")
+        if (preferencesUtils.getCustomerId() <= 0.toLong())
+        {
+            bottomNavigationItems = mutableListOf(
+                CurvedBottomNavigation.Model(HOME_ITEM, getString(R.string.home), R.drawable.ic_home),
+                CurvedBottomNavigation.Model(SEARCH_ITEM, getString(R.string.search), R.drawable.ic_search),
+                CurvedBottomNavigation.Model(PROFILE_ITEM, getString(R.string.profile), R.drawable.ic_person),
             )
+        }else{
+            bottomNavigationItems = mutableListOf(
+                CurvedBottomNavigation.Model(HOME_ITEM, getString(R.string.home), R.drawable.ic_home),
+                CurvedBottomNavigation.Model(SEARCH_ITEM, getString(R.string.search), R.drawable.ic_search),
+                CurvedBottomNavigation.Model(FAVORITE_ITEM, getString(R.string.wish_list), R.drawable.ic_favorite),
+                CurvedBottomNavigation.Model(CART_ITEM, getString(R.string.cart), R.drawable.ic_cart),
+                CurvedBottomNavigation.Model(PROFILE_ITEM, getString(R.string.profile), R.drawable.ic_person),
+            )
+        }
+
         bottomNavigation.apply {
             bottomNavigationItems.forEach { add(it) }
             setOnClickMenuListener {

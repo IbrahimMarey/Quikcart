@@ -155,15 +155,11 @@ class LoginFragment : Fragment() {
                 PreferencesUtils.getInstance(requireContext()).setUserID(userId)
                 getCurrentCustomerID(userId)
                 preferencesUtils.saveCustomerEmail(binding.UserNameTextField.editText?.text.toString())
-                Log.i("TAG", "handleLoginSuccess: $userId")
                 showMessage("Sign in successful")
-                startActivity(Intent(requireContext(), MainActivity::class.java))
-                requireActivity().finish()
             } else {
                 showMessage("Sign in failed. Please try again.")
             }
         } catch (e: Exception) {
-            Log.d("TAG", "handleLoginSuccess: $e")
         }
     }
 
@@ -177,7 +173,6 @@ class LoginFragment : Fragment() {
             message
         }
         showMessage("Error: $errorMessage")
-        Log.e("LoginError", errorMessage)
     }
 
 
@@ -187,11 +182,11 @@ class LoginFragment : Fragment() {
             viewModel.customerCreationState.collect { state ->
                 when (state) {
                     is ViewState.Success -> {
-                        Log.i("TAG", "getCurrentCustomerID: ${state.data}")
                         val currentCustomer = state.data.filter { it.lastName == id }
                         if (currentCustomer.isNotEmpty()) {
-                            Log.i("TAG", "getCurrentCustomerID: ${currentCustomer[0].id}")
                             PreferencesUtils.getInstance(requireContext()).setCustomerId(currentCustomer[0].id)
+                            startActivity(Intent(requireContext(), MainActivity::class.java))
+                            requireActivity().finish()
                         } else {
                             showMessage("Customer not found")
                         }
@@ -214,7 +209,6 @@ class LoginFragment : Fragment() {
                     is ViewState.Success -> {
                         val draftOrders = state.data.filter { it.email == email }
                         if (draftOrders.isNotEmpty()) {
-                            Log.i("LoginFragment", "Draft Orders: ${draftOrders.count()}")
                             if (draftOrders.size == 2){
                                 when (draftOrders[0].lineItems[0].price == "0.00") {
                                     true -> {
@@ -249,8 +243,6 @@ class LoginFragment : Fragment() {
                     }
                     else -> {}
                 }
-                Log.i("TAG", "fetchDraftOrdersForCustomer:${PreferencesUtils.getInstance(requireContext()).getFavouriteId()} ")
-                Log.i("TAG", "fetchDraftOrdersForCustomer:${PreferencesUtils.getInstance(requireContext()).getCartId()} ")
             }
         }
     }
@@ -262,7 +254,6 @@ class LoginFragment : Fragment() {
                     when (state) {
                         is ViewState.Success -> {
                             val products = state.data
-                            Log.i("TAG", "fetchProducts: ${products.count()}")
                             val matchingProducts = mutableListOf<ProductsItem>()
                             draftOrder.lineItems.forEach { lineItem ->
                                 val matchingProduct = products.find { it.title == lineItem.title }
@@ -274,13 +265,10 @@ class LoginFragment : Fragment() {
                             for (product in matchingProducts) {
                                 viewModel.inertProducts(product)
                             }
-                            Log.i("LoginFragment", "Matching Products: $matchingProducts")
                         }
                         is ViewState.Error -> {
-                            Log.i("TAG", "fetchProducts: ${state.message}")
                         }
                         is ViewState.Loading -> {
-                            Log.i("TAG", "fetchProducts:+++++++++++++++++++++")
                         }
                     }
                 }

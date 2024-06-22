@@ -99,15 +99,17 @@ class ProductDetailsFragment : Fragment() {
                     lifecycleScope.launch {
                         pref.setCartId(viewModel.postProductInCart(item))
                     }
+                    AlertUtil.showSnackbar(it,getString(R.string.added_to_cart_successfully))
                     binding.editProductBtn.visibility = View.GONE
                 } else {
                     if(viewModel.isProductFoundInCartExists(productItem.title ?:""))
                     {
-                        AlertUtil.showSnackbar(it,"Product found in Cart")
+                        AlertUtil.showSnackbar(it,getString(R.string.product_is_already_added_to_cart))
                     }else{
                         val data = PutDraftItem(viewModel.getItemLineList(productItem?.title ?: "", productItem?.price ?: ""))
                         val request = PutDraftOrderItemModel(data)
                         viewModel.putProductInCart(cartID.toString(), request)
+                        AlertUtil.showSnackbar(it,getString(R.string.added_to_cart_successfully))
                         binding.editProductBtn.visibility = View.GONE
                     }
                 }
