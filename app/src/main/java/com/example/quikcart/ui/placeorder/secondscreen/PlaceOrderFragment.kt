@@ -6,7 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +29,7 @@ import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PaymentMethod
 import com.example.quikcart.utils.PreferencesUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,55 +57,15 @@ class PlaceOrderFragment : Fragment() {
     private var counter=0
     private var isPaymentApproved=false
     private var isPayPalChoose=false
+    private lateinit var materialAboutUsBuilder: MaterialAlertDialogBuilder
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentPlaceOrderBinding.inflate(inflater, container, false)
-        /*binding.paymentButtonContainer.setup(
-            createOrder =
-            CreateOrder { createOrderActions ->
-                val order =
-                    OrderRequest(
-                        intent = OrderIntent.CAPTURE,
-                        appContext = AppContext(userAction = UserAction.PAY_NOW),
-                        purchaseUnitList =
-                        listOf(
-                            PurchaseUnit(
-                                amount =
-                                Amount(currencyCode = CurrencyCode.USD
-                                    , value = totalPrice)
-                            )
-                        )
-                    )
-
-                createOrderActions.create(order)
-            },
-            onApprove =
-            OnApprove { approval ->
-                paymentMethod=PaymentMethod.PAYPAL
-                isPayPalChoose=true
-                isPaymentApproved=true
-                viewModel.confirmOrder()
-                Log.d("TAG", "OrderId: ${approval.data.orderId}")
-                Toast.makeText(requireActivity(), "Payment Approved", Toast.LENGTH_SHORT).show()
-            },
-            onCancel = OnCancel{
-                isPayPalChoose=true
-                isPaymentApproved=false
-                Log.i("TAG", "onViewCreated: ==================== payment canceld")
-                Toast.makeText(requireActivity(), "Payment Cancel", Toast.LENGTH_SHORT).show()
-
-            },
-            onError = OnError{
-                isPayPalChoose=true
-                isPaymentApproved=false
-                Log.i("TAG", "setUPPayPal: ${it}")
-                Toast.makeText(requireActivity(), "Payment Error", Toast.LENGTH_SHORT).show()
-
-            }
-        )*/
+        materialAboutUsBuilder = MaterialAlertDialogBuilder(requireActivity())
         return binding.root
     }
 
@@ -119,25 +83,18 @@ class PlaceOrderFragment : Fragment() {
         initViewModel()
         getPassedArgs()
         clickOnCash()
-        Log.e("TAG", "onViewCreated email: ${preferencesUtils.getCustomerEmail()}", )
-        Log.e("TAG", "onViewCreated: ${paymentMethod.name}", )
-        Log.e("TAG", "onViewCreated: ${draftOrder.customer.phone}", )
-
         initializeViewModelVariables()
         binding.vm = viewModel
         observeOnLiveData()
         observeOnStateFlow()
-        Log.e("TAG", "onViewCreated: ${totalPrice}", )
         checkTotalPrice(totalPrice.toFloat())
         changePaymentBackground()
-        Log.e("TAG", "getShippingAddress: ${address.phone}", )
         navigateToPayPalPayment()
     }
     private fun changePaymentBackground() {
         binding.paymentLinear.setOnClickListener {
             isPayPalChoose=true
             counter++
-            Log.e("TAG", "onViewCreated1: ${counter}",)
             if (counter % 2 == 0) {
                 binding.paymentLinear.setBackgroundResource(R.drawable.rounded_green_bg)
                 binding.cashPayment.setBackgroundResource(R.drawable.rounded_bg)
@@ -179,9 +136,6 @@ class PlaceOrderFragment : Fragment() {
 
     private fun checkTotalPrice(totalPrice:Float) {
         var checkPrice= MAXIMUM_CASH_AMOUNT
-        Log.e("TAG", "checkTotalPrice: $checkPrice", )
-        Log.e("TAG", "checkTotalPrice: $", )
-
         binding.cashPayment.visibility=if(totalPrice >= checkPrice.toFloat()) {
             if(preferencesUtils.getCurrencyType() == PreferencesUtils.CURRENCY_USD)
                 checkPrice *=preferencesUtils.getUSDRate()
@@ -271,7 +225,8 @@ class PlaceOrderFragment : Fragment() {
                             AlertUtil.showSnackbar(requireView(), "Order is placed successfully")
                             preferencesUtils.setCartId(0)
                             findNavController().popBackStack(R.id.homeFragment, false)
-                           // viewModel.sendEmail("Hello")
+                            showAnimationAfterConfirmOrder()
+                            // viewModel.sendEmail("Hello")
 
                         }
                         is ViewState.Loading -> {}
@@ -282,14 +237,26 @@ class PlaceOrderFragment : Fragment() {
         }
     }
 
+    private fun showAnimationAfterConfirmOrder()
+    {
+        val confirmOrderAnimationDialog = layoutInflater.inflate(R.layout.confirm_order_dialog, null)
+
+        val alertDialog = materialAboutUsBuilder.setView(confirmOrderAnimationDialog)
+            .setBackground(
+                ResourcesCompat.getDrawable(
+                    resources, R.drawable.dialogue_background, requireActivity().theme
+                )
+            ).setCancelable(true).show()
+
+        confirmOrderAnimationDialog.findViewById<Button>(R.id.closeAnimationOrder).setOnClickListener {
+            alertDialog.cancel()
+        }
+    }
 
     private fun getPassedArgs() {
         draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
         totalPrice = (PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total )
-        Log.e("TAG", "getPassedArgs: ${draftOrder.totalPrice}", )
         draftOrder.totalPrice = totalPrice
-        Log.e("TAG", "getPassedArgs: ${totalPrice}", )
-        Log.e("TAG", "getPassedArgs: ${draftOrder.totalPrice}", )
         discountPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.discount
         address = PlaceOrderFragmentArgs.fromBundle(requireArguments()).address
     }
@@ -298,50 +265,4 @@ class PlaceOrderFragment : Fragment() {
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class]
     }
 
-
-/*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        paypalActivityResult(requestCode, resultCode, data)
-    }
-
-    private fun paypalActivityResult(requestCode: Int, resultCode: Int, data: Intent?)
-    {
-        if (requestCode == PAYPAL_REQUEST_CODE){
-            if (requestCode == Activity.RESULT_OK)
-            {
-                var confirmation = data?.getParcelableExtra<PaymentConfirmation>(PaymentActivity.EXTRA_RESULT_CONFIRMATION)
-                if (confirmation != null)
-                {
-                    var d = confirmation.toJSONObject().toString(4)
-                    Log.i("TAG", "onActivityResult: ${d}")
-                }
-            }else if (requestCode == Activity.RESULT_CANCELED){
-                Toast.makeText(requireActivity(), getString(R.string.cancel), Toast.LENGTH_SHORT).show()
-            }
-        }else if(requestCode == PaymentActivity.RESULT_EXTRAS_INVALID)
-        {
-            Toast.makeText(requireActivity(), getString(R.string.delete), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        startPayPalService()
-    }
-    private fun startPayPalService()
-    {
-        val intent = Intent(requireActivity(), PayPalService::class.java)
-        intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, paypalConfig)
-        requireActivity().startService(intent)
-    }
-    private fun stopPayPalService()
-    {
-        requireActivity().stopService(Intent(requireActivity(),PayPalService::class.java))
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        stopPayPalService()
-    }*/
 }

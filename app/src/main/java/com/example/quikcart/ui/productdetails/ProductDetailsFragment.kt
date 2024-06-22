@@ -23,6 +23,7 @@ import com.example.quikcart.models.entities.cart.PostDraftOrderItemModel
 import com.example.quikcart.models.entities.cart.PutDraftItem
 import com.example.quikcart.models.entities.cart.PutDraftOrderItemModel
 import com.example.quikcart.ui.authentication.AuthenticationActivity
+import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
 import com.example.quikcart.utils.setPrice
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,8 +87,7 @@ class ProductDetailsFragment : Fragment() {
         }
         binding.editProductBtn.setOnClickListener {
             if(pref.getUserId()!="0"&&pref.getUserId()!="-1"){
-
-            if (cartID.toInt() == 0) {
+                if (cartID.toInt() == 0) {
                 val item = PostDraftOrderItemModel(
                     DraftItem(
                         line_items = listOf(DraftOrderLineItem(productItem?.title ?: "", productItem?.price ?: "", 1)),
@@ -96,14 +96,21 @@ class ProductDetailsFragment : Fragment() {
                     )
                 )
 
-                lifecycleScope.launch {
-                    pref.setCartId(viewModel.postProductInCart(item))
+                    lifecycleScope.launch {
+                        pref.setCartId(viewModel.postProductInCart(item))
+                    }
+                    binding.editProductBtn.visibility = View.GONE
+                } else {
+                    if(viewModel.isProductFoundInCartExists(productItem.title ?:""))
+                    {
+                        AlertUtil.showSnackbar(it,"Product found in Cart")
+                    }else{
+                        val data = PutDraftItem(viewModel.getItemLineList(productItem?.title ?: "", productItem?.price ?: ""))
+                        val request = PutDraftOrderItemModel(data)
+                        viewModel.putProductInCart(cartID.toString(), request)
+                        binding.editProductBtn.visibility = View.GONE
+                    }
                 }
-            } else {
-                val data = PutDraftItem(viewModel.getItemLineList(productItem?.title ?: "", productItem?.price ?: ""))
-                val request = PutDraftOrderItemModel(data)
-                viewModel.putProductInCart(cartID.toString(), request)
-            }
             }
             else {
                 showSignInAlert("cart")
