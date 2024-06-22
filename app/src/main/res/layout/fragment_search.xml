@@ -51,22 +51,33 @@
           app:layout_constraintStart_toStartOf="parent"
           android:orientation="horizontal"
           android:visibility="gone"
+
           >
           <TextView
               android:id="@+id/price_tv"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginStart="8dp"
-              android:layout_marginTop="8dp"
+              android:layout_marginTop="12dp"
               android:text="@string/filter_by_price"
-              android:fontFamily="@font/pacifico"
-              android:textSize="15sp" />
+              android:textSize="18sp" />
 
           <com.google.android.material.slider.Slider
               android:id="@+id/slider"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginEnd="8dp"
+              app:thumbColor="@color/xd_dark_burgundy"
+              app:tickColor="@color/xd_dark_burgundy"
+              app:tickColorActive="@color/xd_dark_burgundy"
+              app:trackColor="@color/xd_dark_burgundy"
+              app:haloColor="@color/xd_dark_burgundy"
+              android:shadowColor="@color/xd_dark_burgundy"
+              app:trackColorActive="@color/xd_dark_burgundy"
+              app:thumbStrokeColor="@color/xd_dark_burgundy"
+              app:tickColorInactive="@color/xd_dark_burgundy"
+              style="@style/SliderStyle"
+              app:trackColorInactive="@color/xd_dark_burgundy"
               android:text="@string/total_price"
               app:valueFrom="@{vm.minPrice}"
               app:valueTo="@{vm.maxPrice}"

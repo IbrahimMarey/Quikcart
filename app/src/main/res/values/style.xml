@@ -6,4 +6,7 @@
         <item name="android:textColor">@color/white</item>
 -->
     </style>
+    <style name="SliderStyle" parent="Widget.MaterialComponents.Slider">
+        <item name="android:textColor">@color/xd_dark_burgundy</item>
+    </style>
 </resources>
