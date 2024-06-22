@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/order_id"
             app:layout_constraintStart_toEndOf="@id/price_tv"
-            android:text="@{orderItem.totalPrice}"
+            app:price="@{orderItem.totalPrice}"
             tools:text="42$"
             android:layout_marginStart="4dp"
             android:textColor="@color/xd_blue"

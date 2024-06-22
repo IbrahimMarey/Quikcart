@@ -38,7 +38,7 @@ class OrderCustomerAddressesAdapter(private val onItemClick:(AddressResponse)->U
             notifyItemChanged(selectedPosition)
         }
         if (selectedPosition == holder.adapterPosition) {
-            changeCardItemStyle(holder,Color.LTGRAY,R.color.xd_lemon_dark)
+            changeCardItemStyle(holder,Color.LTGRAY,R.color.xd_burgundy)
             onItemClick.invoke(getItem(position))
         } else {
             changeCardItemStyle(holder,Color.WHITE, R.color.xd_btn_nav_item)

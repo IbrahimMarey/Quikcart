@@ -4,15 +4,21 @@ import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.view.View
 import android.widget.Toast
+import com.google.android.material.snackbar.Snackbar
 
 
 object AlertUtil {
     private var progressDialog:ProgressDialog?=null
     private var alertDialog: AlertDialog? = null
-    fun showToast(ctx:Context,msg:String){
-        Toast.makeText(ctx,msg,Toast.LENGTH_LONG).show()
+    fun showSnackbar(view: View, msg:String, actionMsg:String?=null, listener:View.OnClickListener?=null){
+        Snackbar.make(view, msg,Snackbar.LENGTH_LONG)
+            .setAction(msg,listener)
+            .show()
     }
+
+
 
     fun showProgressDialog(ctx:Context){
         progressDialog=ProgressDialog(ctx).apply {

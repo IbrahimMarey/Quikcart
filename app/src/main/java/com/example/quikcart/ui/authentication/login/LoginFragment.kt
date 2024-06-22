@@ -215,16 +215,28 @@ class LoginFragment : Fragment() {
                         val draftOrders = state.data.filter { it.email == email }
                         if (draftOrders.isNotEmpty()) {
                             Log.i("LoginFragment", "Draft Orders: ${draftOrders.count()}")
-                            when (draftOrders[0].lineItems[0].price == "0.00") {
-                                true -> {
-                                    PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[0].id)
-                                    PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[1].id)
-                                    fetchProducts(draftOrders[0])
+                            if (draftOrders.size == 2){
+                                when (draftOrders[0].lineItems[0].price == "0.00") {
+                                    true -> {
+                                        PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[0].id)
+                                        PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[1].id)
+                                        fetchProducts(draftOrders[0])
+                                    }
+                                    false -> {
+                                        PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[0].id)
+                                        PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[1].id)
+                                        fetchProducts(draftOrders[1])
+                                    }
                                 }
-                                false -> {
-                                    PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[0].id)
-                                    PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[1].id)
-                                    fetchProducts(draftOrders[1])
+                            }else{
+                                when (draftOrders[0].lineItems[0].price == "0.00") {
+                                    true -> {
+                                        PreferencesUtils.getInstance(requireContext()).setFavouriteId(draftOrders[0].id)
+                                        fetchProducts(draftOrders[0])
+                                    }
+                                    false -> {
+                                        PreferencesUtils.getInstance(requireContext()).setCartId(draftOrders[0].id)
+                                    }
                                 }
                             }
                         } else {

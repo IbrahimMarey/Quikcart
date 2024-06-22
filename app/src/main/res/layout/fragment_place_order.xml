@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="16dp"
-            android:background="@color/xd_burgundy"
+            android:background="@color/white"
             >
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,7 +44,8 @@
                     android:layout_gravity="center"
                     android:text="@string/confirm_order"
                     android:textSize="20sp"
-                    android:textColor="@color/white" />
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -67,8 +68,7 @@
                             android:layout_weight="1"
                             android:text="@string/subtotal"
                             android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/pacifico" />
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/sub_total"
@@ -96,8 +96,7 @@
                             android:layout_weight="1"
                             android:text="@string/discount_applied"
                             android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/pacifico" />
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/discount"
@@ -125,8 +124,7 @@
                             android:text="@string/shipping_fees"
                             android:layout_weight="1"
                             android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/pacifico" />
+                            android:textSize="20sp" />
 
                         <TextView
                             android:id="@+id/fees"
@@ -154,8 +152,7 @@
                             android:text="@string/total_price"
                             android:layout_weight="1"
                             android:textStyle="bold"
-                            android:textSize="20sp"
-                            android:fontFamily="@font/pacifico" />
+                            android:textSize="20sp"/>
 
                         <TextView
                             android:id="@+id/total"
@@ -182,7 +179,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/choose_payment_method"
-                            android:fontFamily="@font/pacifico"
+                            android:textStyle="bold"
                             android:textSize="15sp" />
 
                             <LinearLayout

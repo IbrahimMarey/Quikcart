@@ -1,16 +1,11 @@
 package com.example.quikcart.ui.placeorder.secondscreen
 
-import android.app.Activity
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -29,20 +24,8 @@ import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.ShippingAddress
 import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.utils.AlertUtil
-import com.example.quikcart.utils.DateUtil
 import com.example.quikcart.utils.PaymentMethod
 import com.example.quikcart.utils.PreferencesUtils
-import com.paypal.checkout.approve.OnApprove
-import com.paypal.checkout.cancel.OnCancel
-import com.paypal.checkout.createorder.CreateOrder
-import com.paypal.checkout.createorder.CurrencyCode
-import com.paypal.checkout.createorder.OrderIntent
-import com.paypal.checkout.createorder.UserAction
-import com.paypal.checkout.error.OnError
-import com.paypal.checkout.order.Amount
-import com.paypal.checkout.order.AppContext
-import com.paypal.checkout.order.OrderRequest
-import com.paypal.checkout.order.PurchaseUnit
 
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -213,25 +196,36 @@ class PlaceOrderFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViewModelVariables() {
         viewModel.totalPrice = totalPrice
-        viewModel.shippingFees = "0"
+        Log.e("TAG", "initializeViewModelVariables: ${viewModel
+            .totalPrice}", )
+        viewModel.shippingFees = "50"
         viewModel.discount=discountPrice
         viewModel.maximumCashAmount= MAXIMUM_CASH_AMOUNT.toString()
         viewModel.subTotal=(totalPrice.toFloat() + discountPrice.toFloat()).toString()
         viewModel.isPayPalChoose=isPayPalChoose
         viewModel.isPaymentApproved=isPaymentApproved
+        Log.e("TAG2", "initializeViewModelVariables: ${totalPrice}", )
+
         viewModel.orderResponse = Order(getOrderItem())
 
+        Log.e("TAG1", "initializeViewModelVariables: ${totalPrice}", )
+        Log.e("TAG1", "orderResponse  = = = == = = =  ${viewModel.orderResponse.order?.totalPrice}", )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getOrderItem():OrdersItem {
+        Log.i("TAG", "getOrderItem: = = = = = = = $totalPrice")
+        Log.i("TAG", "getOrderItem: = = = = = = = discount $discountPrice")
+
         return OrdersItem(
             lineItems = draftOrder.lineItems,
-            customer = getCustomerData(), totalPrice = totalPrice,
+            customer = getCustomerData(),
+            totalPrice = totalPrice,
             totalTax = "0",
             currency = preferencesUtils.getCurrencyType(),
             paymentGatewayNames = mutableListOf(paymentMethod.name),
-            shippingAddress = getShippingAddress()
+            shippingAddress = getShippingAddress(),
+            currentTotalDiscounts = discountPrice
 
         )
     }
@@ -270,11 +264,11 @@ class PlaceOrderFragment : Fragment() {
                 viewModel.uiState.collect {
                     when (it) {
                         is ViewState.Error -> {
-                            AlertUtil.showToast(requireContext(), it.message) }
+                            AlertUtil.showSnackbar(requireView(), it.message) }
 
                         is ViewState.Success -> {
                             viewModel.deleteCartItemsById(draftOrder.id.toString())
-                            AlertUtil.showToast(requireContext(), "Order is placed successfully")
+                            AlertUtil.showSnackbar(requireView(), "Order is placed successfully")
                             preferencesUtils.setCartId(0)
                             findNavController().popBackStack(R.id.homeFragment, false)
                            // viewModel.sendEmail("Hello")
@@ -291,7 +285,11 @@ class PlaceOrderFragment : Fragment() {
 
     private fun getPassedArgs() {
         draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
-        totalPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total
+        totalPrice = (PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total )
+        Log.e("TAG", "getPassedArgs: ${draftOrder.totalPrice}", )
+        draftOrder.totalPrice = totalPrice
+        Log.e("TAG", "getPassedArgs: ${totalPrice}", )
+        Log.e("TAG", "getPassedArgs: ${draftOrder.totalPrice}", )
         discountPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.discount
         address = PlaceOrderFragmentArgs.fromBundle(requireArguments()).address
     }

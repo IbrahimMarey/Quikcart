@@ -134,10 +134,12 @@ class SearchFragment : Fragment() {
 
 
     private fun navigateToProductDetails(productItem: ProductsItem) {
-        val bundle = Bundle().apply {
-            putSerializable("details", productItem)
-        }
-        findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
+        val action = SearchFragmentDirections.actionSearchFragmentToProductDetailsFragment(productItem)
+        findNavController().navigate(action)
+//        val bundle = Bundle().apply {
+//            putSerializable("details", productItem)
+//        }
+//        findNavController().navigate(R.id.action_searchFragment_to_productDetailsFragment, bundle)
     }
 
     private fun addToFavorite(productItem: ProductsItem, position: Int) {

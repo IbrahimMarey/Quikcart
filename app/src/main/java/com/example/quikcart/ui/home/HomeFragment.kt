@@ -8,7 +8,6 @@ import android.text.ClipboardManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -51,7 +50,7 @@ class HomeFragment : Fragment() {
         initViewModel()
         observeOnStateFlow()
         initCategoryRecyclerView()
-
+        ObserveOnCouponLiveData()
        // initImageSlider()
         binding.searchBar.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_searchFragment)
@@ -87,7 +86,7 @@ class HomeFragment : Fragment() {
                     when (it) {
                         is ViewState.Error ->{
                             binding.brandsProgressbar.visibility = View.GONE
-                            AlertUtil.showToast(requireContext(), it.message)}
+                            AlertUtil.showSnackbar(requireView(), it.message)}
                         is ViewState.Success -> {
                             initBrandsRecyclerView(it.data)
                             binding.brandsProgressbar.visibility = View.GONE
@@ -100,9 +99,13 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-            viewModel.couponsList.observe(viewLifecycleOwner) { coupons ->
-                initImageSlider(coupons)
-            }
+        }
+    }
+
+    private fun ObserveOnCouponLiveData()
+    {
+        viewModel.couponsList.observe(viewLifecycleOwner) { coupons ->
+            initImageSlider(coupons)
         }
     }
 

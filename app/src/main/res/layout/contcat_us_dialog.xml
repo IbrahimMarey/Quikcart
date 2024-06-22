@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
-        android:background="@drawable/dialogue_background"
+        android:background="@drawable/background_details_middle"
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -33,7 +33,7 @@
             android:layout_marginEnd="16dp"
             android:text="@string/service_support"
             android:textSize="16sp"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView11"
             app:layout_constraintTop_toTopOf="parent"
@@ -54,7 +54,7 @@
                 android:layout_marginTop="16dp"
                 android:text="quikcart@shopify.com"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                 android:layout_marginTop="16dp"
                 android:text="+20 100 111 1234"
                 android:textSize="16sp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 />
         </LinearLayout>
 

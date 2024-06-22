@@ -1,7 +1,6 @@
 package com.example.quikcart.ui.orders
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +48,7 @@ class OrdersFragment : Fragment() {
                     when (orders) {
                         is ViewState.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            AlertUtil.showToast(requireContext(), orders.message)
+                            AlertUtil.showSnackbar(requireView(), orders.message)
                         }
 
                         ViewState.Loading -> {
@@ -57,6 +56,11 @@ class OrdersFragment : Fragment() {
                         }
 
                         is ViewState.Success -> {
+                   orders.data.forEach {orderItem->
+                                viewModel.totalPrice=(orderItem.currentTotalDiscounts!!.toFloat()
+                                    .let { (orderItem.totalPrice?.toFloat())?.minus(it).toString() }.toString())
+
+                            }.toString()
                             binding.noOrderImg.visibility=if(orders.data.isEmpty()) View.VISIBLE else View.GONE
                             binding.progressBar.visibility = View.GONE
                             initRecyclerView(orders.data)

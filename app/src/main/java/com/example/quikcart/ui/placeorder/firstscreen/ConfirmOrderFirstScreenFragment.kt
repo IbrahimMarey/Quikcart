@@ -64,7 +64,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
 
     private fun observeOnLiveData() {
         viewModel.phoneState.observe(viewLifecycleOwner) { msg ->
-            AlertUtil.showToast(requireContext(),msg)
+            AlertUtil.showSnackbar(requireView(),msg)
         }
     }
 
@@ -75,7 +75,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
                     when (it) {
                         is ViewState.Error ->{
                             binding.progressBar.visibility = View.GONE
-                            AlertUtil.showToast(requireContext(), it.message)}
+                            AlertUtil.showSnackbar(requireView(), it.message)}
                         is ViewState.Success -> {
                             initAddressesRecycler(it.data)
                             binding.progressBar.visibility = View.GONE

@@ -1,5 +1,6 @@
 package com.example.quikcart.ui.orders
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class OrdersViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     private val _uiState = MutableStateFlow<ViewState<List<OrdersItem>>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<List<OrdersItem>>> = _uiState
+    lateinit var totalPrice:String
 
 
     fun getCustomerOrders(customerId: Long) {
@@ -28,6 +30,8 @@ class OrdersViewModel @Inject constructor(private val repo: Repository) : ViewMo
 
                 val productsMap=products.associateBy { it.title }
                 orders.forEach { orderItem ->
+
+                    Log.e("TAG", "getCustomerOrders: ${orderItem.currentTotalDiscounts}", )
                     filterProductByTitle(orderItem, productsMap)
                 }
 

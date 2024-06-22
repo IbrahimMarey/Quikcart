@@ -554,7 +554,7 @@ data class OrdersItem(
     val currentTotalDutiesSet: Any? = null,
 
     @field:SerializedName("total_price")
-    val totalPrice: String? = null,
+    var totalPrice: String? = null,
 
     @field:SerializedName("total_line_items_price")
     val totalLineItemsPrice: String? = null,

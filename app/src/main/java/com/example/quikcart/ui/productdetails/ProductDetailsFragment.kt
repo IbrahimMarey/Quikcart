@@ -53,7 +53,8 @@ class ProductDetailsFragment : Fragment() {
         val favID = pref.getFavouriteId()
 
         viewModel = ViewModelProvider(this)[ProductDetailsViewModel::class.java]
-        productItem = arguments?.getSerializable("details") as ProductsItem
+        productItem = ProductDetailsFragmentArgs.fromBundle(requireArguments()).product
+//        productItem = arguments?.getSerializable("details") as ProductsItem
 /*
         if (NetworkUtil.isNetworkAvailable(requireContext())) {
             binding.networkImageView.visibility=View.GONE
@@ -180,12 +181,12 @@ class ProductDetailsFragment : Fragment() {
         }
     }
     private fun showSignInAlert(message: String) {
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(activity)
             .setTitle("Please Sign In")
             .setMessage("You need to sign in to add items to your $message.")
             .setPositiveButton("Sign In") { dialog, _ ->
-                startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
-                requireActivity().finish()
+                startActivity(Intent(activity, AuthenticationActivity::class.java))
+//                requireActivity().finish()
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->

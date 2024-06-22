@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.quikcart.R
 import com.example.quikcart.databinding.FragmentProductBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.CategoryItem
@@ -104,7 +103,7 @@ class ProductFragment : Fragment() {
                     when (it) {
                         is ViewState.Error ->{
                             binding.progressBar.visibility = View.GONE
-                            AlertUtil.showToast(requireContext(), it.message)
+                            AlertUtil.showSnackbar(requireView(), it.message)
                         }
                         is ViewState.Success -> {
                             binding.noProductImg.visibility= if(it.data.isEmpty()) View.VISIBLE else View.GONE
@@ -138,10 +137,13 @@ class ProductFragment : Fragment() {
         productsViewModel = ViewModelProvider(this)[ProductsViewModel::class.java]
     }
     private fun navigateToProductDetails(productItem: ProductsItem) {
-        val bundle = Bundle().apply {
-            putSerializable("details", productItem)
-        }
-        findNavController().navigate(R.id.action_productFragment_to_productDetailsFragment, bundle)
+        val action = ProductFragmentDirections.actionProductFragmentToProductDetailsFragment(productItem)
+//        Navigation.findNavController(requireView()).navigate(action)
+        findNavController().navigate(action)
+//        val bundle = Bundle().apply {
+//            putSerializable("details", productItem)
+//        }
+//        findNavController().navigate(R.id.action_productFragment_to_productDetailsFragment, bundle)
     }
 
     private fun addToFavorite(productItem: ProductsItem ,position: Int) {
