@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ActivityMainBinding.setUpBottomNavigation() {
+        Log.i("TAG", "setUpBottomNavigation: ${preferencesUtils.getCustomerId()}")
         if (preferencesUtils.getCustomerId() <= 0.toLong())
         {
             bottomNavigationItems = mutableListOf(
