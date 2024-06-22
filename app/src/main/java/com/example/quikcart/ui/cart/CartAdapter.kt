@@ -27,7 +27,7 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit, private val editItem
     {
         val model = getItem(position)
         holder.binding.cartItemTitle.text = model.title
-        holder.binding.cartItemPrice.setPrice(model.price.toFloat(),ctx)
+        holder.binding.cartItemPrice.setPrice(model.price.toFloat()*model.quantity,ctx)
         holder.binding.cartItemQuntity.text = model.quantity.toString()
         ImageUtils.loadImage(holder.binding.cartItemImage,model.fulfillmentService)
         holder.binding.btnRemoveItem.setOnClickListener {
