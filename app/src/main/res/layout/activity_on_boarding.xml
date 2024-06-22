@@ -5,21 +5,25 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.splash.SplashActivity">
+    tools:context=".onboarding.OnBoardingActivity">
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/splash_lottie"
+    <Button
+        android:id="@+id/btnNext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:lottie_rawRes="@raw/cart_splash"
+        android:text="Next"
+        android:backgroundTint="@color/xd_dark_burgundy"
+        android:layout_marginEnd="@dimen/margin_36x"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
-
+        android:layout_marginBottom="@dimen/margin_36x"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

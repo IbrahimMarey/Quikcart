@@ -18,10 +18,14 @@
         android:theme="@style/Theme.Quikcart"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".onboarding.OnBoardingActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".utils.NetworkChangeReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
 
         <activity
             android:name=".ui.splash.SplashActivity"
@@ -40,10 +44,10 @@
         <!-- AIzaSyDyQwg8eDwXdv1ybyIfOJlPgS0ldeUPfFo -->
         <activity
             android:name=".ui.authentication.AuthenticationActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>
