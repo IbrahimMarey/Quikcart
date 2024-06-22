@@ -20,6 +20,7 @@ import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.ProductsItem
 import com.example.quikcart.models.entities.cart.*
 import com.example.quikcart.ui.authentication.AuthenticationActivity
+import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -180,7 +181,7 @@ class SearchFragment : Fragment() {
     private fun handleSuccess(productItem: ProductsItem, position: Int) {
         productItem.isFavorited = true
         adapter.notifyItemChanged(position)
-        Toast.makeText(requireContext(), "Product added to favorites successfully!", Toast.LENGTH_SHORT).show()
+        AlertUtil.showSnackbar(requireView(),"Product added to favorites successfully!")
     }
     private fun showSignInAlert() {
         AlertDialog.Builder(requireContext())

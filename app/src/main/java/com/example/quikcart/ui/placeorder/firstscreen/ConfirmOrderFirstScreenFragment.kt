@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -108,7 +107,7 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         {
             applyCoupon(priceRule)
         }else{
-            Toast.makeText(requireActivity(), getString(R.string.coupon_is_not_found), Toast.LENGTH_SHORT).show()
+            showMSG(getString(R.string.coupon_is_not_found),)
         }
     }
 
@@ -121,12 +120,12 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
             price += percentageAmount
             discountPrice = (totalPrice.toFloat() - price).toString()
             totalPrice = price.toString()
-            Toast.makeText(requireActivity(), getString(R.string.coupon_confirmed), Toast.LENGTH_SHORT).show()
+            showMSG(getString(R.string.coupon_confirmed))
         }else
         {
             totalPrice = (totalPrice.toFloat() + priceRule.value.toFloat()).toString()
             discountPrice = priceRule.value
-            Toast.makeText(requireActivity(), getString(R.string.coupon_confirmed), Toast.LENGTH_SHORT).show()
+            showMSG(getString(R.string.coupon_confirmed))
         }
         lockCouponsViews()
     }
@@ -153,5 +152,9 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
             AlertUtil.showCustomAlertDialog(requireContext(),
                 "Please add your Address","Ok")
         }
+    }
+
+    private fun showMSG(msg:String){
+        AlertUtil.showSnackbar(requireView(),msg)
     }
 }

@@ -22,6 +22,7 @@ import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.PostAddressBodyModel
 import com.example.quikcart.models.entities.PostAddressModel
 import com.example.quikcart.ui.adresses.AddressesViewModel
+import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PreferencesUtils
 import com.example.quikcart.utils.getMarkerAddress
 import com.example.quikcart.utils.isEgyptianPhoneNumberValid
@@ -99,7 +100,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     confirmLocationDialog(PostAddressModel(postadderssbody),alertDialog)
                 }else
                 {
-                    Toast.makeText(context, getString(R.string.phone_miss_match), Toast.LENGTH_SHORT).show()
+                    showMSG(getString(R.string.phone_miss_match))
                 }
             }else{
                 postadderssbody.address1 = addressData.findViewById<EditText>(R.id.locationTitleInput).text.toString()
@@ -122,14 +123,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         Navigation.findNavController(requireView()).navigateUp()
     }
 
-    private fun checkStringLength(input: String):Boolean {
-        if (input.length < 4) {
-            Toast.makeText(context, "Enter Valid Address Title", Toast.LENGTH_SHORT).show()
-            return false
-        } else {
-            return true
-        }
-    }
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
@@ -147,7 +141,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 selectedLatLng=latLng
                 googleMap.addMarker(MarkerOptions().position(latLng).title(getMarkerAddress(requireActivity(),map.cameraPosition.target.latitude, map.cameraPosition.target.longitude)).snippet("Marker Snippet"))
             } else {
-                Toast.makeText(context, R.string.not_allow_location, Toast.LENGTH_SHORT).show()
+                showMSG(getString(R.string.not_allow_location))
             }
         }
     }
@@ -170,5 +164,9 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         binding.mapView.onSaveInstanceState(outState)
+    }
+
+    private fun showMSG(msg:String){
+        AlertUtil.showSnackbar(requireView(),msg)
     }
 }
