@@ -39,8 +39,9 @@ class AddressesViewModel @Inject constructor(private val _appRepo:Repository):Vi
             _appRepo.getAllAddressesShopify(customerID).catch {
                 _customerAddresses.value = ViewState.Error(it.message?:"Can't Delete Defualt Address")
             }.collect{
-                _customerAddresses.value = ViewState.Success(it.addresses)
+                addressesList.clear()
                 addressesList.addAll(it.addresses)
+                _customerAddresses.value = ViewState.Success(it.addresses)
             }
         }
     }

@@ -99,7 +99,7 @@ class AddressesFragment : Fragment() {
     private fun delAddress(addressesModel:AddressResponse){
         Snackbar.make(requireView(), getString(R.string.are_you_sure_you_want_to_delete_this_address), Snackbar.LENGTH_LONG)
             .setAction(getString(R.string.delete)) {
-                if (addressesViewModel.addressesList.size >=2)
+                if (addressesModel != addressesViewModel.addressesList[0])
                     addressesModel.id?.let { it1 ->
                         addressesViewModel.delCustomerAddress(PreferencesUtils.getInstance(requireContext()).getCustomerId(),
                             it1
