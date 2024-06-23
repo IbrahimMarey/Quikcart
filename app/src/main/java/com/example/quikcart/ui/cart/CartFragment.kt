@@ -61,7 +61,7 @@ class CartFragment : Fragment() {
         pref = PreferencesUtils.getInstance(requireActivity())
         viewModel = ViewModelProvider(this)[CartViewModel::class.java]
         viewModel.getCart(pref.getCartId().toString())
-        binding.paymentButtonContainer.setup(
+        /*binding.paymentButtonContainer.setup(
             createOrder =
             CreateOrder { createOrderActions ->
                 val order =
@@ -92,7 +92,7 @@ class CartFragment : Fragment() {
             onError = OnError{
 //                showMSG("Payment Error")
             }
-        )
+        )*/
         val delAction: (LineItem) -> Unit = {
             delCartItem(it)
         }

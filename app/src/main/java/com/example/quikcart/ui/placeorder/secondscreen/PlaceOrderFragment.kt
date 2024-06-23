@@ -45,6 +45,8 @@ import com.paypal.checkout.order.PurchaseUnit
 
 
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -96,9 +98,9 @@ class PlaceOrderFragment : Fragment() {
             },
             onApprove =
             OnApprove { approval ->
-                PreferencesUtils.isPayWithPayPal = true
-                Navigation.findNavController(requireView()).navigateUp()
-                showMSG("Payment Approved")
+                PreferencesUtils.isPayWithPayPal = false
+                viewModel.confirmOrder()
+//                showMSG("Payment Approved")
             },
             onCancel = OnCancel{
                 showMSG("Payment Cancel")
@@ -127,7 +129,8 @@ class PlaceOrderFragment : Fragment() {
         initViewModel()
         getPassedArgs()
         clickOnCash()
-        initializeViewModelVariables()
+//        initializeViewModelVariables()
+        checkCart()
         binding.vm = viewModel
         observeOnLiveData()
         observeOnStateFlow()
@@ -153,11 +156,11 @@ class PlaceOrderFragment : Fragment() {
 
     private fun navigateToPayPalPayment()
     {
-        binding.paypalPayCard.setOnClickListener {
-            val amount = "%.2f".format(totalPrice.toFloat() * preferencesUtils.getUSDRate())
-            val action = PlaceOrderFragmentDirections.actionPlaceOrderFragmentToPaymentFragment(amount)
-            Navigation.findNavController(it).navigate(action)
-        }
+//        binding.paypalPayCard.setOnClickListener {
+//            val amount = "%.2f".format(totalPrice.toFloat() * preferencesUtils.getUSDRate())
+//            val action = PlaceOrderFragmentDirections.actionPlaceOrderFragmentToPaymentFragment(amount)
+//            Navigation.findNavController(it).navigate(action)
+//        }
     }
     private fun clickOnCash()
     {
@@ -192,31 +195,56 @@ class PlaceOrderFragment : Fragment() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initializeViewModelVariables() {
-
+    private fun checkCart()
+    {
         viewModel.shippingFees = "50"
-        viewModel.totalPrice = (totalPrice.toFloat() + 50.0f).toString()
-        viewModel.discount=discountPrice
-        viewModel.maximumCashAmount= MAXIMUM_CASH_AMOUNT.toString()
         viewModel.subTotal=(totalPrice.toFloat() + discountPrice.toFloat()).toString()
+        viewModel.discount=discountPrice
+        viewModel.totalPrice = (totalPrice.toFloat() + 50.0f).toString()
+        lifecycleScope.launch(Dispatchers.Main) {
+            viewModel.cart.collectLatest {
+                when (it) {
+                    is ViewState.Loading -> {
+
+                    }
+
+                    is ViewState.Error -> {
+
+                    }
+
+                    is ViewState.Success -> {
+                        if (it.data.lineItems.isNotEmpty()) {
+                            initializeViewModelVariables()
+                        } else {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeViewModelVariables() {
+        viewModel.maximumCashAmount= MAXIMUM_CASH_AMOUNT.toString()
         viewModel.isPayPalChoose=isPayPalChoose
         viewModel.isPaymentApproved=isPaymentApproved
         viewModel.orderResponse = Order(getOrderItem())
-        Log.i("TAG", "initializeViewModelVariables: ====== ${viewModel.orderResponse}")
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getOrderItem():OrdersItem {
+        var t = if (discountPrice.toFloat() >= 50.0f)
+            discountPrice.toFloat().minus(50.0f).toString()
+        else
+            "0"
         return OrdersItem(
             lineItems = viewModel.lineItemsList,
             customer = getCustomerData(),
             totalPrice = totalPrice,
-            totalTax = discountPrice.toFloat().minus(50.0f).toString(),
+            totalTax = t,//discountPrice.toFloat().minus(50.0f).toString()
             currency = preferencesUtils.getCurrencyType(),
             paymentGatewayNames = mutableListOf(paymentMethod.name),
             shippingAddress = getShippingAddress(),
-            currentTotalDiscounts = discountPrice
         )
     }
 
