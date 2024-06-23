@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:src="@drawable/ic_remove"
-                android:background="@drawable/cart_item_ic_bg"
+                android:background="@drawable/item_bg_gray"
                 android:padding="8dp"
                 />
             <TextView

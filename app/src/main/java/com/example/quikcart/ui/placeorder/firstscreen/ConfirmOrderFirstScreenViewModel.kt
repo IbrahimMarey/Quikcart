@@ -49,7 +49,7 @@ class ConfirmOrderFirstScreenViewModel@Inject constructor(private val repo: Repo
         viewModelScope.launch {
             _uiState.value=ViewState.Loading
             repo.getAllAddressesShopify(customerID).catch {
-                _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error(it1) }!!
+                _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error("something error: $it1") }!!
             }.collect{
                 _uiState.value = ViewState.Success(it.addresses)
             }

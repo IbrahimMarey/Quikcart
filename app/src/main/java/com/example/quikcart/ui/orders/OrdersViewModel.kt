@@ -37,7 +37,7 @@ class OrdersViewModel @Inject constructor(private val repo: Repository) : ViewMo
 
                 _uiState.value = ViewState.Success(orders)
             } catch (e: Exception) {
-                _uiState.value = e.localizedMessage?.let { ViewState.Error(it) }!!
+                _uiState.value = e.localizedMessage?.let { ViewState.Error("server down, please try again later: $it") }!!
             }
         }
     }

@@ -55,11 +55,14 @@ class ProfileFragment : Fragment(),Navigator {
         binding = FragmentProfileBinding.inflate(inflater,container,false)
         aboutUsDialog = AboutUsDialogBinding.inflate(LayoutInflater.from(container?.context), null, false)
         materialAboutUsBuilder = MaterialAlertDialogBuilder(requireActivity())
+        binding.userName.text=getString(R.string.welcome)+preferencesUtils.getCustomerName()
         if (preferencesUtils.getCustomerId() <= 0.toLong())
         {
             binding.addressSittings.visibility = View.GONE
             binding.currency.visibility = View.GONE
             binding.order.visibility = View.GONE
+            binding.circularImageView.visibility = View.GONE
+            binding.userName.text = "You Don't have an account, Please Sign In"
             binding.logout.text = getString(R.string.sign_in)
         }
         return binding.root
@@ -181,6 +184,7 @@ class ProfileFragment : Fragment(),Navigator {
             preferencesUtils.setCustomerId(0)
             preferencesUtils.setUserID("0")
             preferencesUtils.saveCustomerEmail("")
+            preferencesUtils.saveCustomerName("")
             preferencesUtils.setFavouriteId(0)
             startActivity(Intent(requireContext(), AuthenticationActivity::class.java))
             //requireActivity().finish()
