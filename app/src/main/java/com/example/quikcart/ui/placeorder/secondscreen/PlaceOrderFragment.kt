@@ -213,12 +213,9 @@ class PlaceOrderFragment : Fragment() {
 
                         is ViewState.Success -> {
                             viewModel.deleteCartItemsById(draftOrder.id.toString())
-                            AlertUtil.showSnackbar(requireView(), "Order is placed successfully")
                             preferencesUtils.setCartId(0)
                             findNavController().popBackStack(R.id.homeFragment, false)
                             showAnimationAfterConfirmOrder()
-                            // viewModel.sendEmail("Hello")
-
                         }
                         is ViewState.Loading -> {}
 

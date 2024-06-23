@@ -7,8 +7,8 @@ import com.squareup.picasso.Picasso
 object ImageUtils {
     fun loadImage(imageView: ImageView,url:String){
         Picasso.get().load(url)
-            .placeholder(R.drawable.ic_brand)
-            .error(R.drawable.ic_brand)
+            .placeholder(R.drawable.noproduct)
+            .error(R.drawable.noproduct)
             .into(imageView)
     }
 }

@@ -87,7 +87,6 @@
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                             android:orientation="horizontal"
                             tools:listitem="@layout/brand_item"
-                            android:background="@drawable/rounded_bg_pink"
 
                             />
 
@@ -103,7 +102,6 @@
                             app:iss_period="1000"
                             app:iss_auto_cycle="true"
                             app:iss_error_image="@drawable/ic_cart"
-                            android:background="@drawable/rounded_image"
                             android:layout_marginHorizontal="16dp"
                             />
                   </LinearLayout>
