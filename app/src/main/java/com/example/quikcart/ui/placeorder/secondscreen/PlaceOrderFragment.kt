@@ -207,10 +207,8 @@ class PlaceOrderFragment : Fragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getOrderItem():OrdersItem {
-        return OrdersItem(
-            lineItems = viewModel.lineItemsList,
+    /*
+    * lineItems = viewModel.lineItemsList,
             customer = getCustomerData(),
             totalPrice = totalPrice,
             totalTax = discountPrice.toFloat().minus(50.0f).toString(),
@@ -218,6 +216,17 @@ class PlaceOrderFragment : Fragment() {
             paymentGatewayNames = mutableListOf(paymentMethod.name),
             shippingAddress = getShippingAddress(),
             currentTotalDiscounts = discountPrice
+    * */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getOrderItem():OrdersItem {
+        return OrdersItem(
+            lineItems = viewModel.lineItemsList,
+            customer = getCustomerData(), totalPrice = totalPrice,
+            totalTax = "0",
+            currency = preferencesUtils.getCurrencyType(),
+            paymentGatewayNames = mutableListOf(paymentMethod.name),
+            shippingAddress = getShippingAddress()
+
 
         )
     }
