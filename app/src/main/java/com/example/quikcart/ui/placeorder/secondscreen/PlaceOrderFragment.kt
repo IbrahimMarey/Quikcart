@@ -2,12 +2,10 @@ package com.example.quikcart.ui.placeorder.secondscreen
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -24,8 +22,10 @@ import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.Customer
 import com.example.quikcart.models.entities.Order
 import com.example.quikcart.models.entities.OrdersItem
+import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.ShippingAddress
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.ui.placeorder.firstscreen.ConfirmOrderFirstScreenViewModel
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PaymentMethod
 import com.example.quikcart.utils.PreferencesUtils
@@ -58,7 +58,7 @@ class PlaceOrderFragment : Fragment() {
     private var isPaymentApproved=false
     private var isPayPalChoose=false
     private lateinit var materialAboutUsBuilder: MaterialAlertDialogBuilder
-
+    private lateinit var secondViewModel:ConfirmOrderFirstScreenViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,19 +80,25 @@ class PlaceOrderFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        secondViewModel = ViewModelProvider(this)[ConfirmOrderFirstScreenViewModel::class]
         initViewModel()
         getPassedArgs()
         clickOnCash()
+        secondViewModel.getCustomerAddresses(preferencesUtils.getCustomerId())
+
+        totalPrice = draftOrder.totalPrice
+        discountPrice = "0"
+        applyCoupon()
         initializeViewModelVariables()
         binding.vm = viewModel
         observeOnLiveData()
         observeOnStateFlow()
         checkTotalPrice(totalPrice.toFloat())
         changePaymentBackground()
-        navigateToPayPalPayment()
+        getAddresses()
     }
     private fun changePaymentBackground() {
-        binding.paymentLinear.setOnClickListener {
+        /*binding.payment_method_rg.setOnCheckedChangeListener {
             isPayPalChoose=true
             counter++
             if (counter % 2 == 0) {
@@ -104,6 +110,38 @@ class PlaceOrderFragment : Fragment() {
                 binding.cashPayment.setBackgroundResource(R.drawable.rounded_green_bg)
                 binding.paymentLinear.setBackgroundResource(R.drawable.rounded_bg)
             }
+        }
+        */
+        binding.paymentMethodRg.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.cash_payment -> {
+                    isPayPalChoose=true
+                }
+                R.id.paypalPayCard -> {
+                    isPayPalChoose=false
+                }
+            }
+        }
+    }
+
+    private fun checkPayment(){
+        if (binding.paymentMethodRg.checkedRadioButtonId == R.id.cash_payment)
+        {
+            AlertUtil.showCustomAlertDialog(
+                requireActivity(),
+                "Are You Sure You want To Pay with Cash",
+                positiveText = "Confirm",
+                positiveClickListener = { _, _ ->
+                    viewModel.confirmOrder()
+                },
+                negText = "Cancel",
+                negClickListener = {_,_->
+                    AlertUtil.dismissAlertDialog()
+                }
+            )
+        }
+        else if (binding.paymentMethodRg.checkedRadioButtonId == R.id.paypalPayCard){
+            navigateToPayPalPayment()
         }
     }
 
@@ -118,22 +156,9 @@ class PlaceOrderFragment : Fragment() {
     private fun clickOnCash()
     {
         binding.placeOredrBtn.setOnClickListener {
-            AlertUtil.showCustomAlertDialog(
-                requireActivity(),
-                "Are You Sure You want To Pay with Cash",
-                positiveText = "Confirm",
-                positiveClickListener = { _, _ ->
-                    viewModel.confirmOrder()
-                },
-                negText = "Cancel",
-                negClickListener = {_,_->
-                    AlertUtil.dismissAlertDialog()
-                }
-                )
+            checkPayment()
         }
     }
-
-
     private fun checkTotalPrice(totalPrice:Float) {
         var checkPrice= MAXIMUM_CASH_AMOUNT
         binding.cashPayment.visibility=if(totalPrice >= checkPrice.toFloat()) {
@@ -145,7 +170,6 @@ class PlaceOrderFragment : Fragment() {
             View.GONE
         } else View.VISIBLE
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViewModelVariables() {
@@ -246,14 +270,91 @@ class PlaceOrderFragment : Fragment() {
 
     private fun getPassedArgs() {
         draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
-        totalPrice = (PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total )
+    /*    totalPrice = (PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total )
         draftOrder.totalPrice = totalPrice
         discountPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.discount
         address = PlaceOrderFragmentArgs.fromBundle(requireArguments()).address
+*/
     }
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class]
     }
 
+    // applyCoupon
+    private fun checkCoupon(coupon:String)
+    {
+        val priceRule = secondViewModel.couponsList.find { it.id.toString() == coupon }
+        if (priceRule != null)
+        {
+            applyCoupon(priceRule)
+        }else{
+            showMSG(getString(R.string.coupon_is_not_found),)
+        }
+    }
+
+    private fun applyCoupon(priceRule: PriceRule)
+    {
+        var price = totalPrice.toFloat()
+        if (priceRule.valueType == "percentage")
+        {
+            var percentageAmount = (price/100)*priceRule.value.toFloat()
+            price += percentageAmount
+            discountPrice = (totalPrice.toFloat() - price).toString()
+            totalPrice = price.toString()
+            showMSG(getString(R.string.coupon_confirmed))
+        }else
+        {
+            totalPrice = (totalPrice.toFloat() + priceRule.value.toFloat()).toString()
+            discountPrice = priceRule.value
+            showMSG(getString(R.string.coupon_confirmed))
+        }
+        lockCouponsViews()
+    }
+
+    private fun lockCouponsViews()
+    {
+        binding.validateBtn.isEnabled = false
+        binding.couponField.isEnabled = false
+        binding.textLayoutCoupon.isEnabled =false
+    }
+
+    private fun showMSG(msg:String){
+        AlertUtil.showSnackbar(requireView(),msg)
+    }
+    private fun applyCoupon(){
+        val coupon = binding.couponField.text.toString()
+        binding.validateBtn.setOnClickListener {
+            checkCoupon(coupon)
+        }
+    }
+    private fun selectAddress(name:String , address:String){
+        binding.userName.text = name
+        binding.address.text = address
+    }
+    private fun getAddresses(){
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                secondViewModel.uiState.collect {
+                    when (it) {
+                        is ViewState.Error ->{
+                     //       binding.progressBar.visibility = View.GONE
+                            AlertUtil.showSnackbar(requireView(), it.message)}
+                        is ViewState.Success -> {
+                            val address = it.data
+                            val myAddress = address[0].city+","+ address[0].country.toString()
+                            selectAddress(address[0].first_name.toString() , myAddress)
+                         //   initAddressesRecycler(it.data)
+                         //   binding.progressBar.visibility = View.GONE
+                        }
+                        is ViewState.Loading -> {}
+                           // binding.progressBar.visibility = View.VISIBLE
+                    }
+
+                }
+
+            }
+
+        }
+    }
 }

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quikcart.databinding.FavoriteItemBinding
 import com.example.quikcart.models.entities.ProductsItem
+import com.example.quikcart.utils.setPrice
 
 class FavoriteAdapter(private val itemClickListener: (ProductsItem) -> Unit , private val itemDeleteListener: (ProductsItem) -> Unit) : ListAdapter<ProductsItem, FavoriteAdapter.ProductsViewHolder>(DiffCallback()) {
 
@@ -32,6 +33,7 @@ class FavoriteAdapter(private val itemClickListener: (ProductsItem) -> Unit , pr
             binding.root.setOnClickListener {
                 itemClickListener(item)
             }
+            binding.productPrice.setPrice(item.variants?.get(0)?.price?.toFloat() ?: 0.0f, itemView.context)
             binding.deleteItem.setOnClickListener{
                 itemDeleteListener(item)
             }

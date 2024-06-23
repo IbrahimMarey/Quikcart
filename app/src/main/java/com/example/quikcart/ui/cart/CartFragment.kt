@@ -116,8 +116,11 @@ class CartFragment : Fragment() {
 
     private fun navigateToConfirmOrderFirstScreen(draftOrder : DraftOrder) {
         binding.proceedToPayBtn.setOnClickListener {
+//            val action =
+  //              CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(draftOrder)
             val action =
-                CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(draftOrder)
+                CartFragmentDirections.actionCartFragmentToPlaceOrderFragment(draftOrder)
+
             Navigation.findNavController(it).navigate(action)
         }
     }

@@ -26,7 +26,7 @@ import retrofit2.Response
 class FakeRepo : Repository {
     private val categories = listOf(
         CategoryItem(name = "Category 1", img = 0),
-        CategoryItem( name = "Category 2", img = 0)
+        CategoryItem(name = "Category 2", img = 0)
     )
     val smartCollections = listOf(SmartCollectionsItem(id = 1), SmartCollectionsItem(id = 2))
     private val _coupons = MutableStateFlow(
@@ -37,7 +37,9 @@ class FakeRepo : Repository {
             )
         )
     )
+    private val _products = mutableListOf<ProductsItem>()
     val coupons: CouponModel get() = _coupons.value
+
     override fun getBrands(): Flow<List<SmartCollectionsItem>> {
         return flowOf(smartCollections)
     }
@@ -71,7 +73,7 @@ class FakeRepo : Repository {
     }
 
     override fun getProducts(): Flow<List<ProductsItem>> {
-        TODO("Not yet implemented")
+        return flowOf(_products.toList())
     }
 
     override fun getCategories(): List<CategoryItem> {
@@ -99,25 +101,22 @@ class FakeRepo : Repository {
     }
 
     override suspend fun inertProduct(product: ProductsItem) {
-        TODO("Not yet implemented")
+        _products.add(product)
     }
 
     override suspend fun deleteProduct(product: ProductsItem) {
-        TODO("Not yet implemented")
+        _products.remove(product)
     }
 
     override fun getAllProducts(): Flow<List<ProductsItem>> {
-        TODO("Not yet implemented")
+        return flowOf(_products.toList())
     }
 
     override suspend fun postDraftOrder(draftOrderPostBody: PostDraftOrderItemModel): Flow<DraftOrderResponse> {
         TODO("Not yet implemented")
     }
 
-    override suspend fun putDraftOrder(
-        id: String,
-        draftOrderPutBody: PutDraftOrderItemModel
-    ): Flow<DraftOrderResponse> {
+    override suspend fun putDraftOrder(id: String, draftOrderPutBody: PutDraftOrderItemModel): Flow<DraftOrderResponse> {
         TODO("Not yet implemented")
     }
 
@@ -160,7 +159,6 @@ class FakeRepo : Repository {
     }
 
     override suspend fun deleteAllProducts() {
-        TODO("Not yet implemented")
+        _products.clear()
     }
-
 }

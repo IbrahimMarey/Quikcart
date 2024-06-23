@@ -189,5 +189,6 @@
     <string name="are_you_sure_you_want_to_delete_this_item_from_fav">are you sure you want to delete this item from the favorite</string>
     <string name="enter_phone">Enter Phone</string>
     <string name="congratulations">Congratulations !!</string>
+    <string name="change_address">Change Address</string>
 
 </resources>

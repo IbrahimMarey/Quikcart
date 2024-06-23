@@ -141,18 +141,20 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         findNavController().navigate(R.id.action_confirmOrderFirstScreenFragment_to_mapFragment)
     }
 
-    override fun navigateToConfirmOrderFragment(phone:String) {
-        val totalAndDiscountModel = TotalAndDiscountModel(totalPrice,discountPrice)
-        draftOrder.customer.phone=phone
-        if(::selectedAddress.isInitialized){
-            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,draftOrder,totalAndDiscountModel)
-            findNavController().navigate(action)
 
-        }else{
-            AlertUtil.showCustomAlertDialog(requireContext(),
-                "Please add your Address","Ok")
+        override fun navigateToConfirmOrderFragment(phone:String) {
+           /* val totalAndDiscountModel = TotalAndDiscountModel(totalPrice,discountPrice)
+            draftOrder.customer.phone=phone
+            if(::selectedAddress.isInitialized){
+                val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,draftOrder,totalAndDiscountModel)
+                findNavController().navigate(action)
+
+            }else{
+                AlertUtil.showCustomAlertDialog(requireContext(),
+                    "Please add your Address","Ok")
+            }*/
         }
-    }
+
 
     private fun showMSG(msg:String){
         AlertUtil.showSnackbar(requireView(),msg)
