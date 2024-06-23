@@ -21,11 +21,11 @@
 
     <ImageView
         android:id="@+id/image1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/searchaboutproduct"
         app:layout_constraintTop_toBottomOf="@+id/text_top"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
@@ -34,8 +34,8 @@
         android:id="@+id/text_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing,
-sed do eiusmod tempor ut labore"
+        android:text="Explore our extensive catalog, sorted into easy-to-navigate categories.
+\nUse the search bar to find specific items quickly."
         android:gravity="center"
         android:layout_marginTop="@dimen/margin_36x"
         android:textColor="@color/black"

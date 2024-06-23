@@ -21,11 +21,11 @@
 
     <ImageView
         android:id="@+id/image1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/getorder"
         app:layout_constraintTop_toBottomOf="@+id/text_top"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
@@ -34,8 +34,8 @@
         android:id="@+id/text_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing,
-sed do eiusmod tempor ut labore"
+        android:text="Enjoy exclusive deals, discounts, and promotions tailored just for you.
+\nStay updated with our newsletters and push notifications."
         android:gravity="center"
         android:layout_marginTop="@dimen/margin_36x"
         android:textColor="@color/black"
