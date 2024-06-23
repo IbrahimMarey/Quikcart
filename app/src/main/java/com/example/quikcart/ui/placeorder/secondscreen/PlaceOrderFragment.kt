@@ -149,8 +149,9 @@ class PlaceOrderFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViewModelVariables() {
-        viewModel.totalPrice = totalPrice
+
         viewModel.shippingFees = "50"
+        viewModel.totalPrice = (totalPrice.toFloat() + 50.0f).toString()
         viewModel.discount=discountPrice
         viewModel.maximumCashAmount= MAXIMUM_CASH_AMOUNT.toString()
         viewModel.subTotal=(totalPrice.toFloat() + discountPrice.toFloat()).toString()
@@ -166,7 +167,7 @@ class PlaceOrderFragment : Fragment() {
             lineItems = draftOrder.lineItems,
             customer = getCustomerData(),
             totalPrice = totalPrice,
-            totalTax = discountPrice,
+            totalTax = discountPrice.toFloat().minus(50.0f).toString(),
             currency = preferencesUtils.getCurrencyType(),
             paymentGatewayNames = mutableListOf(paymentMethod.name),
             shippingAddress = getShippingAddress(),

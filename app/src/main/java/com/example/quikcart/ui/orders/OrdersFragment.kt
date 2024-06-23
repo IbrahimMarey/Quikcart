@@ -38,11 +38,11 @@ class OrdersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
-        viewModel.getCustomerOrders(preferencesUtils.getCustomerId())
         observeOnStateFlow()
     }
 
     private fun observeOnStateFlow() {
+        viewModel.getCustomerOrders(preferencesUtils.getCustomerId())
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { orders ->
@@ -63,6 +63,11 @@ class OrdersFragment : Fragment() {
                             }.toString()
                             binding.noOrderImg.visibility=if(orders.data.isEmpty()) View.VISIBLE else View.GONE
                             binding.progressBar.visibility = View.GONE
+                            for(item in orders.data)
+                            {
+                                item.totalPrice = ((item.totalPrice?.toFloat() ?: 0.0f) - (item.totalTax?.toFloat()
+                                    ?: 0.0f)).toString()
+                            }
                             initRecyclerView(orders.data)
                         }
                     }
@@ -76,11 +81,6 @@ class OrdersFragment : Fragment() {
 
         adapter = OrdersAdapter { orderItem ->
             navigateToOrderDetails(orderItem)
-        }
-        for(item in orders)
-        {
-            item.totalPrice = ((item.totalPrice?.toFloat() ?: 0.0f) - (item.totalTax?.toFloat()
-                ?: 0.0f)).toString()
         }
         adapter.submitList(orders)
         binding.ordersRecycler.adapter = adapter
