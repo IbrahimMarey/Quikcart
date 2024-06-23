@@ -207,8 +207,10 @@ class PlaceOrderFragment : Fragment() {
 
     }
 
-    /*
-    * lineItems = viewModel.lineItemsList,
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getOrderItem():OrdersItem {
+        return OrdersItem(
+            lineItems = viewModel.lineItemsList,
             customer = getCustomerData(),
             totalPrice = totalPrice,
             totalTax = discountPrice.toFloat().minus(50.0f).toString(),
@@ -216,18 +218,6 @@ class PlaceOrderFragment : Fragment() {
             paymentGatewayNames = mutableListOf(paymentMethod.name),
             shippingAddress = getShippingAddress(),
             currentTotalDiscounts = discountPrice
-    * */
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getOrderItem():OrdersItem {
-        return OrdersItem(
-            lineItems = viewModel.lineItemsList,
-            customer = getCustomerData(), totalPrice = totalPrice,
-            totalTax = "0",
-            currency = preferencesUtils.getCurrencyType(),
-            paymentGatewayNames = mutableListOf(paymentMethod.name),
-            shippingAddress = getShippingAddress()
-
-
         )
     }
 
@@ -297,8 +287,6 @@ class PlaceOrderFragment : Fragment() {
     }
 
     private fun getPassedArgs() {
-//        draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
-//        lineItemsList = PlaceOrderFragmentArgs.fromBundle(requireArguments()).lineItemsList
         totalPrice = (PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total )
         discountPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.discount
         address = PlaceOrderFragmentArgs.fromBundle(requireArguments()).address
