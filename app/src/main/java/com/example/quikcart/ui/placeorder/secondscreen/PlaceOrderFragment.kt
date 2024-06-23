@@ -63,8 +63,6 @@ class PlaceOrderFragment : Fragment() {
     private lateinit var viewModel: PlaceOrderViewModel
     private lateinit var binding: FragmentPlaceOrderBinding
     private lateinit var address: AddressResponse
-//    private lateinit var draftOrder: DraftOrder
-//    private lateinit var lineItemsList: LineItemsList
     @Inject lateinit var preferencesUtils: PreferencesUtils
     private var paymentMethod=PaymentMethod.CASH
     private var counter=0
@@ -204,6 +202,7 @@ class PlaceOrderFragment : Fragment() {
         viewModel.isPayPalChoose=isPayPalChoose
         viewModel.isPaymentApproved=isPaymentApproved
         viewModel.orderResponse = Order(getOrderItem())
+        Log.i("TAG", "initializeViewModelVariables: ====== ${viewModel.orderResponse}")
 
     }
 

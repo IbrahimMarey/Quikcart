@@ -145,6 +145,7 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
                 }
                 .collect{
                     lineItemsList.clear()
+                    lineItemsList.addAll(it.draft_order.lineItems)
                     _cart.value = ViewState.Success(it.draft_order)
                 }
         }
