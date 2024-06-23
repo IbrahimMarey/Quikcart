@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                 || destination.id  == R.id.confirmOrderFirstScreenFragment
                 || destination.id  == R.id.placeOrderFragment
                 || destination.id  == R.id.productFragment
+                || destination.id  == R.id.orderDetailsFragment
                 )
             {
                 binding.bottomNavigation.visibility = View.GONE

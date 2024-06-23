@@ -150,32 +150,23 @@ class PlaceOrderFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeViewModelVariables() {
         viewModel.totalPrice = totalPrice
-        Log.e("TAG", "initializeViewModelVariables: ${viewModel
-            .totalPrice}", )
         viewModel.shippingFees = "50"
         viewModel.discount=discountPrice
         viewModel.maximumCashAmount= MAXIMUM_CASH_AMOUNT.toString()
         viewModel.subTotal=(totalPrice.toFloat() + discountPrice.toFloat()).toString()
         viewModel.isPayPalChoose=isPayPalChoose
         viewModel.isPaymentApproved=isPaymentApproved
-        Log.e("TAG2", "initializeViewModelVariables: ${totalPrice}", )
-
         viewModel.orderResponse = Order(getOrderItem())
 
-        Log.e("TAG1", "initializeViewModelVariables: ${totalPrice}", )
-        Log.e("TAG1", "orderResponse  = = = == = = =  ${viewModel.orderResponse.order?.totalPrice}", )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getOrderItem():OrdersItem {
-        Log.i("TAG", "getOrderItem: = = = = = = = $totalPrice")
-        Log.i("TAG", "getOrderItem: = = = = = = = discount $discountPrice")
-
         return OrdersItem(
             lineItems = draftOrder.lineItems,
             customer = getCustomerData(),
             totalPrice = totalPrice,
-            totalTax = "0",
+            totalTax = discountPrice,
             currency = preferencesUtils.getCurrencyType(),
             paymentGatewayNames = mutableListOf(paymentMethod.name),
             shippingAddress = getShippingAddress(),
@@ -192,7 +183,6 @@ class PlaceOrderFragment : Fragment() {
     }
 
     private fun getShippingAddress():ShippingAddress {
-        Log.e("TAG", "getShippingAddress: ${address.phone}", )
         return ShippingAddress(
             country = address.country,
             address1 = address.address1,
