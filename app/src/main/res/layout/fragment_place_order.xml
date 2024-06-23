@@ -13,250 +13,251 @@
 
 
 
-        <ScrollView
-            android:id="@+id/card_view"
+    <ScrollView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:background="@color/white"
+        >
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="16dp"
-            android:background="@color/white"
+            android:layout_height="wrap_content"
+            tools:context=".ui.placeorder.secondscreen.PlaceOrderFragment"
+            android:orientation="vertical"
             >
+<!--
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo"
+                app:civ_border_color="@color/xd_dark_pink"
+                app:civ_circle_background_color="@color/xd_pink"
+                />
+-->
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/confirm_order"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/black" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:context=".ui.placeorder.secondscreen.PlaceOrderFragment"
                 android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginVertical="16dp"
+                android:background="@drawable/rounded_transparent_bg"
                 >
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/logo"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/logo"
-                    app:civ_border_color="@color/xd_dark_pink"
-                    app:civ_circle_background_color="@color/xd_pink"
-                    />
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/confirm_order"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black" />
+                    android:id="@+id/total_linear"
+
+                    >
+
+
+                    <TextView
+                        android:id="@+id/sub_total_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_weight="1"
+                        android:text="@string/subtotal"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/sub_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/sub_total_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_weight="1"
+                        tools:text="20.0"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        app:price="@{vm.subTotal}"
+                        />
+
+                    <TextView
+                        android:id="@+id/discount_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/sub_total_tv"
+                        app:layout_constraintStart_toStartOf="@id/sub_total_tv"
+                        android:layout_weight="1"
+                        android:text="@string/discount_applied"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/discount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="20.0"
+                        app:layout_constraintTop_toTopOf="@id/discount_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:text="@{vm.discount}"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
+
+
+                    <TextView
+                        android:id="@+id/fees_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/shipping_fees"
+                        app:layout_constraintTop_toBottomOf="@id/discount_tv"
+                        app:layout_constraintStart_toStartOf="@id/sub_total_tv"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/fees"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/fees_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="20.0"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        app:price="@{vm.shippingFees}" />
+                    <TextView
+                        android:id="@+id/total_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/total_price"
+                        app:layout_constraintTop_toBottomOf="@id/fees_tv"
+                        app:layout_constraintStart_toStartOf="@id/sub_total_tv"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                    <TextView
+                        android:id="@+id/total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="@id/total_tv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="20.0"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        app:price="@{vm.totalPrice}"
+                        android:layout_weight="1" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <LinearLayout
+                    android:id="@+id/payment_linear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    android:layout_marginVertical="16dp"
-                    android:background="@drawable/rounded_transparent_bg"
-                    >
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                    app:layout_constraintTop_toBottomOf="@id/total_linear"
+                    android:padding="8dp"
+                    android:layout_marginTop="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/total_linear"
-
-                        >
-
-
-                        <TextView
-                            android:id="@+id/sub_total_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            android:layout_weight="1"
-                            android:text="@string/subtotal"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/sub_total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="@id/sub_total_tv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:layout_weight="1"
-                            tools:text="20.0"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            app:price="@{vm.subTotal}"
-                            />
-
-                        <TextView
-                            android:id="@+id/discount_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toBottomOf="@id/sub_total_tv"
-                            app:layout_constraintStart_toStartOf="@id/sub_total_tv"
-                            android:layout_weight="1"
-                            android:text="@string/discount_applied"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/discount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="20.0"
-                            app:layout_constraintTop_toTopOf="@id/discount_tv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:text="@{vm.discount}"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-
-
-                        <TextView
-                            android:id="@+id/fees_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/shipping_fees"
-                            app:layout_constraintTop_toBottomOf="@id/discount_tv"
-                            app:layout_constraintStart_toStartOf="@id/sub_total_tv"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/fees"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="@id/fees_tv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            tools:text="20.0"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            app:price="@{vm.shippingFees}" />
-                        <TextView
-                            android:id="@+id/total_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/total_price"
-                            app:layout_constraintTop_toBottomOf="@id/fees_tv"
-                            app:layout_constraintStart_toStartOf="@id/sub_total_tv"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:textSize="20sp"/>
-
-                        <TextView
-                            android:id="@+id/total"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="@id/total_tv"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            tools:text="20.0"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
-                            app:price="@{vm.totalPrice}"
-                            android:layout_weight="1" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:text="@string/choose_payment_method"
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
 
                     <LinearLayout
-                        android:id="@+id/payment_linear"
+                        android:id="@+id/paypalPayCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintTop_toBottomOf="@id/total_linear"
-                        android:background="@drawable/rounded_transparent_bg"
-                        android:padding="8dp"
-                        android:layout_marginTop="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/choose_payment_method"
-                            android:textStyle="bold"
-                            android:textSize="15sp" />
-
-                            <LinearLayout
-                                android:id="@+id/paypalPayCard"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:weightSum="3"
-                                android:layout_marginVertical="8dp"
-                                android:orientation="horizontal"
-                                android:layout_gravity="center"
-                                android:background="@drawable/rounded_bg"
-                                >
-                                <ImageView
-                                    android:layout_width="0dp"
-                                    android:layout_height="match_parent"
-                                    android:layout_weight="1"
-                                    android:src="@drawable/paypal"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp"
-                                    />
-                                <TextView
-                                    android:layout_width="0dp"
-                                    android:layout_height="72dp"
-                                    android:layout_weight="2"
-                                    android:gravity="center"
-                                    android:text="@string/pay_pal"
-                                    android:textSize="24sp"
-                                    android:fontFamily="@font/barlow_bold"
-                                    android:textColor="@color/xd_blue"
-                                    />
-                            </LinearLayout>
-                        <!--<LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/rounded_transparent_bg"
-                            android:padding="4dp"
-                            android:layout_marginVertical="8dp">
-
-                            <com.paypal.checkout.paymentbutton.PaymentButtonContainer
-                                android:id="@+id/payment_button_container"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:paypal_button_color="silver"
-                                app:paypal_button_label="pay"
-                                app:paypal_button_shape="rectangle"
-                                app:paypal_button_size="large"
-                                app:paypal_button_enabled="true" />
-                        </LinearLayout>-->
-
-                        <LinearLayout
-                            android:id="@+id/cash_payment"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="3"
-                            android:orientation="horizontal"
+                        android:weightSum="3"
+                        android:layout_marginVertical="8dp"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:background="@drawable/rounded_bg"
+                        >
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/paypal"
                             android:layout_gravity="center"
-                            android:background="@drawable/rounded_green_bg">
-
-                            <ImageView
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:src="@drawable/cash"
-                                android:layout_gravity="center"
-                                android:padding="8dp" />
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="72dp"
-                                android:layout_weight="2"
-                                android:gravity="center"
-                                android:text="@string/cash_on_delivery"
-                                android:textSize="24sp"
-                                android:fontFamily="@font/barlow_bold"
-                                android:textColor="@color/xd_lemon_dark" />
-                        </LinearLayout>
+                            android:padding="8dp"
+                            />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="72dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:text="@string/pay_pal"
+                            android:textSize="24sp"
+                            android:fontFamily="@font/barlow_bold"
+                            android:textColor="@color/black"
+                            />
                     </LinearLayout>
-
-                    <Button
-                        android:id="@+id/placeOredrBtn"
-                        android:layout_width="300dp"
+                    <!--<LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/place_order"
-                        android:layout_marginTop="16dp"
-                        android:backgroundTint="@color/xd_burgundy"
-                        android:layout_gravity="center" />
+                        android:background="@drawable/rounded_transparent_bg"
+                        android:padding="4dp"
+                        android:layout_marginVertical="8dp">
+
+                        <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+                            android:id="@+id/payment_button_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:paypal_button_color="silver"
+                            app:paypal_button_label="pay"
+                            app:paypal_button_shape="rectangle"
+                            app:paypal_button_size="large"
+                            app:paypal_button_enabled="true" />
+                    </LinearLayout>-->
+
+                    <LinearLayout
+                        android:id="@+id/cash_payment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="3"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:background="@drawable/rounded_green_bg">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/cash"
+                            android:layout_gravity="center"
+                            android:padding="8dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="72dp"
+                            android:layout_weight="2"
+                            android:gravity="center"
+                            android:text="@string/cash_on_delivery"
+                            android:textSize="24sp"
+                            android:fontFamily="@font/barlow_bold"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/placeOredrBtn"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/place_order"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/xd_burgundy"
+                    android:layout_gravity="center" />
             </LinearLayout>
-        </ScrollView>
+        </LinearLayout>
+    </ScrollView>
 </layout>

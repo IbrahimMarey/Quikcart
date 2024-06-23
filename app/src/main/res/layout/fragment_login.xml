@@ -50,7 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:startIconContentDescription="@string/email_address"
-                app:startIconDrawable="@drawable/ic_person">
+                app:startIconDrawable="@android:drawable/sym_action_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"

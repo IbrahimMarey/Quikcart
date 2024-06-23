@@ -14,16 +14,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragment"
-        android:background="@color/xd_burgundy"
+        android:background="@color/white"
         android:paddingHorizontal="16dp"
         >
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            app:layout_constraintTop_toTopOf="parent"
-           android:orientation="vertical"
-           >
-           <de.hdodenhof.circleimageview.CircleImageView
+           android:orientation="vertical">
+          <!-- <de.hdodenhof.circleimageview.CircleImageView
                android:id="@+id/logo"
                android:layout_width="100dp"
                android:layout_height="100dp"
@@ -33,7 +32,7 @@
                app:civ_border_color="@color/xd_dark_pink"
                app:civ_circle_background_color="@color/xd_pink"
 
-               />
+               />-->
            <TextView
                android:id="@+id/title"
                android:layout_width="wrap_content"
@@ -41,7 +40,7 @@
                android:layout_gravity="center"
                android:text="@string/confirm_order_details"
                android:textSize="20sp"
-               android:textColor="@color/white"
+               android:textColor="@color/black"
                />
 
 
@@ -52,7 +51,6 @@
                    android:paddingVertical="16dp"
                    android:paddingHorizontal="8dp"
                    android:layout_marginVertical="16dp"
-                   android:background="@drawable/rounded_transparent_bg"
                    >
 
                    <TextView
@@ -62,8 +60,8 @@
                        app:layout_constraintTop_toTopOf="parent"
                        app:layout_constraintStart_toStartOf="parent"
                        android:text="@string/choose_the_address"
-                       android:layout_marginStart="8dp"
-                       android:textSize="15sp"
+                       android:layout_marginStart="16dp"
+                       android:textSize="@dimen/text_large"
                        />
                    <LinearLayout
                        android:id="@+id/address_linear"
@@ -90,8 +88,9 @@
                            android:layout_height="wrap_content"
                            android:backgroundTint="@color/xd_burgundy"
                            android:src="@drawable/ic_add"
+                           app:tint="@color/white"
                            android:onClick="@{()->vm.navigateToMapFragment()}"
-                           android:layout_gravity="center"
+                           android:layout_gravity="right"
                            />
                    </LinearLayout>
                    <ProgressBar
@@ -110,22 +109,22 @@
                        android:layout_height="wrap_content"
                        app:layout_constraintTop_toBottomOf="@id/address_linear"
                        app:layout_constraintStart_toStartOf="parent"
-                       android:orientation="vertical"
+                       android:orientation="horizontal"
+                       android:weightSum="3"
                        android:layout_marginHorizontal="16dp"
                        android:layout_marginTop="8dp"
-                       android:paddingHorizontal="8dp"
-                       android:paddingVertical="8dp"
-                       android:background="@drawable/rounded_transparent_bg"
-                       >
+                       android:paddingHorizontal="2dp"
+                       android:paddingVertical="4dp">
                        <com.google.android.material.textfield.TextInputLayout
                            android:id="@+id/text_layout_coupon"
                            android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
+                           android:layout_height="match_parent"
                            android:hint="@string/enter_coupon"
-                           app:boxStrokeWidth="1dp"
+                           app:boxStrokeWidth="2dp"
+                           android:paddingEnd="6dp"
                            app:boxStrokeColor="@color/xd_text_view_details"
                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-
+                           android:layout_weight="1"
                            >
                            <EditText
                                android:id="@+id/couponField"
@@ -134,48 +133,47 @@
                                />
 
                        </com.google.android.material.textfield.TextInputLayout>
+
                        <Button
                            android:id="@+id/validate_btn"
-                           android:layout_width="wrap_content"
+                           android:layout_width="match_parent"
                            android:layout_height="wrap_content"
                            android:layout_gravity="center"
-                           android:layout_marginTop="8dp"
-                           android:text="@string/apply"
-                           android:textColor="@color/white"
-                           android:backgroundTint="@color/xd_lemon_dark"
+                           android:layout_marginTop="4dp"
                            android:layout_marginEnd="8dp"
-                           />
+                           android:layout_weight="2"
+                           android:backgroundTint="@color/xd_dark_burgundy"
+                           android:text="@string/apply"
+                           android:textColor="@color/white" />
                    </LinearLayout>
 
                    <LinearLayout
                        android:id="@+id/phone_linear"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       app:layout_constraintTop_toBottomOf="@id/coupon_linear"
-                       app:layout_constraintStart_toStartOf="parent"
-                       android:orientation="vertical"
                        android:layout_marginHorizontal="16dp"
                        android:layout_marginTop="8dp"
-                       android:paddingHorizontal="8dp"
-                       android:paddingVertical="8dp"
-                       android:background="@drawable/rounded_transparent_bg"
-                       >
+                       android:orientation="vertical"
+                       app:layout_constraintStart_toStartOf="parent"
+
+                       app:layout_constraintTop_toBottomOf="@id/coupon_linear">
+
                        <com.google.android.material.textfield.TextInputLayout
                            android:id="@+id/text_layout_phone"
+                           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                            android:layout_width="match_parent"
                            android:layout_height="wrap_content"
                            android:hint="@string/enter_phone"
-                           app:boxStrokeWidth="1dp"
                            app:boxStrokeColor="@color/xd_text_view_details"
-                           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                           app:boxStrokeWidth="1dp"
 
                            >
+
                            <EditText
                                android:id="@+id/phone_filed"
                                android:layout_width="match_parent"
                                android:layout_height="match_parent"
-                               android:text="@={vm.phone}"
-                               />
+                               android:text="@={vm.phone}" />
 
                        </com.google.android.material.textfield.TextInputLayout>
                    </LinearLayout>
@@ -185,11 +183,11 @@
                android:id="@+id/continue_btn"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:backgroundTint="@color/xd_asset_burgundy"
+               android:backgroundTint="@color/xd_dark_burgundy"
                android:layout_marginHorizontal="16dp"
-               android:layout_marginTop="16dp"
                android:layout_gravity="center"
                android:text="@string/continue_small"
+               android:layout_marginBottom="24dp"
                android:onClick="@{()->vm.navigateToConfirmOrderFragment()}"
                />
        </LinearLayout>

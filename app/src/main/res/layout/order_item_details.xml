@@ -65,7 +65,6 @@
                 android:text="@string/quantity"
                 android:textStyle="bold"
                 android:textSize="15sp"
-                android:fontFamily="@font/pacifico"
                 />
             <TextView
                 android:id="@+id/qty"
@@ -93,7 +92,6 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textSize="15sp"
-               android:fontFamily="@font/pacifico"
                android:text="@string/price"
                android:textStyle="bold"
                android:layout_marginEnd="16dp"

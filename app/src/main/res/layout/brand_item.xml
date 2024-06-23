@@ -16,7 +16,7 @@
         app:cardCornerRadius="8dp"
         app:strokeWidth="2dp"
         android:layout_margin="8dp"
-        app:strokeColor="@color/xd_asset_burgundy"
+        app:strokeColor="@color/xd_dark_pink"
 
         >
 
@@ -43,11 +43,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:gravity="center"
+                android:textColor="@color/white"
                 android:layout_marginTop="75dp"
                 android:text="@{brandItem.title}"
                 tools:text="ADIDAS"
                 android:textSize="20sp"
-                android:background="@color/xd_asset_burgundy_transparent"
+                android:background="@color/xd_dark_pink"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
