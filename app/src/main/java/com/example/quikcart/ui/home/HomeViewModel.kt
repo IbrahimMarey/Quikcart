@@ -77,38 +77,6 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
         }
     }
 
-
-
-   /* private fun getCouponImages(coupons:List<PriceRule>)
-    {
-        for (item in coupons)
-        {
-            couponsIDs.add(item.id.toString())
-            if (item.valueType == "percentage")
-            {
-                couponsList.add(addImgPercentage(item))
-            }else
-            {
-                couponsList.add(addImgFixedAmount(item))
-            }
-        }
-    }
-
-    *//*private fun getCoupon()
-    {
-        delCoupons()
-        couponsList.clear()
-        couponsIDs.clear()
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.getCoupons().collect{
-                getCouponImages(it.priceRules)
-                saveCouponsLocally(it.priceRules)
-            }
-        }
-    }*/
-
-
-
     private fun delCoupons()
     {
         viewModelScope.launch(Dispatchers.IO) {
@@ -131,7 +99,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
             "-50.0"-> "https://static.vecteezy.com/system/resources/thumbnails/004/141/666/small_2x/golden-50-percent-off-flat-cartoon-style-logo-concept-50-percent-sale-isolated-icon-on-black-background-fifty-percent-discount-for-business-illustration-vector.jpg"
             else->"https://cdn.shopify.com/s/files/1/0817/7988/4088/articles/4XOfcVjU6L9Z0yxkgW0WeI_9a7fdb9d-4173-4023-816b-8918cc91229f.jpg?v=1712946016"
         }
-        return SlideModel(img, "Click To Apply ${coupon.value} %")
+        return SlideModel(img, "Click To Copy")
     }
 
 
@@ -140,7 +108,7 @@ class HomeViewModel @Inject constructor(private val repo: Repository) : ViewMode
     fun addImgFixedAmount(coupon: PriceRule):SlideModel
     {
         var img = "https://cdn.shopify.com/s/files/1/0817/7988/4088/articles/4XOfcVjU6L9Z0yxkgW0WeI_9a7fdb9d-4173-4023-816b-8918cc91229f.jpg?v=1712946016"
-        return SlideModel(img, "Click To Apply ${coupon.value}")
+        return SlideModel(img, "Click To Copy ${coupon.value} Code")
     }
 
 }

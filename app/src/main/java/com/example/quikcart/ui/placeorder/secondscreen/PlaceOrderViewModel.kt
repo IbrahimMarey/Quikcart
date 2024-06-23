@@ -51,7 +51,7 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
             if((isPaymentApproved && isPayPalChoose) || !isPayPalChoose) {
                 repo.confirmOrder(orderResponse).catch {
                     _isLoading.value = false
-                    _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error(it1) }!!
+                    _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error("server down, please try again later:$it1") }!!
                 }.collect { orderItems ->
                     _isLoading.value = false
                     _uiState.value = ViewState.Success(orderItems)

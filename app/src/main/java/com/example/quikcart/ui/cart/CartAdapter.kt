@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.quikcart.R
 import com.example.quikcart.databinding.CartItemAddedBinding
 import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.models.entities.cart.LineItem
@@ -41,6 +42,10 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit, private val editItem
                 holder.binding.cartItemPrice.setPrice(newPrice,ctx)
                 holder.binding.cartItemQuntity.text = model.quantity.toString()
                 editItem(model,position,model.price.toFloat())
+                holder.binding.btnDecrease.setBackgroundResource(R.drawable.cart_item_ic_bg)
+
+            }else{
+                holder.binding.btnIncrease.setBackgroundResource(R.drawable.item_bg_gray)
             }
         }
         holder.binding.btnDecrease.setOnClickListener {
@@ -52,6 +57,9 @@ class CartAdapter(private val delCartItem:(LineItem)->Unit, private val editItem
                 holder.binding.cartItemPrice.setPrice(newPrice,ctx)
                 holder.binding.cartItemQuntity.text = model.quantity.toString()
                 editItem(model,position,-model.price.toFloat())
+                holder.binding.btnIncrease.setBackgroundResource(R.drawable.cart_item_ic_bg)
+            }else{
+                holder.binding.btnDecrease.setBackgroundResource(R.drawable.item_bg_gray)
             }
         }
 

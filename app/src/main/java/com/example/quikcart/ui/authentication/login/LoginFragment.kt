@@ -155,7 +155,7 @@ class LoginFragment : Fragment() {
                 PreferencesUtils.getInstance(requireContext()).setUserID(userId)
                 getCurrentCustomerID(userId)
                 preferencesUtils.saveCustomerEmail(binding.UserNameTextField.editText?.text.toString())
-                showMessage("Sign in successful")
+//                showMessage("Sign in successful")
             } else {
                 showMessage("Sign in failed. Please try again.")
             }
@@ -184,6 +184,7 @@ class LoginFragment : Fragment() {
                     is ViewState.Success -> {
                         val currentCustomer = state.data.filter { it.lastName == id }
                         if (currentCustomer.isNotEmpty()) {
+                            preferencesUtils.saveCustomerName(currentCustomer[0].firstName)
                             PreferencesUtils.getInstance(requireContext()).setCustomerId(currentCustomer[0].id)
                             startActivity(Intent(requireContext(), MainActivity::class.java))
                             requireActivity().finish()

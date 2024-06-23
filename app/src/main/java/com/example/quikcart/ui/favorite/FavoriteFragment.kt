@@ -131,9 +131,11 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun navigateToProductDetails(productItem: ProductsItem) {
-        val bundle = Bundle().apply {
+        /*val bundle = Bundle().apply {
             putSerializable("details", productItem)
         }
-        findNavController().navigate(R.id.action_favoriteFragment_to_productDetailsFragment, bundle)
+        findNavController().navigate(R.id.action_favoriteFragment_to_productDetailsFragment, bundle)*/
+        val action = FavoriteFragmentDirections.actionFavoriteFragmentToProductDetailsFragment(productItem)
+        findNavController().navigate(action)
     }
 }

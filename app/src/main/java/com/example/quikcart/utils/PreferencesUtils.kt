@@ -8,6 +8,7 @@ private const val CURRENCY_PREFERENCE = "SETTING_CURRENCY"
 private const val USER_ID_PREFERENCE = "USER_ID"
 private const val CART_ID_PREFERENCE = "CART_ID"
 private const val CUSTOMER_ID = "CUSTOMER_ID"
+private const val CUSTOMER_NAME = "CUSTOMER_NAME"
 private const val CUSTOMER_EMAIL = "CUSTOMER_EMAIL"
 private const val USD_RATE = "USD_RATE"
 private const val FAVOURITE_ID = "FAVOURITE_LIST"
@@ -54,6 +55,14 @@ class PreferencesUtils internal constructor(context: Context)
     }
     fun getCustomerId():Long{
         return sharedPreferences.getLong(CUSTOMER_ID,0)
+    }
+
+
+    fun saveCustomerName(name:String){
+        editor.putString(CUSTOMER_NAME,name).apply()
+    }
+    fun getCustomerName(): String? {
+        return sharedPreferences.getString(CUSTOMER_NAME,"")
     }
 
     fun setUSDRate(id:Float){

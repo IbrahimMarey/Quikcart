@@ -32,7 +32,7 @@
     <string name="addedd_countinue_cart">إلى العربة؟</string>
     <string name="yes">نعم</string>
     <string name="cancel">إالغاء</string>
-    <string name="welcome">مرحباً! </string>
+    <string name="welcome">مرحباً, </string>
     <string name="firbase_signin_try_agin">تم تعطيل الوصول إلى هذا الحساب مؤقتًا بسبب العديد من محاولات تسجيل الدخول الفاشلة</string>
     <string name="no_favourite">لا توجد عناصر في المفضلة</string>
     <string name="logout_confirm">هل أنت متأكد أنك تريد تسجيل الخروج؟</string>

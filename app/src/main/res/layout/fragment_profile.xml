@@ -25,7 +25,8 @@
                 android:id="@+id/circularImageView"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
-                android:src="@drawable/user"
+                android:padding="8dp"
+                android:src="@drawable/userquikcart"
                 android:layout_marginVertical="8dp" />
 
             <LinearLayout
@@ -57,6 +58,7 @@
                     android:layout_gravity="center"
                     tools:text="useremail@quikcart.com"
                     android:textSize="16sp"
+                    android:maxLines="2"
                     android:fontFamily="@font/barlow" />
             </LinearLayout>
         </LinearLayout>
@@ -257,7 +259,7 @@
                 android:text="@string/logout"
                 android:textSize="18sp"
                 android:fontFamily="@font/barlow_bold"
-                android:textColor="@android:color/holo_orange_dark" />
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
     </LinearLayout>
