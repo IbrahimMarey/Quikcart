@@ -112,7 +112,9 @@ interface ApiService {
     @GET("price_rules.json")
     suspend fun getCoupons(): CouponModel
 
-    @POST("orders.json?access_token=${Constants.ACCESS_TOKEN}")
+//    @POST("orders.json?access_token=${Constants.ACCESS_TOKEN}")
+    @Headers("Content-Type:application/json","X-Shopify-Access-Token:"+Constants.ACCESS_TOKEN)
+    @POST("orders.json")
     suspend fun confirmOrder(@Body orderResponse:Order):Order
 
 

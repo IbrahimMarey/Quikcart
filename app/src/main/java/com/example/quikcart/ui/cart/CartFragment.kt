@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,14 +16,17 @@ import com.example.quikcart.databinding.FragmentCartBinding
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.cart.DraftOrder
 import com.example.quikcart.models.entities.cart.LineItem
+import com.example.quikcart.models.entities.cart.LineItemsList
 import com.example.quikcart.utils.PreferencesUtils
 import com.example.quikcart.utils.setPrice
 import com.google.android.material.snackbar.Snackbar
 import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.cancel.OnCancel
 import com.paypal.checkout.createorder.CreateOrder
 import com.paypal.checkout.createorder.CurrencyCode
 import com.paypal.checkout.createorder.OrderIntent
 import com.paypal.checkout.createorder.UserAction
+import com.paypal.checkout.error.OnError
 import com.paypal.checkout.order.Amount
 import com.paypal.checkout.order.AppContext
 import com.paypal.checkout.order.OrderRequest
@@ -57,6 +61,38 @@ class CartFragment : Fragment() {
         pref = PreferencesUtils.getInstance(requireActivity())
         viewModel = ViewModelProvider(this)[CartViewModel::class.java]
         viewModel.getCart(pref.getCartId().toString())
+        binding.paymentButtonContainer.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    OrderRequest(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD, value = "10.0")
+                            )
+                        )
+                    )
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                Toast.makeText(requireActivity(), "Test ===================", Toast.LENGTH_SHORT)
+                    .show()
+//                PreferencesUtils.isPayWithPayPal = true
+//                Navigation.findNavController(requireView()).navigateUp()
+//                showMSG("Payment Approved")
+            },
+            onCancel = OnCancel{
+//                showMSG("Payment Cancel")
+            },
+            onError = OnError{
+//                showMSG("Payment Error")
+            }
+        )
         val delAction: (LineItem) -> Unit = {
             delCartItem(it)
         }
@@ -115,9 +151,10 @@ class CartFragment : Fragment() {
     }
 
     private fun navigateToConfirmOrderFirstScreen(draftOrder : DraftOrder) {
+        val list = LineItemsList(draftOrder.lineItems)
         binding.proceedToPayBtn.setOnClickListener {
             val action =
-                CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(draftOrder)
+                CartFragmentDirections.actionCartFragmentToConfirmOrderFirstScreenFragment(draftOrder.totalPrice)
             Navigation.findNavController(it).navigate(action)
         }
     }

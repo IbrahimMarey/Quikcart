@@ -4,6 +4,45 @@ import com.example.quikcart.models.entities.cart.LineItem
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
+data class PostOrderDto(
+    val order: PostOrderItem
+)
+
+data class PostOrderItem (
+    @SerializedName("line_items")
+    val lineItems: List<LineItem>,
+
+    val transactions: List<Transaction>,
+
+    @SerializedName("total_tax")
+    val totalTax: Double,
+
+    val currency: String
+)
+
+
+/*data class LineItem (
+    val title: String,
+    val price: Double,
+    val grams: String,
+    val quantity: Long,
+
+    @SerializedName("tax_lines")
+    val taxLines: List<TaxLine>
+)*/
+
+/*data class TaxLine (
+    val price: Double,
+    val rate: Double,
+    val title: String
+)*/
+
+data class Transaction (
+    val kind: String,
+    val status: String,
+    val amount: Double
+)
+////////////////////////////////////////////////////////////////////////////
 data class OrderResponse(
 
     @field:SerializedName("orders")

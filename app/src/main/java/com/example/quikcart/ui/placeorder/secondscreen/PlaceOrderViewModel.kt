@@ -10,8 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.Order
+import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.LineItem
 import com.example.quikcart.models.repos.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -40,7 +43,10 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
      var isPaymentApproved=false
     private val _uiState = MutableStateFlow<ViewState<Order>>(ViewState.Loading)
     var uiState: StateFlow<ViewState<Order>> = _uiState
-
+    private val _cart : MutableStateFlow<ViewState<DraftOrder>> = MutableStateFlow(
+        ViewState.Loading)
+    val cart : StateFlow<ViewState<DraftOrder>> = _cart
+    var lineItemsList:MutableList<LineItem> = mutableListOf()
     private val _isLoading=MutableLiveData(false)
     var isLoading:LiveData<Boolean> =_isLoading
 
@@ -50,8 +56,8 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
             _uiState.value = ViewState.Loading
             if((isPaymentApproved && isPayPalChoose) || !isPayPalChoose) {
                 repo.confirmOrder(orderResponse).catch {
-                    _isLoading.value = false
-                    _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error("server down, please try again later:$it1") }!!
+                    _isLoading.value = false//server down, please try again later:
+                    _uiState.value = it.localizedMessage?.let { it1 -> ViewState.Error("$it1 && ${it.message} && ${it.localizedMessage}") }!!
                 }.collect { orderItems ->
                     _isLoading.value = false
                     _uiState.value = ViewState.Success(orderItems)
@@ -128,5 +134,19 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
         }
 
         Log.e("TAG", "sendEmail:Sent Successfully", )
+    }
+
+    fun getCart(id: String)
+    {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getDraftOrderById(id)
+                .catch {
+                    _cart.value = ViewState.Error(it.message ?: "Error")
+                }
+                .collect{
+                    lineItemsList.clear()
+                    _cart.value = ViewState.Success(it.draft_order)
+                }
+        }
     }
 }

@@ -255,3 +255,6 @@ data class LineItem (
     val adminGraphqlAPIID: String,
     var image: Image? = null
 )
+data class LineItemsList(
+    var list : List<LineItem>
+):Serializable

@@ -26,10 +26,22 @@ import com.example.quikcart.models.entities.Order
 import com.example.quikcart.models.entities.OrdersItem
 import com.example.quikcart.models.entities.ShippingAddress
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.LineItemsList
 import com.example.quikcart.utils.AlertUtil
 import com.example.quikcart.utils.PaymentMethod
 import com.example.quikcart.utils.PreferencesUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.paypal.checkout.approve.OnApprove
+import com.paypal.checkout.cancel.OnCancel
+import com.paypal.checkout.createorder.CreateOrder
+import com.paypal.checkout.createorder.CurrencyCode
+import com.paypal.checkout.createorder.OrderIntent
+import com.paypal.checkout.createorder.UserAction
+import com.paypal.checkout.error.OnError
+import com.paypal.checkout.order.Amount
+import com.paypal.checkout.order.AppContext
+import com.paypal.checkout.order.OrderRequest
+import com.paypal.checkout.order.PurchaseUnit
 
 
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +63,8 @@ class PlaceOrderFragment : Fragment() {
     private lateinit var viewModel: PlaceOrderViewModel
     private lateinit var binding: FragmentPlaceOrderBinding
     private lateinit var address: AddressResponse
-    private lateinit var draftOrder: DraftOrder
+//    private lateinit var draftOrder: DraftOrder
+//    private lateinit var lineItemsList: LineItemsList
     @Inject lateinit var preferencesUtils: PreferencesUtils
     private var paymentMethod=PaymentMethod.CASH
     private var counter=0
@@ -66,9 +79,42 @@ class PlaceOrderFragment : Fragment() {
     ): View {
         binding = FragmentPlaceOrderBinding.inflate(inflater, container, false)
         materialAboutUsBuilder = MaterialAlertDialogBuilder(requireActivity())
+        binding.paymentButtonContainer.setup(
+            createOrder =
+            CreateOrder { createOrderActions ->
+                val order =
+                    OrderRequest(
+                        intent = OrderIntent.CAPTURE,
+                        appContext = AppContext(userAction = UserAction.PAY_NOW),
+                        purchaseUnitList =
+                        listOf(
+                            PurchaseUnit(
+                                amount =
+                                Amount(currencyCode = CurrencyCode.USD, value = "10.0")
+                            )
+                        )
+                    )
+                createOrderActions.create(order)
+            },
+            onApprove =
+            OnApprove { approval ->
+                PreferencesUtils.isPayWithPayPal = true
+                Navigation.findNavController(requireView()).navigateUp()
+                showMSG("Payment Approved")
+            },
+            onCancel = OnCancel{
+                showMSG("Payment Cancel")
+            },
+            onError = OnError{
+                showMSG("Payment Error")
+            }
+        )
         return binding.root
     }
 
+    private fun showMSG(msg:String){
+        AlertUtil.showSnackbar(requireView(),msg)
+    }
     override fun onResume() {
         super.onResume()
         if(PreferencesUtils.isPayWithPayPal)
@@ -164,7 +210,7 @@ class PlaceOrderFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getOrderItem():OrdersItem {
         return OrdersItem(
-            lineItems = draftOrder.lineItems,
+            lineItems = viewModel.lineItemsList,
             customer = getCustomerData(),
             totalPrice = totalPrice,
             totalTax = discountPrice.toFloat().minus(50.0f).toString(),
@@ -212,7 +258,7 @@ class PlaceOrderFragment : Fragment() {
                             AlertUtil.showSnackbar(requireView(), it.message) }
 
                         is ViewState.Success -> {
-                            viewModel.deleteCartItemsById(draftOrder.id.toString())
+                            viewModel.deleteCartItemsById(preferencesUtils.getCartId().toString())
                             preferencesUtils.setCartId(0)
                             findNavController().popBackStack(R.id.homeFragment, false)
                             showAnimationAfterConfirmOrder()
@@ -242,15 +288,16 @@ class PlaceOrderFragment : Fragment() {
     }
 
     private fun getPassedArgs() {
-        draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
+//        draftOrder = PlaceOrderFragmentArgs.fromBundle(requireArguments()).draftOrder
+//        lineItemsList = PlaceOrderFragmentArgs.fromBundle(requireArguments()).lineItemsList
         totalPrice = (PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.total )
-        draftOrder.totalPrice = totalPrice
         discountPrice = PlaceOrderFragmentArgs.fromBundle(requireArguments()).priceData.discount
         address = PlaceOrderFragmentArgs.fromBundle(requireArguments()).address
     }
 
     private fun initViewModel() {
         viewModel = ViewModelProvider(this)[PlaceOrderViewModel::class]
+        viewModel.getCart(preferencesUtils.getCartId().toString())
     }
 
 }

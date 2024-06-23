@@ -16,6 +16,7 @@ import com.example.quikcart.models.ViewState
 import com.example.quikcart.models.entities.AddressResponse
 import com.example.quikcart.models.entities.PriceRule
 import com.example.quikcart.models.entities.cart.DraftOrder
+import com.example.quikcart.models.entities.cart.LineItemsList
 import com.example.quikcart.models.entities.cart.TotalAndDiscountModel
 import com.example.quikcart.ui.placeorder.firstscreen.ConfirmOrderFirstScreenFragmentArgs
 import com.example.quikcart.utils.AlertUtil
@@ -33,7 +34,8 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
     private lateinit var totalPrice : String
     private lateinit var discountPrice : String
     private lateinit var selectedAddress:AddressResponse
-    private lateinit var draftOrder: DraftOrder
+//    private lateinit var draftOrder: DraftOrder
+//    private lateinit var lineItemsList: LineItemsList
     private lateinit var totalAndDiscountModel: TotalAndDiscountModel
 
     override fun onCreateView(
@@ -41,8 +43,11 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
         savedInstanceState: Bundle?
     ): View {
         binding=FragmentConfirmOrderFirstScreenBinding.inflate(inflater,container,false)
-        draftOrder=ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).draftOrder
-        totalPrice = draftOrder.totalPrice
+//        draftOrder=ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).draftOrder
+//        lineItemsList=ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).lineItemsList
+        totalPrice=ConfirmOrderFirstScreenFragmentArgs.fromBundle(requireArguments()).totalPrice
+
+//        totalPrice = draftOrder.totalPrice
         discountPrice = "0"
         return binding.root
     }
@@ -143,9 +148,9 @@ class ConfirmOrderFirstScreenFragment : Fragment() ,Navigator{
 
     override fun navigateToConfirmOrderFragment(phone:String) {
         val totalAndDiscountModel = TotalAndDiscountModel(totalPrice,discountPrice)
-        draftOrder.customer.phone=phone
+//        draftOrder.customer.phone=phone
         if(::selectedAddress.isInitialized){
-            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,draftOrder,totalAndDiscountModel)
+            val action = ConfirmOrderFirstScreenFragmentDirections.actionConfirmOrderFirstScreenFragmentToPlaceOrderFragment(selectedAddress,totalAndDiscountModel)
             findNavController().navigate(action)
 
         }else{
