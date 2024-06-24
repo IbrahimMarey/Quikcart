@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text='@{String.valueOf(product.variants.get(0).price)+"USD"}'
+                android:text="price"
                 android:textColor="@color/xd_blue"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
