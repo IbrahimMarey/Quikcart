@@ -63,11 +63,11 @@ class OrdersFragment : Fragment() {
                             }.toString()
                             binding.noOrderImg.visibility=if(orders.data.isEmpty()) View.VISIBLE else View.GONE
                             binding.progressBar.visibility = View.GONE
-                            for(item in orders.data)
+                            /*for(item in orders.data)
                             {
                                 item.totalPrice = ((item.totalPrice?.toFloat() ?: 0.0f) - (item.totalTax?.toFloat()
                                     ?: 0.0f)).toString()
-                            }
+                            }*/
                             initRecyclerView(orders.data)
                         }
                     }

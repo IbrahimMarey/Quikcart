@@ -277,7 +277,7 @@ class PlaceOrderFragment : Fragment() {
 
     private fun observeOnStateFlow() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
                     when (it) {
                         is ViewState.Error -> {
@@ -293,7 +293,7 @@ class PlaceOrderFragment : Fragment() {
 
                     }
                 }
-            }
+//            }
         }
     }
 

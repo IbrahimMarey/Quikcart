@@ -70,14 +70,14 @@ class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : Vi
 
     fun deleteCartItemsById(id:String){
         viewModelScope.launch {
-            while (true){
-                try {
+//            while (true){
+//                try {
                     repo.delCartItem(id)
-                    break
-                }catch (ex:Exception){
-                    Log.e("TAG", "deleteCartItemsById: ${ex.localizedMessage}", )
-                }
-            }
+//                    break
+//                }catch (ex:Exception){
+//                    Log.e("TAG", "deleteCartItemsById: ${ex.localizedMessage}", )
+//                }
+//            }
 
         }
     }
