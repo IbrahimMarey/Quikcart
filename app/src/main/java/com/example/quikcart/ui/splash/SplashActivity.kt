@@ -17,8 +17,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             val preferencesUtils = PreferencesUtils.getInstance(this)
-            val userId = preferencesUtils.getCustomerId()
-
+             val userId = preferencesUtils.getCustomerId()
             val intent: Intent = if (userId == 0L) {
                 Intent(this, OnBoardingActivity::class.java)
             } else {

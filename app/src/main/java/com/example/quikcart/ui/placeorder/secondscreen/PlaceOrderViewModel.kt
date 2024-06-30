@@ -34,6 +34,7 @@ import javax.mail.internet.MimeMessage
 @HiltViewModel
 class PlaceOrderViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
     lateinit var totalPrice: String
+    lateinit var payPalTotalPrice: String
     lateinit var shippingFees: String
     lateinit var subTotal: String
     lateinit var discount: String

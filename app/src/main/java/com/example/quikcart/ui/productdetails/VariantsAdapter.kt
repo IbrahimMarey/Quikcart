@@ -1,6 +1,7 @@
 package com.example.quikcart.ui.productdetails
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +10,8 @@ import com.example.quikcart.databinding.VariantsDetailsItemBinding
 import com.example.quikcart.models.entities.VariantsItem
 
 class VariantsAdapter : ListAdapter<VariantsItem, VariantsAdapter.VariantViewHolder>(DiffCallback()) {
-
+    private var selectedPosition=0
+    private var lastSelectedPosition=0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VariantViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = VariantsDetailsItemBinding.inflate(inflater, parent, false)
@@ -18,9 +20,20 @@ class VariantsAdapter : ListAdapter<VariantsItem, VariantsAdapter.VariantViewHol
 
     override fun onBindViewHolder(holder: VariantViewHolder, position: Int) {
         holder.bind(getItem(position))
+        holder.binding.root.setOnClickListener {
+            lastSelectedPosition = selectedPosition
+            selectedPosition = holder.adapterPosition
+            notifyItemChanged(lastSelectedPosition)
+            notifyItemChanged(selectedPosition)
+        }
+        if (selectedPosition == holder.adapterPosition) {
+            holder.binding.icDone.visibility = View.VISIBLE
+        } else {
+            holder.binding.icDone.visibility = View.GONE
+        }
     }
 
-    class VariantViewHolder(private val binding: VariantsDetailsItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class VariantViewHolder(val binding: VariantsDetailsItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: VariantsItem) {
             binding.variant = item

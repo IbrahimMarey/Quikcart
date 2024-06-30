@@ -90,7 +90,7 @@ class PlaceOrderFragment : Fragment() {
                         listOf(
                             PurchaseUnit(
                                 amount =
-                                Amount(currencyCode = CurrencyCode.USD, value = "10.0")
+                                Amount(currencyCode = CurrencyCode.USD, value = viewModel.payPalTotalPrice)
                             )
                         )
                     )
@@ -201,6 +201,8 @@ class PlaceOrderFragment : Fragment() {
         viewModel.subTotal=(totalPrice.toFloat() + discountPrice.toFloat()).toString()
         viewModel.discount=discountPrice
         viewModel.totalPrice = (totalPrice.toFloat() + 50.0f).toString()
+        viewModel.payPalTotalPrice = "%.2f".format(viewModel.totalPrice.toFloat() * preferencesUtils.getUSDRate())
+
         lifecycleScope.launch(Dispatchers.Main) {
             viewModel.cart.collectLatest {
                 when (it) {

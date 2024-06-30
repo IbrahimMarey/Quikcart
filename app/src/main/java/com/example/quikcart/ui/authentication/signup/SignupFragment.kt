@@ -56,8 +56,9 @@ class SignupFragment : Fragment() {
         return password.length >= 8
     }
     private fun showErrorMessage(message: String) {
-        AlertUtil.showSnackbar(requireView(),message)
+        view?.let { AlertUtil.showSnackbar(it,message) }
     }
+
     private fun createCustomerOnShopify(email: String, username: String, userId: String) {
         val address = Address(
             address1 = " ", city = " ", province = " ", phone = " ",

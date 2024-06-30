@@ -74,39 +74,39 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     resources, R.drawable.dialogue_background, requireActivity().theme
                 )
             ).setCancelable(true).show()
-        addressData.findViewById<EditText>(R.id.locationPhoneInput).visibility =View.GONE
+//        addressData.findViewById<EditText>(R.id.locationPhoneInput).visibility =View.GONE
 
-        addressData.findViewById<RadioButton>(R.id.chooseDefaultPhone).toggle()
-        addressData.findViewById<RadioGroup>(R.id.choosePhoneGroup).setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId){
-                R.id.chooseDefaultPhone->{
-                    addressData.findViewById<EditText>(R.id.locationPhoneInput).visibility =View.GONE
-                    isNewPhone = false
-                }
-                R.id.chooseNewPhone->{
-                    addressData.findViewById<EditText>(R.id.locationPhoneInput).visibility =View.VISIBLE
-                    isNewPhone = true
-                }
-            }
-        }
+//        addressData.findViewById<RadioButton>(R.id.chooseDefaultPhone).toggle()
+//        addressData.findViewById<RadioGroup>(R.id.choosePhoneGroup).setOnCheckedChangeListener { group, checkedId ->
+//            when(checkedId){
+//                R.id.chooseDefaultPhone->{
+//                    addressData.findViewById<EditText>(R.id.locationPhoneInput).visibility =View.GONE
+//                    isNewPhone = false
+//                }
+//                R.id.chooseNewPhone->{
+//                    addressData.findViewById<EditText>(R.id.locationPhoneInput).visibility =View.VISIBLE
+//                    isNewPhone = true
+//                }
+//            }
+//        }
 
         addressData.findViewById<Button>(R.id.confirmBtn).setOnClickListener {
-            if (isNewPhone){
-                if (isEgyptianPhoneNumberValid(addressData.findViewById<EditText>(R.id.locationPhoneInput).text.toString()))
-                {
-                    postadderssbody.address1 = addressData.findViewById<EditText>(R.id.locationTitleInput).text.toString()
-                    postadderssbody.address2 = getMarkerAddress(requireContext(),selectedLatLng.latitude, selectedLatLng.longitude)
-                    postadderssbody.phone = addressData.findViewById<EditText>(R.id.locationPhoneInput).text.toString()
-                    confirmLocationDialog(PostAddressModel(postadderssbody),alertDialog)
-                }else
-                {
-                    showMSG(getString(R.string.phone_miss_match))
-                }
-            }else{
+//            if (isNewPhone){
+//                if (isEgyptianPhoneNumberValid(addressData.findViewById<EditText>(R.id.locationPhoneInput).text.toString()))
+//                {
+//                    postadderssbody.address1 = addressData.findViewById<EditText>(R.id.locationTitleInput).text.toString()
+//                    postadderssbody.address2 = getMarkerAddress(requireContext(),selectedLatLng.latitude, selectedLatLng.longitude)
+//                    postadderssbody.phone = addressData.findViewById<EditText>(R.id.locationPhoneInput).text.toString()
+//                    confirmLocationDialog(PostAddressModel(postadderssbody),alertDialog)
+//                }else
+//                {
+//                    showMSG(getString(R.string.phone_miss_match))
+//                }
+//            }else{
                 postadderssbody.address1 = addressData.findViewById<EditText>(R.id.locationTitleInput).text.toString()
                 postadderssbody.address2 = getMarkerAddress(requireActivity(),selectedLatLng.latitude, selectedLatLng.longitude)
                 confirmLocationDialog(PostAddressModel(postadderssbody),alertDialog)
-            }
+//            }
 
         }
         addressData.findViewById<Button>(R.id.dismissBtn).setOnClickListener {

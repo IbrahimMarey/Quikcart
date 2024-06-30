@@ -65,7 +65,27 @@
                 android:inputType="text"
                 />
         </com.google.android.material.textfield.TextInputLayout>
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/textView13"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Please write location Details"
+                android:drawableStart="@drawable/ic_address_title"
+                android:inputType="text"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+<!--        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/phone"
@@ -115,7 +135,7 @@
                 android:drawableStart="@drawable/ic_phone"
                 android:inputType="number"
                 />
-        </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>-->
         <LinearLayout
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"

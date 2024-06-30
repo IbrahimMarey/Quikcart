@@ -56,6 +56,7 @@ class CartViewModel @Inject constructor(private val repo: Repository) : ViewMode
     }
     private fun editCart(id:String,cartItem: PutDraftOrderItemModel)
     {
+        _cart.value = ViewState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             repo.putDraftOrder(id ,cartItem).collect{
             }
