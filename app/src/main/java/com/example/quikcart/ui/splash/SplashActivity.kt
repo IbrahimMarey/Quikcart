@@ -20,6 +20,7 @@ class SplashActivity : AppCompatActivity() {
              val userId = preferencesUtils.getCustomerId()
             val intent: Intent = if (userId == 0L) {
                 Intent(this, OnBoardingActivity::class.java)
+
             } else {
                 Intent(this, MainActivity::class.java)
             }
